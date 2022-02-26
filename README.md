@@ -1,0 +1,1160 @@
+# 基于RGBD视觉信息的异常行为识别
+
+## 1. 三维相机
+
+### 1.1 概念
+
+[RGB-D｜深度图像 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/344043024)
+
+- 3D相机又称RGB-D相机。3D相机通常有多个摄像头+深度传感器组成，不仅能够获得平面图像，还可以获得拍摄对象的深度信息，即三维位置及尺寸等。
+
+- 深度图像 = 普通RGB三通道彩色图像 + 深度图
+
+- 深度图：包含与视点场景对象表面距离有关信息的图像通道，通道本身类似于灰度图像，每个像素值是物体到离摄像头平面最近的距离（**相机坐标系的z值**）
+
+  ![img](picture/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25ieHV3ZW50YW8=,size_16,color_FFFFFF,t_70.png)
+
+- RGB图和深度图之间需要对齐，保证像素之间一一对应
+  如kinect2获得的数据：RGB图像大小：（1080, 1920） 深度图像大小：（424, 512）
+
+  ![image-20220220185150057](picture/image-20220220185150057.png)
+
+### 1.2 分类（根据原理）
+
+[清华创业团队发布 3D 视觉技术白皮书，万字长文详述ToF | 附PDF完整版下载 - AMiner](https://www.aminer.cn/research_report/5e9676eaab6e30e67b2c7856)
+
+#### 1.2.1 双目视觉
+
+- 原理：根据块匹配方法（SGBM），得到每个像素在两幅图中的一一对应关系。在已知两个相机间距等相对位置关系的情况下，即可通过相似三角形的原理计算出被摄物到相机的距离。
+- 缺点：依赖于被拍摄物体的表面纹理和环境光照。如下情况会遇到无法找到匹配的对应像素的问题：
+  - 在表面没有任何纹理的物体时，例如拍摄一面白墙
+  - 或者当拍摄环境的光照很弱的情况下，例如黑灯环境下
+
+![image-20220221140430753](picture/image-20220221140430753.png)
+
+
+
+#### 1.2.2 结构光
+
+- 原理：结构光技术就是使用提前设计好的具有特殊**结构的图案**（比如离散光斑、条纹光、编码结构光等），然后将图案投影到三维空间物体表面上，使用另外一个相机观察在三维物理表面成像的畸变情况。如果结构光图案投影在该物体表面是一个平面，那么观察到的成像中结构光的图案就和投影的图案类似，没有变形，只是根据距离远近产生一定的尺度变化。但是，如果物体表面不是平面，那么观察到的结构光图案就会因为物体表面不同的几何形状而产生不同的扭曲变形，而且根据距离的不同而不同，根据已知的结构光图案及观察到的变形，就能根据算法计算被测物的三维形状及深度信息。
+
+  ![image-20220220191206801](picture/image-20220220191206801.png)
+
+- 结构化图案：
+
+  - 直接编码（光谱）
+  - 时分复用编码
+  - 空分复用编码
+
+#### 1.2.3 光飞行时间法(TOF）
+
+- 原理：连续发射不可见光脉冲到被测物体上，接受从物体反射回的光脉冲，探测光脉冲的飞行时间计算被测物体距离。
+
+- i-ToF，即 indirect ToF，通过传感器在不同时间窗口采集到能量值的比例关系，解析出信号相位，间接测量发射信号和接收信号的时间差，进而得到深度。
+
+  ![image-20220220192213695](picture/image-20220220192213695.png)
+
+- d-ToF 即 direct ToF，相比于 i-ToF 技术用测量信号的相位来间接地获得光的来回飞行时间，d-ToF (direct time-of-flight) 技术直接测量光脉冲的发射和接收的时间差。
+
+  ![image-20220220192345575](picture/image-20220220192345575.png)
+
+- 优点：可调节发射脉冲的频率改变测量距离；测量精度不会随着测量距离增大而降低；抗干扰能力强；适合距离比较远的(无人驾驶
+
+- 缺点：功耗大；分辨率低深度图质量差
+
+### 1.3 总结
+
+![image-20220220193247277](picture/image-20220220193247277.png)
+
+## 补充1 3D数据表示
+
+图中是3D数据的不同表示类型:（a）点云（Point clouds）；(b) 体素网格(Voxel grids)； (c) 多边形网格(Polygon meshes)； (d) 多视图表示(Multi-view representations)
+
+其中：
+
+- a. 点云是三维空间(xyz坐标)点的集合。
+- b. 体素是3D空间的像素。量化的，大小固定的点云。每个单元都是固定大小和离散坐标。
+- c. mesh是面片的集合。
+- d. 多视图表示是从不同模拟视点渲染的2D图像集合。
+
+理解：体素网格是用固定大小的立方块作为最小单元，来表示三维物体的一种数据结构。
+体素可以看成粗略版的点云。
+
+![image-20211229162528207](picture/image-20211229162528207.png)
+
+
+
+## 补充2 相机四大坐标系
+
+[相机标定（1）——四个坐标系_白水煮蝎子-CSDN博客_相机主点坐标](https://blog.csdn.net/weixin_44278406/article/details/112986651)
+
+> 版权声明：本文为博主原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。
+> 本文链接：https://blog.csdn.net/weixin_44278406/article/details/112986651
+
+### 1. 前言
+
+为了描述相机的几何成像关系，需要进行数学建模，这些几何模型参数就是相机参数，包括内参和外参，而求解参数的过程就称为相机标定。所介绍的相机模型是计算机视觉中广泛使用的针孔模型。这种模型在数学上是三维空间到二维平面的中心投影。
+
+### 2. 四个坐标系
+
+- **图像像素坐标系：**表示三维空间物体在图像平面上的投影，像素是离散化的，其坐标原点在CCD图像平面的左上角，u轴平行于CCD平面水平向右，v轴垂直于u轴向下，坐标使用( u , v )来表示。图像宽度W，高度H。
+- **图像物理坐标系：**坐标原点在CCD图像平面的中心，x , y 轴分别平行于图像像素坐标系的( u , v )轴，坐标用( x , y ) 表示。
+- **相机坐标系：**以相机的光心为坐标系原点， 轴平行于图像坐标系的x , y 轴，相机的光轴为Z c 轴，坐标系满足右手法则。相机的光心可理解为相机透镜的几何中心。
+- **世界坐标系：**用于表示空间物体的绝对坐标，使用**( X w , Y w , Z w )** 表示，世界坐标系可通过旋转和平移得到相机坐标系。
+
+![img](picture/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDI3ODQwNg==,size_16,color_FFFFFF,t_70.png)
+
+### 3. 世界坐标系-相机坐标系
+
+刚体变换只改变物体的空间位置(平移)和朝向(旋转)，而不改变其形状的变换，可用两个变量来描述：正交单位旋转矩阵R RR，三维平移矢量t 。平移比较好理解，世界坐标系原点移动到相机坐标系；旋转一共有三个自由度，即绕x , y , z旋转，根据旋转角度可以分别得三个方向上的旋转矩阵R x , R y , R z，而旋转矩阵即为他们的乘积，R = R x × R y × R z
+
+![image-20220220205403082](picture/image-20220220205403082.png)
+
+![image-20220220205425530](picture/image-20220220205425530.png)
+
+同理可求的Ry,Rz，于是可得旋转矩阵R = R x R y R z ，其中**[*R*∣*t*]为外参**，总的转换公式：
+
+![image-20220220210543920](picture/image-20220220210543920.png)
+
+写成齐次坐标系形式为：
+
+![image-20220220210608154](picture/image-20220220210608154.png)
+
+### 4. 相机坐标系-图像坐标系
+
+**以图象中心为坐标系：**相机坐标系到图像坐标系是透视关系，利用相似三角形进行计算：
+
+![image-20220220205330219](picture/image-20220220205330219.png)
+
+![image-20220220205552232](picture/image-20220220205552232.png)
+
+写成齐次坐标形式的矩阵相乘为，其中**K 称为相机内参数矩阵**。
+
+![image-20220220205609577](picture/image-20220220205609577.png)
+
+**当主点不是坐标系原点时**，相机内参数矩阵形式如下：
+
+![image-20220220205810401](picture/image-20220220205810401.png)
+
+### 5. 图像坐标系-像素坐标系
+
+像素坐标系是图像坐标系的离散化表示，实际CCD相机每个像素对应一个感光点，是个矩形，假设其物理尺寸为**dx宽**，**dy高**。以CCD传感器的左上角为坐标原点建立的坐标系与以成像平面中心建立的坐标系的转换关系如下。
+![image-20220220210044007](picture/image-20220220210044007.png)
+
+![image-20220220210100960](picture/image-20220220210100960.png)
+
+齐次坐标矩阵形式为：
+
+![image-20220220210120736](picture/image-20220220210120736.png)
+
+### 6. 综合（像素坐标系-世界坐标系）
+
+![image-20220220210432873](picture/image-20220220210432873.png)
+
+## 2. 点云数据
+
+### 2.1 概念
+
+[绪论：什么是点云？ - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/22581673)
+
+- 点云数据是指在一个三维坐标系统中的一组**向量的集合**。这些向量通常以X,Y,Z三维坐标的形式表示，而且一般主要用来代表一个物体的外表面形状。不经如此，除**（X,Y,Z）**代表的几何位置信息之外，点云数据还可以表示一个点的RGB颜色，灰度值，深度，分割结果等。
+- 来源：三维激光雷达扫描、深度相机
+- 应用：三维重建、自动驾驶、城市规划、考古文物保护、医学影像、测绘等领域
+- 点云有三个主要特征：
+  - **无序性**：虽然输入的点云是有顺序的，但是显然这个顺序不应当影响结果。
+  - **点之间的交互**：每个点不是独立的，而是与其周围的一些点共同蕴含了一些信息，因而模型应当能够抓住局部的结构和局部之间的交互。
+  - **变换不变性**：比如点云整体的旋转和平移不应该影响它的分类或者分割
+
+### 2.2 深度图像转点云
+
+解读：
+
+[Computer Vision Group - File Formats (tum.de)](https://vision.in.tum.de/data/datasets/rgbd-dataset/file_formats)
+
+[相机标定(2)---摄像机标定原理_不系之舟的专栏-QQ讨论群331590339-CSDN博客](https://blog.csdn.net/lixianjun913/article/details/10032019)
+
+![image-20211229193655423](picture/image-20211229193655423.png)
+
+```python
+fx = 525.0  # focal length x
+fy = 525.0  # focal length y
+cx = 319.5  # optical center x
+cy = 239.5  # optical center y
+
+factor = 5000 # for the 16-bit PNG files
+# OR: factor = 1 # for the 32-bit float images in the ROS bag files
+
+for v in range(depth_image.height):
+  for u in range(depth_image.width):
+    Z = depth_image[v,u] / factor;
+    X = (u - cx) * Z / fx;
+    Y = (v - cy) * Z / fy;
+```
+
+### 2.3 点云数据预处理
+
+[点云数据预处理 FAQ - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/89114456)
+
+[PCL(Point Cloud Library)学习指南&资料推荐（2022版） - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/268524083)
+
+（可以使用现成库对点云数据处理）
+
+#### 2.3.1 采样
+
+[Python点云数据处理(四)点云下采样 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/353761080)
+
+由于点云的海量和无序性，直接处理的方式在对邻域进行搜索时需要较高的计算成本。一个常用的解决方式就是对点云进行下采样，将对全部点云的操作转换到下采样所得到的点上，降低计算量。
+
+点云采样有很多方法，一般有体素网格采样，均匀采样，曲率采样，随机采样，曲面采样，泊松磁盘采样等。
+
+- **体素网格下采样**
+
+  体素下采样就是把三维空间体素化，每个小体素包含了若干个点，取中心点或重心为采样点（可取平均值）。需要注意的是：有些grid内可能没有点，所以，downsample后，点的个数，一般小于grid的个数。
+
+  采样后点数不固定，可以使用随机取样方法：
+
+  ```python
+  np.random.choice(num, NUM_POINT, replace=True)  #当前点云个数<需要个数，replace为true重复采样
+  np.random.choice(num, NUM_POINT, replace=False) #当前点云个数>需要个数，replace为false重复采样
+  ```
+
+- **均匀下采样**
+
+  均匀下采样有多种不同的采样方式，其中**最远点采样**是较为简单的一种，首先需要选取一个种子点，并设置一个内点集合，每次从点云中不属于内点的集合找出一点距离内点最远的点，如下图，这里的距离计算方式为**该点至内点所有点的最小距离**。这种方式的下采样点云分布均匀，但是算法复杂度较高效率低。**采样点一般先分布在边界附近**。
+
+  ![image-20220223125838675](picture/image-20220223125838675.png)
+
+- **曲率下采样**
+
+  稳定性高，通过几何特征区域的划分，使得采样结果抗噪性更强
+
+  在点云曲率越大的地方，采样点个数越多。输入是一个点云，目标采样数S，采样均匀性U。具体方法如下：
+
+  1. 点云曲率计算比较耗时，这里我们采用了一个简单方法，来近似达到曲率的效果：**给每个点计算K邻域，然后计算点到邻域点的法线夹角值。曲率越大的地方，这个夹角值就越大。**
+
+  2. 设置一个角度阈值，比如5度。点的邻域夹角值大于这个阈值的点，被放入几何特征区域G。这样点云就分成了两部分，几何特征区域G和其它区域。
+
+  3. 均匀采样几何特征区域G和其它区域，采样数分别为S * (1 - U)，S * U。
+
+     ![image-20220223135400090](picture/image-20220223135400090.png)
+
+#### 2.3.2 归一化
+
+数据归一化后，最优解的寻优过程明显会变得平缓，更容易正确的收敛到最优解。
+
+- **xyz坐标**：
+
+1. 在3d空间中找一个能包含所有点的最小的立方体，立方体的三条边与xyz轴平行。找到这个立方体的下表面的中心点，以这个点作为归一化的参考点。所有点的坐标，减去参考点的坐标。**（找参考点算相对坐标）**
+2. 可以进一步将x、y、z归一化到[-1, 1]之间。
+
+- **颜色值：**
+
+1. 一般归一化到[-1, 1]之间。
+
+- **pointnet源码归一化及反归一化：**
+
+  [PointNet系列点云归一化与反归一化_m0_37718643的博客-CSDN博客](https://blog.csdn.net/m0_37718643/article/details/122144764)
+
+```python
+def pc_normalize(pc):
+    """
+    对点云数据进行归一化
+    :param pc: 需要归一化的点云数据
+    :return: 归一化后的点云数据
+    """
+    # 求质心，也就是一个平移量，实际上就是求均值
+    centroid = np.mean(pc, axis=0)
+    pc = pc - centroid
+    m = np.max(np.sqrt(np.sum(pc ** 2, axis=1)))
+    # 对点云进行缩放
+    pc = pc / m
+    return pc
+
+
+"""
+点云的反归一化：
+由于点云的归一化操作，会使得PointNet预测的结果比原始点云尺寸不同，为了恢复原始大小，可以将预测得到的点云进行反归一化，即使得到的点云乘上缩放尺寸m，再加上平移尺寸centroid。
+"""
+ret = pred × m + centroid
+```
+
+#### 2.3.3 数据增强
+
+Data augmentation可以增强模型的范化能力。一般的方式有：
+
+- 一个batch内，选一定比例的点云，绕z轴随机旋转(0 - 360)度
+- 一个batch内，选一定比例的点云，分别绕x、y、z随机旋转一个小的角度，比如20度左右
+- 一个batch内，所有点进行随机抖动（jitter）
+
+#### 2.3.4 常用点云处理库
+
+- **open3D**
+
+  - [ ] TOLEARN
+
+  [爆肝5万字❤️Open3D 点云数据处理基础（Python版）_NOIF-CSDN博客](https://blog.csdn.net/weixin_46098577/article/details/120167360)
+
+  [python点云处理算法汇总(长期更新版)_点云侠的博客-CSDN博客_python 点云](https://blog.csdn.net/qq_36686437/article/details/113407090)
+
+  [Open3D 点云处理方法示例 - Python版 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/266428745)
+
+  [教程：Python Open3d 完成 ICP 点云配准_成畅的博客-CSDN博客_open3d点云配准](https://blog.csdn.net/weixin_42488182/article/details/105196148#:~:text=Open3D 是一个在Python和C%2B%2B平台上的三维数据处理与可视化库。 它由 Qian-Yi Zhou，Jaesik Park， 以及 Vladlen,其中 Zhou 博士在中国清华大学取得硕士学位，并分别在 USC 和Stanford 取得了博士以及博士后学位，目前在在旧金山的 Forma 公司担任首席研发官。)
+
+- **PCL**
+
+  
+
+### 2.4 点云处理相关算法
+
+[3D点云模型总结_一只不出息的程序员的博客-CSDN博客_点云模型](https://blog.csdn.net/qq_43232556/article/details/106653145)
+
+#### 2.4.1 Farthest Point Sampling（FPS）
+
+[Farthest Point Sampling (FPS)算法核心思想解析 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/114522377)
+
+- 目前很多流行的点云模型结构里面，都用到了FPS算法，如pointnet++ 。
+- 最远距离采样，同上均匀采样，点云有n个点，去掉重复计算优化后算法复杂度为 O(n^2)
+- **步骤：**
+  1. 以点云第一个点，作为查询点，从剩余点中，取一个距离最远的点；
+  2. 继续以取出来的点，作为查询点，从剩余点中，取距离最远的点。此时，由于已经取出来的点的个数大于1，需要考虑已经选出来的点集中的每个点。计算逻辑如下：
+     - 对于任意一个剩余点，计算该点到已经选中的点集中所有点的距离；
+     - 取最小值，作为该点到点集的距离；
+     - 计算出每个剩余点到点集的距离后，取距离最大的那个点。
+  3. 重复第2步，一直采样到目标数量N为止。
+
+#### 2.4.2 PointNet（2017）
+
+> PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation
+
+[细嚼慢咽读论文：PointNet论文及代码详细解析 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/264627148)
+
+- **步骤：**
+
+1. 输入为一帧的全部点云数据的集合，表示为一个nx3的2d tensor，其中n代表点云数量，3对应xyz坐标。
+2. 输入数据先通过和一个T-Net学习到的转换矩阵相乘来对齐，保证了模型的对特定空间**转换的不变性。**
+3. 通过多次mlp对各点云数据进行特征提取后，再用一个T-Net对特征进行对齐。
+4. 在特征的各个维度上执行maxpooling操作来得到最终的全局特征。**（针对点云无序性使用对称函数）**
+5. 对分类任务，将全局特征通过mlp来预测最后的分类分数；对分割任务，将全局特征和之前学习到的各点云的局部特征进行串联，再通过mlp得到每个数据点的分类结果。
+
+![image-20211230120344582](picture/image-20211230120344582.png)
+
+- **两个定理：**
+
+  - [ ] TOLEARN
+
+  - 定理1证明了PointNet的网络结构能够拟合任意的连续集合函数。
+  - 定理2说明对于任何输入数据集，都存在一个关键集和一个最大集，使得对和之间的任何集合，其网络输出都和一样。
+
+#### 2.4.3 PointNet++（2017）
+
+> PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space
+
+[搞懂PointNet++，这篇文章就够了！ - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/266324173)
+
+- encoder-decoder结构
+
+- PointNet因为是只使用了MLP和max pooling，没有能力捕获局部结构，因此在细节处理和泛化到复杂场景上能力很有限。PointNet++改进：
+  - point-wise MLP，仅仅是对每个点表征，对局部结构信息整合能力太弱 --> **PointNet++的改进：sampling和grouping整合局部邻域**
+  - global feature直接由max pooling获得，无论是对分类还是对分割任务，都会造成巨大的信息损失 --> **PointNet++的改进：hierarchical feature learning framework，通过多个set abstraction逐级降采样，获得不同规模不同层次的local-global feature**
+  - 分割任务的全局特征global feature是直接复制与local feature拼接，生成discriminative feature能力有限 --> **PointNet++的改进：分割任务设计了encoder-decoder结构，先降采样再上采样，使用skip connection将对应层的local-global feature拼接**
+
+![image-20220223210545410](picture/image-20220223210545410.png)
+
+- **网络参数说明**
+
+  - N表示点集中点的数量
+  - d表示点的坐标维度，d=3
+  - C表示点的其他特征（比如法向量等）维度，刚开始c=0（输入是只有坐标信息的点云）
+
+- **Sampling Layer**
+
+  采样层使用farthest point sampling (**FPS**)采样算法，从初始点云中采样出有限个点进行后续处理，**(N->N1采样)**。
+
+- **Grouping layer**
+
+  分别以每个采样点为球心，在一个特定半径的球体范围内，找出落在该球体范围内的特殊数目K个点，构成一个group。（**根据点的坐标来聚合**）
+
+  找邻域这里有两种方式：KNN和query ball point.
+
+  - 其中前者KNN就是大家耳熟能详的K近邻，找K个坐标空间最近的点。
+  - 后者query ball point就是划定某一半径，找在该半径球内的点作为邻点。多就取前K个，少就重采样。
+
+- **PointNet layer**
+
+  Grouping layer得出的每个group，可以看做是一个“**局部点云**”，用PointNet网络来计算出这个局部点云的feature。
+
+  输入**（N1,K,d+C）**到网络中获得**（N1,C1）**特征，然后拼接**d维**坐标信息，得**（N1,d+C1）**
+
+- **Segmentation-interpolate**
+
+  interpolate前后点集分别以**P1,P2**表示
+
+  P2的的每一个点x，找在原始点云坐标空间下，在P1点集中找到与x最近的k个点。
+
+  对k个点的特征加权求和，得到x的特征。其中这个权重是与x和P1中点的距离成反向相关的，意思就是距离越远的点，对x特征的贡献程度越小。
+
+  ![image-20220223220017972](picture/image-20220223220017972.png)
+
+- **unit pointnet**
+
+  1x1conv与Relu层
+
+- 面对挑战：non-uniform sampling density，也就是在稀疏点云局部邻域训练可能不能很好挖掘点云的局部结构，解决：
+
+  - **Multi-scale grouping（MSG）**
+
+    对当前层的每个中心点，取不同radius的query ball，可以得到多个不同大小的同心球，也就是得到了多个相同中心但规模不同的局部邻域，分别对这些局部邻域表征，并将所有表征拼接。
+
+  - **Multi-resolution grouping（MRG）**
+
+    ![image-20220223213911789](picture/image-20220223213911789.png)
+
+  
+
+#### 2.4.4 DGCNN（2019）
+
+> Dynamic Graph CNN for Learning on Point Clouds
+
+[Dynamic Graph CNN for Learning on Point Clouds 笔记 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/85857744)
+
+论文提出了两个新的概念：**EdgeConv**和**Dynamic Graph**，EdgeConv主要实现对点云中节点的feature的更新操作，改进了PointNet中缺少局部信息的缺点。Dynamic Graph主要是对点云中的点使用knn算法是基于点的特征而不是起初的三维坐标，特征是改变的，每一层都会得到一个不同的图。
+
+
+
+![image-20220223222127040](picture/image-20220223222127040.png)
+
+- **EdgeConv**
+
+  > ![image-20220223235812718](picture/image-20220223235812718.png)
+
+- **Dynamic Graph**
+
+  - 从edgeConv的计算过程可以看出，每更新一次feature，重新用KNN找K个最近点时，由于是按照新的feature的距离来找，所以每次KNN的结果都会不同，每次构建的局部图都会动态的更新。
+  - 通过堆叠EdgeConv模块或循环使用，可以提取到全局形状信息。
+
+#### 补充3 PointNet++ 与DGCNN
+
+两者都是针对PointNet网络缺少局部信息等的改进。
+
+- PointNet++算法在FPS采样、球体Grouping时，使用的是每个点的xyz坐标，这些坐标始终没有变化，相当于每个点是**固定**的。
+- DGCNN中，除第一层使用xyz坐标系计算外，后续使用计算出来的feature在feature空间KNN内采样、构建局部图，相当于每个点是**动态变化**的。
+
+#### 2.4.5 PVCNN（2019）
+
+> Point-Voxel CNN for Efficient 3D Deep Learning
+
+[[PointCloud\]PVCNN论文阅读 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/209229692)
+
+- PVCNN针对Voxel-based与point-based的缺点进行融合。PVConv由低分辨率的基于体素的分支和高分辨率的基于点的分支组成。 基于体素的分支提取粗粒度的邻域信息，并从基于点的分支中对单个点的特征进行细粒度的补充。
+  - Voxel-based的缺点已经是为人所熟知的，主要就是在将点云变为voxel的过程中，信息的丢失程度与resolution的大小有关。但随着resolution的增加，计算和内存要求是三次方增加的。
+  - point-based的方法的输入是无序的点云，在前向计算过程中，需要找出某些点邻域内的点，由于点云是无序的，所以不能通过其在点云中的位置进行索引，需要使用KNN方法去计算寻找，而这个计算过程则是非常慢的。
+
+  ![image-20220224134604261](picture/image-20220224134604261.png)
+
+- **Point-Based**
+
+  不再使用邻域的点，而是使用MLP直接计算每个点的feature。
+
+- **Voxel-Based**
+
+  - 尺度归一化后将点云变为体素，然后使用3D卷积核卷积提取特征。
+
+  - Devoxelize：认为每个体素的特征是对应每个体素的中心，然后使用三维线性插值来恢复每个点的特征。
+
+    [线性插值与双/三线性插值 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/77496615)
+
+- **Feature Fusion**
+
+  将两个分支的结果直接相加，就得到了最终结果
+
+  Point-Based方法在特征聚合时由于点云的不规则分布，特征聚合的耗时明显高于Voxel-Based方法，所以特征聚合是转换为体素进行的。
+
+## 3. 3D人体姿态估计
+
+### 3.1 3D人体姿态表示
+
+> Ce Zheng, Wenhan Wu, Taojiannan Yang, Sijie Zhu, Chen Chen, Ruixu Liu, Ju Shen, Nasser Kehtarnavaz and Mubarak Shah. “Deep Learning-Based Human Pose Estimation: A Survey” arXiv: Computer Vision and Pattern Recognition (2020): n. pag.
+
+#### 3.1.1 skeleton-based model
+
+![image-20220220212630075](picture/image-20220220212630075.png)
+
+#### 3.1.2 Volumetric models
+
+**3D human body models：**
+
+[SMPL论文解读和相关基础知识介绍 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/256358005)
+
+- **SMPL**(Skinned Multi-Person Linear model)是一种裸体的蒙皮，基于顶点的人体三维模型，能够精确地表示人体的不同**形状和姿态**。常用于人体三维重建。
+
+  SMPL模型是一个统计模型，其通过两种类型的统计参数对人体进行描述，分别有：
+
+  1. **形状参数β：**代表人体高矮胖瘦、头身比等比例的10个参数。
+  2. **姿态参数θ：**一组姿态参数有着24 ×3维度的数字，去描述某个时刻人体的动作姿态，其中的24表示的是24个定义好的人体关节点，其中的3并不是如同识别问题里面定义的(x,y,z)空间位置坐标，而是指的是**该节点针对于其父节点的旋转角度的轴角式表达**。![image-20220220213121532](picture/image-20220220213121532.png)
+
+- **DYNA:** Dynamic Human Shape in Motion model
+
+- **Stitched Puppet Model**
+
+- **Frankenstein & Adam:** The Frankenstein model
+
+- **GHUM & GHUML(ite)**
+
+### 3.2 3D人体姿态估计目标
+
+#### 3.2.1 输入
+
+基于不同数据输入不同：
+
+- 基于RGB图像的3D人体姿态估计：输入RGB图像，维度（H,W,3）
+- 基于深度图像的3D人体姿态估计：输入深度图像，维度（H,W）
+- 基于RGB-D图像的3D人体姿态估计：输入RGB图像（H,W,3）+深度图（H,W）
+- 基于点云的3D人体姿态估计输入点云数据，维度（N,3+c）,N表示点云中点数，3是指三维坐标，c是指其他点云特征（颜色、法向量等）
+
+#### 3.2.2 输出
+
+类似于2D姿态估计，3D姿态估计模型输出可以有多种表示。最常见两种：**坐标表示与热图。**
+
+- 输出关键节点坐标维度（n,3）,n表示节点个数；3是指三维坐标（x,y,z）
+
+- 热图输出维度（n,H,W,D）,n个关键节点，立体热图（H,W,D）中值最大点表示改关键节点位置（选择方法不止这个）
+
+  如下是2D姿态估计的每个关键节点热图，3D类似：
+
+  ![image-20220224150811152](picture/image-20220224150811152.png)
+
+基于RGB图像与其他输入（点云等）的3D人体姿态估计输出区别：（大多数情况，不绝对）
+
+- 基于RGB图像的3D人体姿态估计预测的关键节点坐标（x,y,z），之中**（x,y）为图像像素坐标，z为深度值（相机坐标系相对root点的位置值）**
+
+- 基于点云等输入的3D人体姿态估计预测的关键节点坐标（x,y,z），之中**（x,y,z）一般为世界坐标或相机坐标（相对于根点的值）**
+
+  
+
+### 3.3 基于RGB图像的3D人体姿态估计
+
+#### 3.3.1 单目
+
+##### 3.3.1.1 Coarse-to-Fine（2017）
+
+> Coarse-to-Fine Volumetric Prediction for Single-Image 3D Human Pose
+
+[3D人体姿态估计--Coarse-to-Fine Volumetric Prediction for Single-Image 3D Human Pose_AI小作坊 的博客-CSDN博客](https://blog.csdn.net/zhangjunhit/article/details/75338260)
+
+- 直接预测（x,y,z），不依赖2D-HPE
+- 第一个使用端到端学习范式将3D人体姿势估计作为体素空间中的3D关键点定位问题
+- 类似于2D Pose Estimation中的stacked Hourglass结构
+- 对三维空间进行网格划分，将问题转换为主体周围离散化空间中的 3D 关键点定位
+- Coarse-to-Fine 渐进优化，主要是针对 第三维度深度 z 而言的，d 的取值为 {1,2,4,8,16,32,64}
+
+![image-20220220215313532](picture/image-20220220215313532.png)
+
+##### 3.3.1.2 Simple-baseline-3D（2017）
+
+> A simple yet effective baseline for 3d human pose estimation
+
+[【论文读后感】：A simple yet effective baseline for 3d human pose estimation_艾与代码-CSDN博客](https://blog.csdn.net/kid_14_12/article/details/86713412)
+
+- 2D-to-3D Lifting，第一步，从RGB图像中获取到二维的重要关节点坐标。第二步，训练一个网络，该网络输入是一系列二维关节点坐标，输出是一系列三维关节点坐标。
+- 结论：大多数的3d姿态估计的错误来自于上述第一步
+- 使用2d/3d姿态的坐标分别作为输入与输出
+- RGB图像到2D关键节点使用stacked hourglass，微调
+
+![image-20220220215434983](picture/image-20220220215434983.png)
+
+
+
+##### 3.3.1.3 RepNet（2019）
+
+> RepNet:Weakly Supervised Training of an Adversarial Reprojection Network for 3D Human PoseEstimation
+
+- 一种基于二维重投影的三维人体姿势估计神经网络（RepNet）的对抗训练方法。通过GAN进行3D人体姿态估计。
+
+
+
+#### 3.3.2 多目（Multi-view Methods）
+
+#### 3.3.3 时序信息(video)
+
+
+
+### 补充4 基于RGB图像进行3D人体姿态估计的不足
+
+- 单视角2D到3D的映射中固有的深度模糊性、不适定性（一个2D骨架可以对应多个3D骨架）
+
+- 仅使用2D图像的人体姿势估计仍然存在一些限制。额外的深度信息可以提供丰富的 3D 数据，以克服 2D 数据的局限性
+
+  
+
+### 3.4 基于深度图的3D人体姿态估计
+
+#### 3.4.1 RF（2011）
+
+> Real-time human pose recognition in parts from single depth images
+
+
+
+#### 3.4.2 RFW（2015）
+
+> Random tree walk toward instantaneous 3D human pose estimation
+
+
+
+#### 3.4.3 V2V-PoseNet（2017）
+
+> V2V-PoseNet: Voxel-to-Voxel Prediction Network for Accurate 3D Hand and Human Pose Estimation from a Single Depth Map
+
+[V2V-PoseNet算法和应用详解（3D关节点估计领域）_不精，不诚，不足以动人-CSDN博客](https://blog.csdn.net/weixin_42118657/article/details/119779935)
+
+- 传统方法是基于2D深度图直接回归关节点坐标，而该模型是把2D深度图投影到3D空间，然后用3D卷积去操作，这能解决2D深度图的透视畸变问题。
+
+- 该模型不是直接回归关节点坐标，而是估计每个点云所属某关节点的概率值。（用热图表示）
+
+  ![img](picture/format,png.png)
+
+![img](picture/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjExODY1Nw==,size_16,color_FFFFFF,t_70.jpeg)
+
+- 作者认为3D识别关节点的好处：
+  - 第一个是2D深度图中的透视失真。由于2D深度图的像素值表示物体与深度相机的物理距离，因此深度图本质上是3D数据。然而，大多数先前的方法仅将深度图作为2S图像形式，其可以通过将其投影到2D图像空间来扭曲3D空间中的实际对象的形状。因此，网络看到一个扭曲的对象，并负担执行失真不变的估计。
+  - 第二个缺点是深度图与3D坐标之间的高度非线性映射。这种高度非线性的映射妨碍了学习过程，并阻止网络精确估计关键点的坐标。
+
+
+
+#### 3.4.4 A2J（2019）
+
+> A2J: Anchor-to-Joint Regression Network for 3D Articulated Pose Estimation from a Single Depth Image
+
+
+
+#### 3.4.5 Weakly Supervised Adversarial Learning for 3D Human Pose Estimation from Point Clouds（2020）
+
+[Weakly Supervised Adversarial Learning for 3D Human Pose Estimation from Point Clouds | IEEE Journals & Magazine | IEEE Xplore](https://ieeexplore.ieee.org/document/8998337)
+
+- 利用深度图像或点云的2D和3D表示来实现精确的3D人体姿势估计。模型既利用了**仅注释2D人类关节的弱监督数据**，也利用了**带有3D人类关节注释的完全监督数据**。为了缓解由于监督不力而导致的人类姿势模糊性，采用**对抗性学习**来确保恢复的人体姿势是有效的。包含两个模块：
+
+  - Point Clouds Proposal Module，我们使用紧凑而有效的全卷积网络，通过2D热图从输入深度中提取2D人体姿势，并使用2D人体姿势对点云进行采样。然后，使用估计的根关节对采样的点云进行归一化;
+  - 3D Pose Regression Module，我们根据生成对抗网络（GAN）恢复3D人体姿势。对于生成器，我们使用分层的基于 PointNet 的回归（以采样的点云作为输入）来恢复人体姿势。对于鉴别器，我们使用完全连接的神经网络来区分估计的人类姿势和地面事实人类姿势。
+
+  ![image-20220220235023316](picture/image-20220220235023316.png)
+
+- **Point Clouds Proposal Module**
+
+  ![image-20220220234915724](picture/image-20220220234915724.png)
+
+  
+
+  1. 使用**Stacked hourglass networks**进行2D人体姿势估计，从预测的热图上通过的 argmax 操作来获得**J**个2D关键节点。argmax 操作不是连续的或可微的（单独训练）
+
+  2. 我们从深度图中以检测到的 **2D 关节为中心**裁剪**d=20*20**像素的边界框，通过深度摄像头参数转换成点云，总采样点数**N=d*J**
+
+  3. 通过将采样的点云馈送到具有ResNet骨干网（称为根估计网络（RENet））的微小回归网络，从而获得根关节Root的位置。采样的点云可以归一化为 [−1， 1]^3由，**L**是预定义边界框的大小（实验为**[1.5,1.5,2]**）。
+
+     ![image-20220224202624818](picture/image-20220224202624818.png)
+
+     **注意：**此转换同样应用于采样的点云、真实关键节点坐标和**初始 3D 人体姿势**，保证一致性。
+
+  4. 初始3D姿态为预测的2D关键节点回溯投影到点云中的坐标，并将每个关节的深度设置为我们估计的根关节深度。(如上标准化处理)
+
+- **3D Pose Regression Module**
+
+  包括偏移量估计、2D关节投影损失，3D关节损失、骨长比损失以及判别器。
+
+  使用**PointNet++**估计3D关键节点偏移量，整个模型对抗学习，这里可以理解成GAN的**生成器**
+
+- ##### Discriminator
+
+  判别器旨在判断恢复的3D人体姿势是真假的。该网络使用预测的 3D 关节位置作为输入，并预测预测的 3D 关节位置是真实的还是假的。判别器由两个具有Leaky RELU 功能和跳过连接的全连接层 （FC）、一个具有Leaky ReLU 功能的完全连接层、另一个全连接层和一个 softmax 功能组成。
+
+  ![image-20220224204423145](picture/image-20220224204423145.png)
+
+- **损失函数**
+
+  **表示真实值*
+
+  ![image-20220224205154075](picture/image-20220224205154075.png)
+
+  为了惩罚不合逻辑的骨长度比，我们添加了骨长度比正则化损失:
+
+  > ![image-20220224205308743](picture/image-20220224205308743.png)
+
+- **对抗学习**
+
+  在训练阶段，按照 GAN 的典型训练程序，我们交替地在判别器D与生成器G之间训练更新网络参数。
+
+  
+
+  ![image-20220224205626678](picture/image-20220224205626678.png)
+
+  （a） 使用固定的3D姿势生成器的参数来训练判别器;
+
+  ![image-20220224205944453](picture/image-20220224205944453.png)
+
+  （b） 通过同时使用完全标记的数据和弱标记的数据来训练3D姿态生成器。总损失：
+
+  ![image-20220224210036213](picture/image-20220224210036213.png)
+
+#### 补充 5 Leaky ReLU函数
+
+[机器学习中的数学——激活函数（四）：Leaky ReLU函数_冯·诺依曼实验室-CSDN博客_leakyrelu函数公式](https://blog.csdn.net/hy592070616/article/details/120617996)
+
+Leaky ReLU函数的特点：
+
+- Leaky ReLU函数通过把x 的非常小的线性分量给予负输入0.01 x 来调**整负值的零梯度问题**。
+- Leaky有助于扩大ReLU函数的范围，通常α的值为0.01左右。
+- Leaky ReLU的函数范围是负无穷到正无穷。
+
+![image-20220224163548455](picture/image-20220224163548455.png)
+
+#### 3.4.6 Learning to Estimate 3D Human Pose From Point Cloud（2020）
+
+[Learning to Estimate 3D Human Pose From Point Cloud | IEEE Journals & Magazine | IEEE Xplore](https://ieeexplore.ieee.org/document/9107101)
+
+- 将图像作为输入并将其转换为3D点云。根据深度阈值和欧几里得聚类提取，我们从这些3D点中提取人。人体的点在被转移到深度学习网络之前，将人的高度和宽度进行标准化。
+
+- 基于DGCNN和PointNet的网络架构，直接从3D点云中估计人体关键关节。与其他从深度图像中回归3D关键点的方法不同，该算法将3D姿势估计问题从单个深度图像投射到点云。
+
+- 使用DGCNN网络提出的EdgeConv，学习点云的领域信息，通过堆叠EdgeConv模块或循环使用，可以提取到全局形状信息。
+
+- 对点云数据预处理，消除背景。
+
+  ![image-20220220232734813](picture/image-20220220232734813.png)
+
+  ![image-20220220234238139](picture/image-20220220234238139.png)
+
+### 3.5 基于RGBD数据的3D人体姿态估计
+
+#### 3.5.1 Research on 3D Human Pose Estimation Using RGBD Camera（2019）
+
+- **出发点：**由于技术的限制，RGBD相机读取的彩色图像与深度图像之间的对齐会存在一定偏差
+
+- **修正对齐：**我们将彩色图像上的特征点与相应深度图上的特征点进行匹配，**以获得准确的转换参数**。特征点之前已匹配。我们使用具有恒定尺度的SURF算法来提取图像的特征点。SURF 是一种高度改进的 SIFT 计算。获得特征点后，用尺度不变特征变换的描述符描述特征点，得到每个特征点i的深度向量和描述向量。我们使用 k 均值聚类算法来匹配彩色图像和深度图像的描述向量。尽管深度图像和彩色图像中的特征点通过欧氏距离比较进行了匹配和比较，但特征点集中仍然存在一些不匹配的点对。RANSAC算法用于消除不匹配，从而进一步提高匹配精度。最后，我们可以通过获得的高质量匹配点对精确计算转换参数。
+
+- **模型：**首先使用Faster-RCNN从彩色图像中提取人类边框，然后通过堆stacked hourglass network获得关节点的2D坐标。为了解决彩色图像缺乏深度信息的问题，将2D姿势估计的结果映射到深度图像上，因此可以轻松获得人体关节点的3D信息，从而实现3D姿态估计。
+
+  对于这个方法的一点想法：
+
+- **2D关键点映射到深度图获得z值的3D人体姿态估计方法的缺点：**
+
+  > 3D Human Pose Estimation Using RGBD Camera
+
+  由于RGBD相机的激光成像原理，深度信息代表了人体身体表面的深度。由2D关键点和深度图像生成的3D关键点都将落在人体模型的表面上。因为人体模型的关键点是基于人体骨骼关节，这种现象显然不符合事实。
+
+#### 3.5.2 3d human pose estimation in rgbd images for robotic task learning（2018）
+
+- 模型目标是预测世界坐标系的**J**个人体三维关键节点坐标。这里模型输出**(KxKxKxJ)**大小的热图，其中K是体素的大小决定。
+
+  > **拼接由⊗表示，⊕是逐元素添加操作。**
+
+![image-20220220225829293](picture/image-20220220225829293.png)
+
+-  **Color Keypoint Detector**
+
+  使用2D-HPE模型（openpose）检测人体关键点，输出热图（H,W,J），然后沿着z轴平铺得（H,W,D,J）。这里H,W,D=64，与跟体素网格相同大小。
+
+- **Voxelize**
+
+   预测的2D"颈部"关键点的反向投影到世界坐标中（计算使用的深度是3个有效邻居节点的深度值取平均）作为**体素中心**。将深度图像转换为**点云**，再计算**体素V**。我们选择体素网格的分辨率约为3厘米。当点云中至少有一个点位于所表示的区间内时，将**V**中元素设置为 1，否则为0。体素大小**KxKxK**，论文中K=64。
+
+- **VoxelPoseNet**
+
+  输入是平铺后的热图与体素拼接。**（B,K,K,K,J+1）**,B是batch_size。（这是我暂时的理解，不完全确定）
+
+  Voxel-PoseNet是一种编码器解码器架构，灵感来自**U-net**。先3D卷积编码，再反卷积解码，在解码为全分辨率分数图时，合并了多个中间预测。
+
+  > U-Net: Convolutional Networks for Biomedical Image Segmentation
+  >
+  > 网络是一个经典的全卷积网络（即网络中没有全连接操作）
+
+- **HandNormalNet**
+
+  手部法线预测（这里暂不细看）
+
+- **训练**
+
+  通过启发式方法来生成两种预测结果。一种是模型输出得热图做argmax操作获得的3D关键节点坐标；另一种是使用2D预测的二维节点坐标与方法一中获得的3D节点坐标z值，通过相机参数映射到世界坐标作为第二种预测结果，.对于这些坐标，x 和 y 方向的精度不受体素大小等的限制。最终两种方法根据**节点预测热图位置得分**选择最优。
+
+- **行动学习**
+
+#### 3.5.3 3D Human Pose Estimation Using RGBD Camera（2021）
+
+- **AlphaPose**
+
+  使用SSD算法进行人体检测，再使用Stacked Hourglass network估计目标的2D关键点，然后通过Simple-baseline-3D模型进行3D人体姿态估计。（另一种方式将2D关键点映射到相应的深度图，以获得相应的3D关键点。论文描述模糊，不确定这一步）
+
+- 介于**2D关键点映射到深度图获得z值方法的缺点**以及**受2D关键点精度和图像对齐误差的影响，生成3D模型时，3D关键点偶尔会无法与深度图中的实际位置对齐**。为了解决这个问题，我们使用FrankMocap生成SMPL模型作为人体测量学的先验，以提高pode估计的鲁棒性。
+
+- FrankMocap是一个使用SMPL模型的3D人体动作捕捉系统。首先，分别使用两个回归模块从输入图像中估计人体和人手的3D姿势，然后通过积分模块将预测结果组合在一起，得到最终的3D人体。
+
+  > FrankMocap: Fast Monocular 3D Hand and Body Motion Capture by Regression and Integration
+
+![image-20220220232002793](picture/image-20220220232002793.png)
+
+#### 3.5.4 RGB-D FUSION FOR POINT-CLOUD-BASED 3D HUMAN POSE ESTIMATION（2021）
+
+- 模型由三个模块组成。**2D fusion module**首先通过2D姿态估计模型从 RGB 图像生成热图。热图充当初步但有用的预测，有助于在后期阶段进行3D估计。接下来，2D 融合模块将热图与深度图像融合，并输出一个点云，其中每个点都赋予了一个颜色特征矢量。然后将缩减采样的点馈送到**3D learning module**中，以生成逐点特征。最后，为了更好地利用局部特征，设计了一个逐点投票机制**Dense prediction module**，可以预测从每个点到目标关键点的接近度分数和偏移向量，最终结果由所有积分投票选出。
+
+![image-20220220225757764](picture/image-20220220225757764.png)
+
+- **2D fusion module**
+
+  采用2D姿势估计器（SimpleBaseline ）从RGB图像生成热图（颜色特征），热图上采样为原始图像大小，然后颜色特征以点云的形式与深度图像集成。在馈送到下游模块之前，点云被随机下采样到固定大小的*N*。
+
+- **3D learning module**
+
+  利用PVCNN来提取点云中的几何信息。PVCNN是一种高效的3D深度学习方法，对于每个点，PVCNN 都会生成一个要素向量，该要素向量嵌入了涵盖不同空间大小的上下文信息。
+
+  逐点特征通过全局池化层和 MLP 获取全局特征向量。然后将其平铺并连接到逐点要素。此步骤旨在使每个点都能够"感知"全局。
+
+- **Dense prediction module**
+
+  **密集预测有利于网络的收敛。**（论文提到试过直接回归未能收敛）
+
+  - 第一个分支输出每个点与目标关键点的接近度分数。具体而言，它预测点是否位于关键点的邻域。真实接近度分数生成为：
+
+    ![image-20220225224010982](picture/image-20220225224010982.png)
+
+  - 另一个分支计算从每个点到每个关键点的偏移量：
+
+    ![image-20220225224252785](picture/image-20220225224252785.png)
+
+  - **左膝关节的网络输出示例**
+
+    （a） 红点表示左膝的相邻点。（b） 箭头表示从不同点到目标关键点的偏移量。为了获得更好的可视化效果，仅可视化了一部分矢量。
+
+    ![image-20220225224115726](picture/image-20220225224115726.png)
+
+  - 最后预测的关键节点坐标：
+
+    ![image-20220225224928615](picture/image-20220225224928615.png)
+
+- **损失函数**
+
+  损失函数由三个项组成
+
+  - 预测的3D人体姿态与真实值：
+
+    ![image-20220225225219793](picture/image-20220225225219793.png)
+
+    选择Huber loss而不是MSE loss，因为它对异常值不太敏感，同时将强凸性保持在零附近。该功能将更侧重于减少小错误，并有助于生成尽可能准确的结果。
+
+  - 接近度估计误差：
+
+    ![image-20220225225417718](picture/image-20220225225417718.png)
+
+  - 使用 Huber loss的偏移分支：
+
+    ![image-20220225225430958](picture/image-20220225225430958.png)
+
+  - 整体损失函数是上述三项的加权和：
+
+    ![image-20220225230336571](picture/image-20220225230336571.png)
+
+  
+
+- 一点总结，跟上面3.52算法对比：
+
+  - **相同点：**两者都使用2D人体姿态估计提取RGB图像特征，直接使用输出的热图信息作为颜色特征；将深度图像构建点云。
+
+  - **不同点：**
+    - 前者使用**体素**的结构输入到后续网络预测，将点云转换成体素结合RGB分支的热图特征。
+    - 本模型使用**点云**的结构输入到后续网络预测。
+
+
+
+#### 3.5.5 Real-time RGBD-based Extended Body Pose Estimation（2021）
+
+- 使用参数化 3D 可变形人体网格模型 （SMPL-X） 作为表示
+
+  
+
+### 3.6 基于点云数据3D人体姿态估计
+
+基于深度图或RGBD图像的3D人体姿态估计大部分可归为基于点云数据的模型
+
+#### 3.6.1 A Review: Point Cloud-Based 3D Human Joints Estimation（2021）
+
+![image-20220221104727876](picture/image-20220221104727876.png)
+
+- **不同方法特点：**
+  - 基于模板的方法首先需要建立模板库或参数化模板，然后比较人体点云与模板库或目标模型中的样本之间的相似性。这种方法相对粗糙且耗时。鉴于样本数据的多样性和多尺度结构，人体的相同姿势在空间中可能非常不同。因此，基于模板的方法的准确性非常有限。
+  - 基于特征的方法需要提取点云的全局或局部特征，结合一些先验知识来获得人体的3D关节。这种方法依赖于特征点的选择，使其不适合自遮挡和改变姿势。因此，有必要进一步优化算法的鲁棒性，以尽可能地覆盖人体的姿势。
+  - 基于机器学习的方法主要利用网络从点云中自动学习所需的特征，然后将学习到的特征视为提取人体关节的判断条件。与上述两种方法相比，有了很大的改进。一方面，获得的关节可以通过在大型训练集中学习样本特征来实现更高的精度，另一方面，它对尺度处理也非常健壮。基于机器学习的方法可以弥补上述两种方法的缺点，但它受到训练集样本丰富性的限制，因此训练集的构建对于基于机器学习的方法非常重要。
+
+#### 3.6.2 Structured Deep Learning Supported with Point Cloud for 3D Human Pose Estimation（2017）
+
+使用简化的提取方法"条件随机场"对3D人体点云进行分类，并将相应的图像和姿势作为CNN的输入传输类似的空间。当图像-姿势对匹配时，点积的值为高，否则该值较低。
+
+
+
+#### 3.6.3 Fast on-board 3D torso pose recovery and forecasting（2019）
+
+一种端到端系统，该系统结合了RGB图像和点云信息来恢复3D人体姿势。
+
+
+
+#### 3.6.4 Point-to-pose voting based hand pose estimation using residual permutation equivariant layer（2019）
+
+提出了多层残差网络，以获得用于跟踪和分割的手部特征。
+
+
+
+#### 3.6.5 Skeleton-Aware 3D Human Shape Reconstruction From Point Clouds（2019）
+
+
+
+### 3.7 评价指标
+
+
+
+## 4. 行为识别
+
+### 4.1 综述
+
+**行为识别Action Recognition**是指对视频中人的行为动作进行识别，即读懂视频。
+
+- 划分：
+
+  - **Hand gesture**：集中于处理视频片段中单人的手势
+  - **Action**：短时间的行为动作，场景往往是短视频片段的单人行为，比如Throw，catch，clap等
+  - **Activity**：持续时间较长的行为，场景往往是较长视频中的单人或多人行为
+
+- 行为识别算法分类：
+
+  [一文了解通用行为识别ActionRecognition：了解及分类 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/103566134)![preview](picture/v2-d1df4c0d34ccb1cda0a5627ac80966ed_r.jpg)
+
+- 框架：
+
+  [open-mmlab/mmaction2: OpenMMLab's Next Generation Video Understanding Toolbox and Benchmark (github.com)](https://github.com/open-mmlab/mmaction2)
+
+- 3D-Conv与CNN+LSTM算法参考代码（PyTorch）
+
+  [MRzzm/action-recognition-models-pytorch: The models of action recognition with pytorch (github.com)](https://github.com/MRzzm/action-recognition-models-pytorch)
+
+- 基于RGB-D的行为识别综述
+
+  [基于RGB-D的深度学习人体运动识别：|调查深爱 (deepai.org)](https://deepai.org/publication/rgb-d-based-human-motion-recognition-with-deep-learning-a-survey)
+
+### 4.2 传统算法
+
+#### 4.2.1 DT（2013）
+
+> Dense Trajectories and Motion Boundary Descriptors for Action Recognition
+
+- **解读：**
+
+- [行为识别笔记：improved dense trajectories算法（iDT算法） - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/27528934)
+
+  框架包括密集采样特征点、特征点轨迹跟踪和基于轨迹的特征提取三部分，后续再进行特征编码和分类。
+
+  在得到视频对应的特征后，DT算法采用SVM分类器进行分类，采用one-against-rest策略训练多类分类器。
+
+- **模型：**
+
+  ![image-20220122131931570](picture/image-20220122131931570.png)
+
+#### 4.2.2 iDT（2013）
+
+> Action Recognition with Improved Trajectories
+
+- **解读：**
+
+  iDT算法的基本框架和DT算法相同，主要改进在于对光流图像的优化，特征正则化方式的改进以及特征编码方式的改进。
+
+  - 通过估计相机运动估计来消除背景上的光流以及轨迹
+  - 对于HOF,HOG和MBH特征采取了与DT算法（L2范数归一化）不同的方式——L1正则化后再对特征的每个维度开平方
+  - 使用效果更好的Fisher Vector特征编码
+
+
+
+### 补充4 光流
+
+- **光流**是空间运动物体在**观察成像平面**上的像素运动的**瞬时速度**，是利用图像序列中像素在时间域上的变化以及相邻帧之间的**相关性**来找到上一帧跟当前帧之间存在的对应关系，从而计算出相邻帧之间物体的运动信息的一种方法。
+
+- 光流之所以生效是依赖于这几个假设：
+
+  1. 物体的像素强度不会在连续帧之间改变；
+  2. 一张图像中相邻的像素具有相似的运动。
+
+- **光流的计算方法**
+
+  假设第一帧图像中的像素 *I(x, y, t)* 在时间 *dt* 后移动到第二帧图像的 *(x+dx, y+dy)* 处。根据上述第一条假设：灰度值不变，我们可以得到：
+
+  ![image-20220221153601761](picture/image-20220221153601761.png)
+
+  对等号右侧进行泰勒级数展开，消去相同项，两边都除以 *dt* ，得到如下方程：
+
+  ![image-20220221153623441](picture/image-20220221153623441.png)
+
+  ![image-20220221153635509](picture/image-20220221153635509.png)
+
+  fx,fy均可由图像数据求得，而**(u,v)即为所求光流矢量**。
+
+  上述一个等式中有两个未知数。有几个方法可以解决这个问题，其中的一个是 Lucas-Kanade 法 。增加有一个假设：
+
+  这里就要用到上面提到的第二个假设条件，领域内的所有像素点具有相同的运动。Lucas-Kanade法就是利用一个3x3的领域中的9个像素点具有相同的运动，就可以得到9个点的光流方程(即上述公式)，用这些方程来求得*(u, v)* 这两个未知数，显然这是个约束条件过多的方程组，不能解得精确解，一个好的解决方法就是使用最小二乘来拟合。
+
+  opencv提供函数计算，参考[OpenCV小例程——光流法_xiao_lxl的专栏-CSDN博客_opencv 光流算法](https://blog.csdn.net/xiao_lxl/article/details/95330541)
+
+### 4.3 Two-Stream
+
+Two-Stream将动作识别中的特征提取分为两个分支，一个是RGB分支提取空间特征，另一个是光流分支提取时间上的光流特征，最后结合两种特征进行动作识别。
+
+- 解读：
+
+  [论文笔记——基于深度学习的视频行为识别/动作识别（一） - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/40964492)
+
+#### 4.3.1 TwoStreamCNN（2014）
+
+> Two-stream convolutional networks for action recognition in videos
+
+- **解读：**
+
+  - 多任务学习
+  - 一个密集光流可以看做是在连续的帧t和帧t+1之间的一个位移矢量场dt的集合。通过dt(u,v)，我们表示在帧t的(u,v)位置的位移矢量，他表示移动到在下一个帧t+1相对应的点。矢量场的水平和垂直部分是dtx和dty，可以视为图像的通道（如图2所示），在卷积网络中可以用来识别。为了表示一系列帧之间的运动，我们叠加了L个连续帧的流通道dtxy，行成了2L的输入通道。
+  - [(1条消息) 【论文学习】Two-Stream Convolutional Networks for Action Recognition in Videos_I am what i am-CSDN博客](https://blog.csdn.net/liuxiao214/article/details/78377791)
+- **模型：**![image-20220123101946274](picture/image-20220123101946274.png)
+
+#### 4.3.2 其他模型
+
+Christoph Feichtenhofer等人对双流网络中空间和时间特征的融合进行优化。
+
+Limin Wang等人提出时域分割网络，采取了稀疏时间采样策略和基于视频监督的策略解决了普通双流网络只能处理短期运动问题。
+
+### 4.4 3D-Conv
+
+3D convolution 直接将2D卷积扩展到3D（添加了时间维度），直接提取包含时间和空间两方面的特征。
+
+- 解读：
+
+  [论文笔记——基于的视频行为识别/动作识别算法笔记(三) - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/41659502)
+
+#### 4.4.1 C3D（2015）
+
+> Learning spatiotemporal features with 3d convolutional networks
+
+- 视频输入是C×L×H×W，C为图像通道(一般为3)，L为视频序列的长度，kernel size为3x3x3，stride为1，padding=True，滤波器个数为K的3D卷积后，输出的视频大小为K∗L∗H∗W。文章认为不那么过早地池化时间信息，可以在早期阶段保留更多的时间信息。网络的输入的视频长度为16帧，输入的视频帧尺寸为 112 × 112。
+
+![image-20220221120529269](picture/image-20220221120529269.png)
+
+#### 4.4.2 其他模型
+
+Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1x3x3)和时间的1D卷积(3x1x1)并以不同的串并联方式结合获得了显著效果。
+
+
+
+### 4.5 CNN+LSTM
+
+这种方法通常使用CNN提取空间特征，使用RNN（如LSTM）提取时序特征，进行行为识别。
+
+- 解读：
+
+  [论文笔记——基于深度学习的视频行为识别/动作识别（二） - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/41125934)
+
+#### 4.5.1 LRCN（2015）
+
+> Long-term recurrent convolutional networks for visual recognition and description
+
+- CNN的部分仍然用传统的AlexNet，但实验中发现全连接层fc6和fc7差距较小，舍弃了fc7，将fc6的结果作为LSTM的输入；
+- LSTM的部分隐藏单元数量分别使用了256、512、1024，但数量增多效果增益不明显，最后隐藏单元数RGB输入时256个，光流输入时1024个。
+
+![image-20220221121127752](picture/image-20220221121127752.png)
+
+### 4.6 基于骨骼关键节点
+
+基于骨架（Skeleton-based）的行为识别目前基本都是在用图卷积GCN
+
+#### 4.6.1 基于骨骼关键节点的行为识别综述
+
+- [【骨骼行为识别】论文与数据集列表 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/330856233)
+- [【论文笔记】2020行为识别综述A Survey on 3D Skeleton-Based Action Recognition Using Learning Method_LoveKKarlie_的博客-CSDN博客_skeleton 行为识别](https://blog.csdn.net/LoveKKarlie_/article/details/111034083)
+- 根据基于模型的不同可以划分为RNN 、CNN 、GCN
+  1. RNN-based：RNN通过将上一时刻的输出作为当前时刻的输入来形成其结构内部的递归连接，这被证明是一种处理序列数据的有效方法。
+  2. CNN-based：如何平衡且更充分利用空间信息和时域信息
+  3. GCN-based：作为CNN的一种推广形式可应用于包括骨架图在内的任意结构。最重要的问题仍然与骨架数据的表示有关，即如何将原始数据组织成特定的图形。
+
+#### 4.6.2 双流RNN结构（2017）
+
+> Modeling Temporal Dynamics and Spatial Configurations of Actions Using Two-Stream Recurrent Neural Networks
+
+![image-20220221133630244](picture/image-20220221133630244.png)
+
+- 时间堆叠式 RNN
+
+  此结构为每个时间步长的所有关节的串联坐标馈送RNN网络。在这里，我们堆叠两层RNN，发现添加更多层不会显着提高性能。
+
+- 时间分层 RNN
+
+  人体骨骼可分为五部分，即两条胳膊、两条腿和一条躯干。我们观察到，一个动作是由一个独立的部分或几个部分的组合来执行的。
+
+  ![image-20220221134035500](picture/image-20220221134035500.png)
+
+- 空间链序列RNN
+
+  我们假设关节按照手臂，躯干和腿的顺序排列成链条状序列。躯干放在中间，因为它连接着手臂和腿。
+
+- 空间遍历序列RNN
+
+  一种图遍历方法，根据邻接关系访问序列中的关节，首先选择中央脊柱关节作为起点，并访问左臂的关节。在达到终点时，它会回到过去。然后我们参观右臂，上躯干等。在访问了所有关节之后，它终于回到了起点。我们根据访问顺序将图表排列成一系列关节。**遍历序列通过在正向和反向方向上两次访问大多数关节来保证图形中的空间关系。**
+
+#### 4.6.3 ST-GCN（2018）
+
+> Spatial Temporal Graph Convolutional Networks for Skeleton Based Action Recognition
+
+- **骨架时空图：**由结点和边（edges）组成。
+  1）结点：骨架图的结点就是人骨架中的关节点。
+  2）边：骨架图中的边就相当具有“时空特色”，边的类型分为两类。为了方便理解我使用“控制变量法”来描述：
+   a）在同一时间（帧）内，某个骨架数据各个关节点之间连接关系称为第一类边。
+   b）在同一关节点处，某个骨架数据的某个关节点在各个时间（帧）之间的连接关系称为第二类边
+
+![image-20220221123637172](picture/image-20220221123637172.png)
+
+- **输入：**(N , C, T, V)，N是batchsize；C是通道数（3个坐标）；T是帧数；V是关键节点数
+
+  ![image-20220221124943045](picture/image-20220221124943045.png)
+
+#### 4.6.4 PoseC3D（2021）
+
+> Revisiting Skeleton-based Action Recognition
+
+- 基于提取好的 2D 姿态，我们需要堆叠**T**张形状为**KxHxW**的二维关键点热图以生成形状为**KxTxHxW**的 3D 热图堆叠作为输入。若我们事先将 2D 姿态存储成坐标形式，则需要先借助生成以 **(x,y)** 为中心的高斯分布，将其重新转换为热图形式。
+
+![image-20220221125158638](picture/image-20220221125158638.png)
+
+- 我们同时利用均匀采样以减少 3D 热图堆叠在时间维度上的冗余。由于整个视频长度过长，难以处理，通常选取一个仅包含部分帧的子集构成一个片段，作为 3D-CNN 的输入。基于 RGB 模态的方法，通常只在一个较短的时间窗内采帧构成 3D-CNN 的输入（如 SlowFast 在一个长仅为 64 帧的时间窗内采帧）。由于这种采帧方式难以捕捉整个动作，因此在骨骼行为识别中，我们采用了均匀采样的方式：**需要采 N 帧时，我们先将整个视频均分为长度相同的N 段，并在每段中随机选取一帧。**在实验中，我们发现这样的采帧方式对骨骼行为识别尤其适用。
+
+  ![image-20220221125927200](picture/image-20220221125927200.png)
+
+## 5. 应用落地
+
+应用：视频监控、人机交互、智能驾驶、机器人技术以及体育赛事辅助等
+
+### 5.1 体育赛事辅助
+
+[足球、篮球、花样滑冰、乒乓球四大运动的动作识别通用方案开源了 (paddlepaddle.org.cn)](https://www.paddlepaddle.org.cn/support/news?action=detail&id=2782)
+
+- 统计分析每个球得失分的原因、使用了什么技术，成功率又是多少。
+- 将动作识别出来后可用于犯规判断
+- 识别动作智能评分等
+
+### 5.2 视频监控
+
+- 社区安全应用：老人儿童摔倒等
+- 监狱场景应用：实时分析并警报是否有人员逃逸、斗殴等情况；
+- 校园周边安防应用：实时分析并警报是否有学生斗殴、外人入侵等情况；
+- 医院周边安防应用：实时分析并警报是否有暴动伤医、危险人员等情况；
+
+
+
+## 6. 其他
+
+### 6.1 Huber loss
+
+[机器学习（十）：损失函数 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/136047113)
+
+MSE 损失收敛快但容易受 outlier 影响，MAE 对 outlier 更加健壮但是收敛慢。
+
+**Huber Loss**则是一种将 MSE 与 MAE 结合起来，取两者优点的损失函数，也被称作 Smooth Mean Absolute Error Loss 。其原理很简单，就是在**误差接近 0 时使用 MSE，误差较大时使用 MAE**，公式为
+
+![image-20220226160401522](picture/image-20220226160401522.png)
+
+> ![image-20220226160634130](picture/image-20220226160634130.png)
