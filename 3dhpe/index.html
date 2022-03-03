@@ -321,7 +321,7 @@ ret = pred × m + centroid
 </ol>
 </li>
 </ul>
-<h4 id="2-4-2-pointnet-2017-">2.4.2 PointNet（2017）</h4>
+<h4 id="2-4-2-pointnet-2017-cvprr-">2.4.2 PointNet（2017 CVPRR）</h4>
 <blockquote>
 <p>PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation</p>
 </blockquote>
@@ -348,7 +348,7 @@ ret = pred × m + centroid
 </ul>
 </li>
 </ul>
-<h4 id="2-4-3-pointnet-2017-">2.4.3 PointNet++（2017）</h4>
+<h4 id="2-4-3-pointnet-2017-nips-">2.4.3 PointNet++（2017 NIPS）</h4>
 <blockquote>
 <p>PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space</p>
 </blockquote>
@@ -408,7 +408,7 @@ ret = pred × m + centroid
 </ul>
 </li>
 </ul>
-<h4 id="2-4-4-dgcnn-2019-">2.4.4 DGCNN（2019）</h4>
+<h4 id="2-4-4-dgcnn-2019-acm-tog-">2.4.4 DGCNN（2019 ACM TOG）</h4>
 <blockquote>
 <p>Dynamic Graph CNN for Learning on Point Clouds</p>
 </blockquote>
@@ -417,6 +417,7 @@ ret = pred × m + centroid
 <p><img src="picture/image-20220223222127040.png" alt="image-20220223222127040"></p>
 <ul>
 <li><p><strong>EdgeConv</strong></p>
+<p><img src="picture/image-20220303110108522.png" alt="image-20220303110108522"></p>
 <blockquote>
 <p><img src="picture/image-20220223235812718.png" alt="image-20220223235812718"></p>
 </blockquote>
@@ -434,7 +435,7 @@ ret = pred × m + centroid
 <li>PointNet++算法在FPS采样、球体Grouping时，使用的是每个点的xyz坐标，这些坐标始终没有变化，相当于每个点是<strong>固定</strong>的。</li>
 <li>DGCNN中，除第一层使用xyz坐标系计算外，后续使用计算出来的feature在feature空间KNN内采样、构建局部图，相当于每个点是<strong>动态变化</strong>的。</li>
 </ul>
-<h4 id="2-4-5-pvcnn-2019-">2.4.5 PVCNN（2019）</h4>
+<h4 id="2-4-5-pvcnn-2019-nips-">2.4.5 PVCNN（2019 NIPS）</h4>
 <blockquote>
 <p>Point-Voxel CNN for Efficient 3D Deep Learning</p>
 </blockquote>
@@ -519,7 +520,7 @@ ret = pred × m + centroid
 </ul>
 <h3 id="3-3-rgb-3d-">3.3 基于RGB图像的3D人体姿态估计</h3>
 <h4 id="3-3-1-">3.3.1 单目</h4>
-<h5 id="3-3-1-1-coarse-to-fine-2017-">3.3.1.1 Coarse-to-Fine（2017）</h5>
+<h5 id="3-3-1-1-coarse-to-fine-2017-cvpr-">3.3.1.1 Coarse-to-Fine（2017 CVPR）</h5>
 <blockquote>
 <p>Coarse-to-Fine Volumetric Prediction for Single-Image 3D Human Pose</p>
 </blockquote>
@@ -532,7 +533,7 @@ ret = pred × m + centroid
 <li>Coarse-to-Fine 渐进优化，主要是针对 第三维度深度 z 而言的，d 的取值为 {1,2,4,8,16,32,64}</li>
 </ul>
 <p><img src="picture/image-20220220215313532.png" alt="image-20220220215313532"></p>
-<h5 id="3-3-1-2-simple-baseline-3d-2017-">3.3.1.2 Simple-baseline-3D（2017）</h5>
+<h5 id="3-3-1-2-simple-baseline-3d-2017-iccv-">3.3.1.2 Simple-baseline-3D（2017 ICCV）</h5>
 <blockquote>
 <p>A simple yet effective baseline for 3d human pose estimation</p>
 </blockquote>
@@ -544,7 +545,7 @@ ret = pred × m + centroid
 <li>RGB图像到2D关键节点使用stacked hourglass，微调</li>
 </ul>
 <p><img src="picture/image-20220220215434983.png" alt="image-20220220215434983"></p>
-<h5 id="3-3-1-3-repnet-2019-">3.3.1.3 RepNet（2019）</h5>
+<h5 id="3-3-1-3-repnet-2019-cvpr-">3.3.1.3 RepNet（2019 CVPR）</h5>
 <blockquote>
 <p>RepNet:Weakly Supervised Training of an Adversarial Reprojection Network for 3D Human PoseEstimation</p>
 </blockquote>
@@ -555,21 +556,21 @@ ret = pred × m + centroid
 <h4 id="3-3-3-video-">3.3.3 时序信息(video)</h4>
 <h3 id="-4-rgb-3d-">补充4 基于RGB图像进行3D人体姿态估计的不足</h3>
 <ul>
-<li><p>单视角2D到3D的映射中固有的深度模糊性、不适定性（一个2D骨架可以对应多个3D骨架）</p>
+<li><p>单视角2D到3D的映射中存在的深度模糊性、高度非线性（一个2D骨架可以对应多个3D骨架）</p>
 </li>
 <li><p>仅使用2D图像的人体姿势估计仍然存在一些限制。额外的深度信息可以提供丰富的 3D 数据，以克服 2D 数据的局限性</p>
 </li>
 </ul>
 <h3 id="3-4-3d-">3.4 基于深度图的3D人体姿态估计</h3>
-<h4 id="3-4-1-rf-2011-">3.4.1 RF（2011）</h4>
+<h4 id="3-4-1-rf-2011-cvpr-">3.4.1 RF（2011 CVPR）</h4>
 <blockquote>
 <p>Real-time human pose recognition in parts from single depth images</p>
 </blockquote>
-<h4 id="3-4-2-rfw-2015-">3.4.2 RFW（2015）</h4>
+<h4 id="3-4-2-rfw-2015-cvpr-">3.4.2 RFW（2015 CVPR）</h4>
 <blockquote>
 <p>Random tree walk toward instantaneous 3D human pose estimation</p>
 </blockquote>
-<h4 id="3-4-3-v2v-posenet-2017-">3.4.3 V2V-PoseNet（2017）</h4>
+<h4 id="3-4-3-v2v-posenet-2018-cvpr-">3.4.3 V2V-PoseNet（2018 CVPR）</h4>
 <blockquote>
 <p>V2V-PoseNet: Voxel-to-Voxel Prediction Network for Accurate 3D Hand and Human Pose Estimation from a Single Depth Map</p>
 </blockquote>
@@ -589,17 +590,17 @@ ret = pred × m + centroid
 </ul>
 </li>
 </ul>
-<h4 id="3-4-4-a2j-2019-">3.4.4 A2J（2019）</h4>
+<h4 id="3-4-4-a2j-2019-iccv-">3.4.4 A2J（2019 ICCV）</h4>
 <blockquote>
 <p>A2J: Anchor-to-Joint Regression Network for 3D Articulated Pose Estimation from a Single Depth Image</p>
 </blockquote>
-<h4 id="3-4-5-weakly-supervised-adversarial-learning-for-3d-human-pose-estimation-from-point-clouds-2020-">3.4.5 Weakly Supervised Adversarial Learning for 3D Human Pose Estimation from Point Clouds（2020）</h4>
+<h4 id="3-4-5-weakly-supervised-adversarial-learning-for-3d-human-pose-estimation-from-point-clouds-2020-tvcg-">3.4.5 Weakly Supervised Adversarial Learning for 3D Human Pose Estimation from Point Clouds（2020 TVCG）</h4>
 <p><a href="https://ieeexplore.ieee.org/document/8998337">Weakly Supervised Adversarial Learning for 3D Human Pose Estimation from Point Clouds | IEEE Journals &amp; Magazine | IEEE Xplore</a></p>
 <ul>
 <li><p>利用深度图像或点云的2D和3D表示来实现精确的3D人体姿势估计。模型既利用了<strong>仅注释2D人类关节的弱监督数据</strong>，也利用了<strong>带有3D人类关节注释的完全监督数据</strong>。为了缓解由于监督不力而导致的人类姿势模糊性，采用<strong>对抗性学习</strong>来确保恢复的人体姿势是有效的。包含两个模块：</p>
 <ul>
-<li>Point Clouds Proposal Module，我们使用紧凑而有效的全卷积网络，通过2D热图从输入深度中提取2D人体姿势，并使用2D人体姿势对点云进行采样。然后，使用估计的根关节对采样的点云进行归一化;</li>
-<li>3D Pose Regression Module，我们根据生成对抗网络（GAN）恢复3D人体姿势。对于生成器，我们使用分层的基于 PointNet 的回归（以采样的点云作为输入）来恢复人体姿势。对于鉴别器，我们使用完全连接的神经网络来区分估计的人类姿势和地面事实人类姿势。</li>
+<li><strong>Point Clouds Proposal Module</strong>，我们使用紧凑而有效的全卷积网络，通过2D热图从输入深度中提取2D人体姿势，并使用2D人体姿势对点云进行采样。然后，使用估计的根关节对采样的点云进行归一化;</li>
+<li><strong>3D Pose Regression Module</strong>，我们根据生成对抗网络（GAN）恢复3D人体姿势。对于生成器，我们使用分层的基于 PointNet 的回归（以采样的点云作为输入）来恢复人体姿势。对于鉴别器，我们使用完全连接的神经网络来区分估计的人类姿势和真实人体姿势。</li>
 </ul>
 <p><img src="picture/image-20220220235023316.png" alt="image-20220220235023316"></p>
 </li>
@@ -654,7 +655,7 @@ ret = pred × m + centroid
 <li>Leaky ReLU的函数范围是负无穷到正无穷。</li>
 </ul>
 <p><img src="picture/image-20220224163548455.png" alt="image-20220224163548455"></p>
-<h4 id="3-4-6-learning-to-estimate-3d-human-pose-from-point-cloud-2020-">3.4.6 Learning to Estimate 3D Human Pose From Point Cloud（2020）</h4>
+<h4 id="3-4-6-learning-to-estimate-3d-human-pose-from-point-cloud-2020-jsen-">3.4.6 Learning to Estimate 3D Human Pose From Point Cloud（2020 JSEN）</h4>
 <p><a href="https://ieeexplore.ieee.org/document/9107101">Learning to Estimate 3D Human Pose From Point Cloud | IEEE Journals &amp; Magazine | IEEE Xplore</a></p>
 <ul>
 <li><p>将图像作为输入并将其转换为3D点云。根据深度阈值和欧几里得聚类提取，我们从这些3D点中提取人。人体的点在被转移到深度学习网络之前，将人的高度和宽度进行标准化。</p>
@@ -663,13 +664,13 @@ ret = pred × m + centroid
 </li>
 <li><p>使用DGCNN网络提出的EdgeConv，学习点云的领域信息，通过堆叠EdgeConv模块或循环使用，可以提取到全局形状信息。</p>
 </li>
-<li><p>对点云数据预处理，消除背景。</p>
+<li><p><strong>对点云数据预处理，消除背景。</strong></p>
 <p><img src="picture/image-20220220232734813.png" alt="image-20220220232734813"></p>
 <p><img src="picture/image-20220220234238139.png" alt="image-20220220234238139"></p>
 </li>
 </ul>
 <h3 id="3-5-rgbd-3d-">3.5 基于RGBD数据的3D人体姿态估计</h3>
-<h4 id="3-5-1-research-on-3d-human-pose-estimation-using-rgbd-camera-2019-">3.5.1 Research on 3D Human Pose Estimation Using RGBD Camera（2019）</h4>
+<h4 id="3-5-1-research-on-3d-human-pose-estimation-using-rgbd-camera-2019-iceiec-">3.5.1 Research on 3D Human Pose Estimation Using RGBD Camera（2019 ICEIEC）</h4>
 <ul>
 <li><p><strong>出发点：</strong>由于技术的限制，RGBD相机读取的彩色图像与深度图像之间的对齐会存在一定偏差</p>
 </li>
@@ -682,10 +683,10 @@ ret = pred × m + centroid
 <blockquote>
 <p>3D Human Pose Estimation Using RGBD Camera</p>
 </blockquote>
-<p>由于RGBD相机的激光成像原理，深度信息代表了人体身体表面的深度。由2D关键点和深度图像生成的3D关键点都将落在人体模型的表面上。因为人体模型的关键点是基于人体骨骼关节，这种现象显然不符合事实。</p>
+<p>由于RGBD相机的激光成像原理，深度信息代表了<strong>人体身体表面的深度</strong>。由2D关键点和深度图像生成的3D关键点都将落在人体模型的表面上。因为人体模型的关键点是基于人体骨骼关节，这种现象显然不符合事实。</p>
 </li>
 </ul>
-<h4 id="3-5-2-3d-human-pose-estimation-in-rgbd-images-for-robotic-task-learning-2018-">3.5.2 3d human pose estimation in rgbd images for robotic task learning（2018）</h4>
+<h4 id="3-5-2-3d-human-pose-estimation-in-rgbd-images-for-robotic-task-learning-2018-icra-">3.5.2 3d human pose estimation in rgbd images for robotic task learning（2018 ICRA）</h4>
 <ul>
 <li><p>模型目标是预测世界坐标系的<strong>J</strong>个人体三维关键节点坐标。这里模型输出<strong>(KxKxKxJ)</strong>大小的热图，其中K是体素的大小决定。</p>
 <blockquote>
@@ -718,7 +719,7 @@ ret = pred × m + centroid
 <li><p><strong>行动学习</strong></p>
 </li>
 </ul>
-<h4 id="3-5-3-3d-human-pose-estimation-using-rgbd-camera-2021-">3.5.3 3D Human Pose Estimation Using RGBD Camera（2021）</h4>
+<h4 id="3-5-3-3d-human-pose-estimation-using-rgbd-camera-2021-cei-">3.5.3 3D Human Pose Estimation Using RGBD Camera（2021 CEI）</h4>
 <ul>
 <li><p><strong>AlphaPose</strong></p>
 <p>使用SSD算法进行人体检测，再使用Stacked Hourglass network估计目标的2D关键点，然后通过Simple-baseline-3D模型进行3D人体姿态估计。（另一种方式将2D关键点映射到相应的深度图，以获得相应的3D关键点。论文描述模糊，不确定这一步）</p>
@@ -732,7 +733,7 @@ ret = pred × m + centroid
 </li>
 </ul>
 <p><img src="picture/image-20220220232002793.png" alt="image-20220220232002793"></p>
-<h4 id="3-5-4-rgb-d-fusion-for-point-cloud-based-3d-human-pose-estimation-2021-">3.5.4 RGB-D FUSION FOR POINT-CLOUD-BASED 3D HUMAN POSE ESTIMATION（2021）</h4>
+<h4 id="3-5-4-rgb-d-fusion-for-point-cloud-based-3d-human-pose-estimation-2021-icip-">3.5.4 RGB-D FUSION FOR POINT-CLOUD-BASED 3D HUMAN POSE ESTIMATION（2021 ICIP）</h4>
 <ul>
 <li>模型由三个模块组成。<strong>2D fusion module</strong>首先通过2D姿态估计模型从 RGB 图像生成热图。热图充当初步但有用的预测，有助于在后期阶段进行3D估计。接下来，2D 融合模块将热图与深度图像融合，并输出一个点云，其中每个点都赋予了一个颜色特征矢量。然后将缩减采样的点馈送到<strong>3D learning module</strong>中，以生成逐点特征。最后，为了更好地利用局部特征，设计了一个逐点投票机制<strong>Dense prediction module</strong>，可以预测从每个点到目标关键点的接近度分数和偏移向量，最终结果由所有积分投票选出。</li>
 </ul>
@@ -748,7 +749,7 @@ ret = pred × m + centroid
 <li><p><strong>Dense prediction module</strong></p>
 <p><strong>密集预测有利于网络的收敛。</strong>（论文提到试过直接回归未能收敛）</p>
 <ul>
-<li><p>第一个分支输出每个点与目标关键点的接近度分数。具体而言，它预测点是否位于关键点的邻域。真实接近度分数生成为：</p>
+<li><p>第一个分支输出每个点与目标关键点的<strong>接近度分数</strong>。具体而言，它预测点是否位于关键点的邻域。真实接近度分数生成为：</p>
 <p><img src="picture/image-20220225224010982.png" alt="image-20220225224010982"></p>
 </li>
 <li><p>另一个分支计算从每个点到每个关键点的偏移量：</p>
@@ -768,7 +769,7 @@ ret = pred × m + centroid
 <ul>
 <li><p>预测的3D人体姿态与真实值：</p>
 <p><img src="picture/image-20220225225219793.png" alt="image-20220225225219793"></p>
-<p>选择Huber loss而不是MSE loss，因为它对异常值不太敏感，同时将强凸性保持在零附近。该功能将更侧重于减少小错误，并有助于生成尽可能准确的结果。</p>
+<p>选择Huber loss而不是MSE loss，因为它对<strong>异常值不太敏感</strong>，同时将强凸性保持在零附近。该功能将更侧重于减少小错误，并有助于生成尽可能准确的结果。</p>
 </li>
 <li><p>接近度估计误差：</p>
 <p><img src="picture/image-20220225225417718.png" alt="image-20220225225417718"></p>
@@ -796,13 +797,13 @@ ret = pred × m + centroid
 </ul>
 </li>
 </ul>
-<h4 id="3-5-5-real-time-rgbd-based-extended-body-pose-estimation-2021-">3.5.5 Real-time RGBD-based Extended Body Pose Estimation（2021）</h4>
+<h4 id="3-5-5-real-time-rgbd-based-extended-body-pose-estimation-2021-wacv-">3.5.5 Real-time RGBD-based Extended Body Pose Estimation（2021 WACV）</h4>
 <ul>
 <li>使用参数化 3D 可变形人体网格模型 （SMPL-X） 作为表示</li>
 </ul>
 <h3 id="3-6-3d-">3.6 基于点云数据3D人体姿态估计</h3>
 <p>基于深度图或RGBD图像的3D人体姿态估计大部分可归为基于点云数据的模型</p>
-<h4 id="3-6-1-a-review-point-cloud-based-3d-human-joints-estimation-2021-">3.6.1 A Review: Point Cloud-Based 3D Human Joints Estimation（2021）</h4>
+<h4 id="3-6-1-a-review-point-cloud-based-3d-human-joints-estimation-2021-sensors-">3.6.1 A Review: Point Cloud-Based 3D Human Joints Estimation（2021 Sensors）</h4>
 <p><img src="picture/image-20220221104727876.png" alt="image-20220221104727876"></p>
 <ul>
 <li><strong>不同方法特点：</strong><ul>
@@ -812,14 +813,79 @@ ret = pred × m + centroid
 </ul>
 </li>
 </ul>
-<h4 id="3-6-2-structured-deep-learning-supported-with-point-cloud-for-3d-human-pose-estimation-2017-">3.6.2 Structured Deep Learning Supported with Point Cloud for 3D Human Pose Estimation（2017）</h4>
-<p>使用简化的提取方法&quot;条件随机场&quot;对3D人体点云进行分类，并将相应的图像和姿势作为CNN的输入传输类似的空间。当图像-姿势对匹配时，点积的值为高，否则该值较低。</p>
-<h4 id="3-6-3-fast-on-board-3d-torso-pose-recovery-and-forecasting-2019-">3.6.3 Fast on-board 3D torso pose recovery and forecasting（2019）</h4>
-<p>一种端到端系统，该系统结合了RGB图像和点云信息来恢复3D人体姿势。</p>
-<h4 id="3-6-4-point-to-pose-voting-based-hand-pose-estimation-using-residual-permutation-equivariant-layer-2019-">3.6.4 Point-to-pose voting based hand pose estimation using residual permutation equivariant layer（2019）</h4>
-<p>提出了多层残差网络，以获得用于跟踪和分割的手部特征。</p>
-<h4 id="3-6-5-skeleton-aware-3d-human-shape-reconstruction-from-point-clouds-2019-">3.6.5 Skeleton-Aware 3D Human Shape Reconstruction From Point Clouds（2019）</h4>
-<h3 id="3-7-">3.7 评价指标</h3>
+<h4 id="3-6-2-a-3d-point-cloud-feature-for-human-pose-estimation-2013-icra-">3.6.2 A 3D-point-cloud feature for human-pose estimation（2013 ICRA）</h4>
+<h4 id="3-6-3-point-to-pose-voting-based-hand-pose-estimation-using-residual-permutation-equivariant-layer-2019-cvpr-">3.6.3 Point-to-pose voting based hand pose estimation using residual permutation equivariant layer（2019 CVPR）</h4>
+<p><a href="https://www.jianshu.com/p/ed5f0b685d79">Point-to-Pose Voting based Hand Pose Estimation using Residual Permutation Equivariant Layer总结 - 简书 (jianshu.com)</a></p>
+<ul>
+<li><p>近年来，基于三维输入数据的手部姿态估计方法显示出最先进的性能，因为三维数据比深度捕捉更多的空间信息。而基于三维体素的方法需要大量计算量，基于PointNet的方法需要冗长的预处理步骤，如计算曲面法线向量，分组时使用k-最近邻搜索。</p>
+</li>
+<li><p>本文提出了一种新的基于无序点云的手势估计方法。采用1024个三维点作为输入，不需要额外的信息。本文以置换等变层(PEL)为基本单元，提出一个PEL版本的ResNet用于手势识别任务。此外，还提出了一个基于投票的方案(Voting-Based Scheme)，合并各个点的信息用于最终手势预测。</p>
+</li>
+<li><p>我们的方法取N个任意阶三维点P∈R^N×3作为输入，最后输出矢量化的三维手部姿态y∈R^J，其中<strong>J = 3 × #关节</strong></p>
+<p><img src="picture/image-20220303094724043.png" alt="image-20220303094724043"></p>
+</li>
+<li><p><strong>预处理</strong></p>
+<ol>
+<li>将深度图像素转换为3D点云</li>
+<li>为手点创建一个3D包围框，以获得这些点的规范化坐标。通常简单地创建一个与摄像机坐标系统对齐的边界框。</li>
+<li>归一化视角<ul>
+<li>问题：相同的手势由于不同的视图方向导致不同的观测结果，因此得到的训练样本将包含一对多映射。</li>
+<li>解决：把质心旋转到z轴上。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>Residual Permutation Equivariant Layers(RPEL)残差置换等变层</strong></p>
+<ul>
+<li><p><strong>PEL</strong></p>
+<blockquote>
+<p>Deep learning with sets and point clouds（2016）</p>
+</blockquote>
+<blockquote>
+<p><img src="picture/image-20220303102035247.png" alt="image-20220303102035247"></p>
+</blockquote>
+<p><img src="picture/image-20220303101448739.png" alt="image-20220303101448739"></p>
+<p><strong>注意到权值γ和λ是共享的</strong>，因为每个点使用自己的输入特征和各个特征维度上的最大值计算自己的特征。所以PEL能处理无序数据，而且各个点在一定程度上相当于使用Xmax交换信息。</p>
+</li>
+<li><p><strong>Residual network of permutation equivariant layer</strong></p>
+<p><img src="picture/image-20220303101430625.png" alt="image-20220303101430625"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Point-to-pose voting</strong></p>
+<p>通过ResNet-PEL得到NxF维特征，每一行F维向量表示一个点的局部特征。使用Point-to-Pose voting方式估计关节点坐标，文章提出了检测和回归两种版本(回归效果更好)。</p>
+<ul>
+<li><p>Regression version</p>
+<p><img src="picture/image-20220303103440332.png" alt="image-20220303103440332"></p>
+<p>G表示3D点n对于关节点j预测的贡献程度(置信水平)，y`为网    络输出的每个3D点预测的关节点j的坐标激励值，根据每个3D点对每个关节点的贡献程度及自身估计的坐标激励值，综合归一化得到最终的估计值。</p>
+<p><img src="picture/image-20220303103422957.png" alt="image-20220303103422957"></p>
+</li>
+<li><p>Detection version</p>
+<p>首先检测出各位姿维数的概率分布，然后将分布积分得到位姿。两个完全连接的模块的最后一层是sigmoid函数。G和D的值范围是 [0, 1]。</p>
+<p><img src="picture/image-20220303104201059.png" alt="image-20220303104201059"></p>
+<p><strong>weighted fusion：</strong></p>
+<p><img src="picture/image-20220303104237754.png" alt="image-20220303104237754"></p>
+<p>D表示输出构成分布，其中每个点对J输出维度做出自己的预测。每个输出姿态维用一个B bins表示为离散分布，表示[−r， +r]的值范围，每个桶的分辨率∆d = 2r/B。对于输出姿态<strong>yj</strong>，其本身对应的bin索引是：</p>
+<p><img src="picture/image-20220303104617912.png" alt="image-20220303104617912"></p>
+<p>真实训练分布，真实姿势周围的三个<strong>bin</strong>i被设为1，其他<strong>bin</strong>被设为0。：</p>
+<p><img src="picture/image-20220303104710395.png" alt="image-20220303104710395"></p>
+<p>最终的姿态y是通过对分布的积分来估计的：<strong>（存疑）</strong></p>
+<p><img src="picture/image-20220303105032326.png" alt="image-20220303105032326"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>损失函数</strong></p>
+<p><img src="picture/image-20220303103708070.png" alt="image-20220303103708070"></p>
+</li>
+<li><p><strong>结果</strong></p>
+<p><img src="picture/image-20220303105416421.png" alt="image-20220303105416421"></p>
+</li>
+</ul>
+<h4 id="3-6-4-skeleton-aware-3d-human-shape-reconstruction-from-point-clouds-2019-iccv-">3.6.4 Skeleton-Aware 3D Human Shape Reconstruction From Point Clouds（2019 ICCV）</h4>
+<h4 id="3-6-5-sequential-3d-human-pose-and-shape-estimation-from-point-clouds-2020-cvpr-">3.6.5 Sequential 3D Human Pose and Shape Estimation From Point Clouds（2020 CVPR）</h4>
+<h4 id="3-6-6-sequential-3d-human-pose-estimation-using-adaptive-point-cloud-sampling-strategy-2021-ijcai-">3.6.6 Sequential 3D Human Pose Estimation Using Adaptive Point Cloud Sampling Strategy（2021 IJCAI）</h4>
+<h3 id="3-7-">3.7 数据集</h3>
+<h3 id="3-8-">3.8 评价指标</h3>
 <h2 id="4-">4. 行为识别</h2>
 <h3 id="4-1-">4.1 综述</h3>
 <p><strong>行为识别Action Recognition</strong>是指对视频中人的行为动作进行识别，即读懂视频。</p>
@@ -842,10 +908,11 @@ ret = pred × m + centroid
 </li>
 <li><p>基于RGB-D的行为识别综述</p>
 <p><a href="https://deepai.org/publication/rgb-d-based-human-motion-recognition-with-deep-learning-a-survey">基于RGB-D的深度学习人体运动识别：|调查深爱 (deepai.org)</a></p>
+<p><strong>注意：</strong>后面传统算法、Two-Stream、3D-Conv、CNN+LSTM基于视频数据，与骨骼数据相对。</p>
 </li>
 </ul>
 <h3 id="4-2-">4.2 传统算法</h3>
-<h4 id="4-2-1-dt-2013-">4.2.1 DT（2013）</h4>
+<h4 id="4-2-1-dt-2013-ijcv-">4.2.1 DT（2013 IJCV）</h4>
 <blockquote>
 <p>Dense Trajectories and Motion Boundary Descriptors for Action Recognition</p>
 </blockquote>
@@ -860,7 +927,7 @@ ret = pred × m + centroid
 <p><img src="picture/image-20220122131931570.png" alt="image-20220122131931570"></p>
 </li>
 </ul>
-<h4 id="4-2-2-idt-2013-">4.2.2 iDT（2013）</h4>
+<h4 id="4-2-2-idt-2013-iccv-">4.2.2 iDT（2013 ICCV）</h4>
 <blockquote>
 <p>Action Recognition with Improved Trajectories</p>
 </blockquote>
@@ -903,7 +970,7 @@ ret = pred × m + centroid
 <p><a href="https://zhuanlan.zhihu.com/p/40964492">论文笔记——基于深度学习的视频行为识别/动作识别（一） - 知乎 (zhihu.com)</a></p>
 </li>
 </ul>
-<h4 id="4-3-1-twostreamcnn-2014-">4.3.1 TwoStreamCNN（2014）</h4>
+<h4 id="4-3-1-twostreamcnn-2014-nips-">4.3.1 TwoStreamCNN（2014 NIPS）</h4>
 <blockquote>
 <p>Two-stream convolutional networks for action recognition in videos</p>
 </blockquote>
@@ -927,7 +994,7 @@ ret = pred × m + centroid
 <p><a href="https://zhuanlan.zhihu.com/p/41659502">论文笔记——基于的视频行为识别/动作识别算法笔记(三) - 知乎 (zhihu.com)</a></p>
 </li>
 </ul>
-<h4 id="4-4-1-c3d-2015-">4.4.1 C3D（2015）</h4>
+<h4 id="4-4-1-c3d-2015-iccv-">4.4.1 C3D（2015 ICCV）</h4>
 <blockquote>
 <p>Learning spatiotemporal features with 3d convolutional networks</p>
 </blockquote>
@@ -944,7 +1011,7 @@ ret = pred × m + centroid
 <p><a href="https://zhuanlan.zhihu.com/p/41125934">论文笔记——基于深度学习的视频行为识别/动作识别（二） - 知乎 (zhihu.com)</a></p>
 </li>
 </ul>
-<h4 id="4-5-1-lrcn-2015-">4.5.1 LRCN（2015）</h4>
+<h4 id="4-5-1-lrcn-2015-cvpr-">4.5.1 LRCN（2015 CVPR）</h4>
 <blockquote>
 <p>Long-term recurrent convolutional networks for visual recognition and description</p>
 </blockquote>
@@ -957,16 +1024,23 @@ ret = pred × m + centroid
 <p>基于骨架（Skeleton-based）的行为识别目前基本都是在用图卷积GCN</p>
 <h4 id="4-6-1-">4.6.1 基于骨骼关键节点的行为识别综述</h4>
 <ul>
-<li><a href="https://zhuanlan.zhihu.com/p/330856233">【骨骼行为识别】论文与数据集列表 - 知乎 (zhihu.com)</a></li>
-<li><a href="https://blog.csdn.net/LoveKKarlie_/article/details/111034083">【论文笔记】2020行为识别综述A Survey on 3D Skeleton-Based Action Recognition Using Learning Method_LoveKKarlie_的博客-CSDN博客_skeleton 行为识别</a></li>
-<li>根据基于模型的不同可以划分为RNN 、CNN 、GCN<ol>
-<li>RNN-based：RNN通过将上一时刻的输出作为当前时刻的输入来形成其结构内部的递归连接，这被证明是一种处理序列数据的有效方法。</li>
-<li>CNN-based：如何平衡且更充分利用空间信息和时域信息</li>
-<li>GCN-based：作为CNN的一种推广形式可应用于包括骨架图在内的任意结构。最重要的问题仍然与骨架数据的表示有关，即如何将原始数据组织成特定的图形。</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/330856233">【骨骼行为识别】论文与数据集列表 - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/107983551">行为识别综述之 基于3D骨架的深度学习行为识别综述 - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p>根据基于模型的不同可以划分为RNN 、CNN 、GCN</p>
+<blockquote>
+<p>A Survey on 3D Skeleton-Based Action Recognition Using Learning Method（2020）</p>
+</blockquote>
+<ol>
+<li>RNN-based：在基于RNN的方法中，骨架序列是关节坐标的自然时间序列，这可以被视为序列向量，而RNN本身就适合于处理时间序列数据。此外，为了进一步改善学习到的关节序列的时序上下文信息，一些别的RNN(LSTM,GRU)方法也被用到骨架行为识别中。</li>
+<li>CNN-based：当使用CNN来处理这一基于骨架的任务的时候，可以将其视为基于RNN方法的补充，因为CNN结构能更好地捕获输入数据的空间cues，而基于RNN的方法正缺乏空间信息的构建。需要平衡且更充分利用空间信息和时域信息</li>
+<li>GCN-based：相对新的方法图卷积神经网络GCN也有用于骨架数据处理中，因为骨架数据本身就是一个自然的拓扑图数据结构（关节点和骨头可以被视为图的节点和边），而不是图像或序列那样的格式。这个方法最重要的问题仍然与骨架数据的表示有关，即如何将原始数据组织成特定的图形。</li>
 </ol>
 </li>
 </ul>
-<h4 id="4-6-2-rnn-2017-">4.6.2 双流RNN结构（2017）</h4>
+<h4 id="4-6-2-rnn-based">4.6.2 RNN-based</h4>
+<h5 id="4-6-2-1-two-stream-rnn-2017-cvpr-">4.6.2.1 Two-Stream RNN（2017 CVPR）</h5>
 <blockquote>
 <p>Modeling Temporal Dynamics and Spatial Configurations of Actions Using Two-Stream Recurrent Neural Networks</p>
 </blockquote>
@@ -986,7 +1060,50 @@ ret = pred × m + centroid
 <p>一种图遍历方法，根据邻接关系访问序列中的关节，首先选择中央脊柱关节作为起点，并访问左臂的关节。在达到终点时，它会回到过去。然后我们参观右臂，上躯干等。在访问了所有关节之后，它终于回到了起点。我们根据访问顺序将图表排列成一系列关节。<strong>遍历序列通过在正向和反向方向上两次访问大多数关节来保证图形中的空间关系。</strong></p>
 </li>
 </ul>
-<h4 id="4-6-3-st-gcn-2018-">4.6.3 ST-GCN（2018）</h4>
+<h5 id="4-6-2-2-ensemble-ts-lstm-v2-2017-iccv-">4.6.2.2 Ensemble TS-LSTM v2（2017 ICCV）</h5>
+<blockquote>
+<p>Ensemble Deep Learning for Skeleton-based Action Recognition using Temporal Sliding LSTM networks</p>
+</blockquote>
+<h5 id="4-6-2-3-arrn-lstm-2018-icme-">4.6.2.3 ARRN-LSTM（2018 ICME）</h5>
+<blockquote>
+<p>Relational Network for Skeleton-Based Action Recognition</p>
+</blockquote>
+<h5 id="4-6-2-4-agc-lstm-2019-cvpr-">4.6.2.4 AGC-LSTM（2019 CVPR）</h5>
+<blockquote>
+<p>An Attention Enhanced Graph Convolutional LSTM Network for Skeleton-Based Action Recognition</p>
+</blockquote>
+<h4 id="4-6-3-cnn-based">4.6.3 CNN-based</h4>
+<h5 id="4-6-3-1-p-cnn-2015-iccv-">4.6.3.1 P-CNN（2015 ICCV）</h5>
+<blockquote>
+<p>P-CNN: Pose-based CNN Features for Action Recognition</p>
+</blockquote>
+<h5 id="4-6-3-2-cnn-motion-trans-2017-icmew-">4.6.3.2 CNN+Motion+Trans（2017 ICMEW）</h5>
+<blockquote>
+<p>Skeleton-based action recognition with convolutional neural networks</p>
+</blockquote>
+<h5 id="4-6-3-3-hcn-2018-ijcai-">4.6.3.3 HCN（2018 IJCAI）</h5>
+<blockquote>
+<p>Co-occurrence Feature Learning from Skeleton Data for Action Recognition and Detection with Hierarchical Aggregation</p>
+</blockquote>
+<h5 id="4-6-3-4-tsrji-2019-sibgrapi-">4.6.3.4 TSRJI（2019 SIBGRAPI）</h5>
+<blockquote>
+<p>Skeleton Image Representation for 3D Action Recognition Based on Tree Structure and Reference Joints</p>
+</blockquote>
+<h5 id="4-6-3-5-posec3d-2021-arxiv-">4.6.3.5 PoseC3D（2021 arXiv）</h5>
+<blockquote>
+<p>Revisiting Skeleton-based Action Recognition</p>
+</blockquote>
+<ul>
+<li>基于提取好的 2D 姿态，我们需要堆叠<strong>T</strong>张形状为<strong>KxHxW</strong>的二维关键点热图以生成形状为<strong>KxTxHxW</strong>的 3D 热图堆叠作为输入。若我们事先将 2D 姿态存储成坐标形式，则需要先借助生成以 <strong>(x,y)</strong> 为中心的高斯分布，将其重新转换为热图形式。</li>
+</ul>
+<p><img src="picture/image-20220221125158638.png" alt="image-20220221125158638"></p>
+<ul>
+<li><p>我们同时利用均匀采样以减少 3D 热图堆叠在时间维度上的冗余。由于整个视频长度过长，难以处理，通常选取一个仅包含部分帧的子集构成一个片段，作为 3D-CNN 的输入。基于 RGB 模态的方法，通常只在一个较短的时间窗内采帧构成 3D-CNN 的输入（如 SlowFast 在一个长仅为 64 帧的时间窗内采帧）。由于这种采帧方式难以捕捉整个动作，因此在骨骼行为识别中，我们采用了均匀采样的方式：<strong>需要采 N 帧时，我们先将整个视频均分为长度相同的N 段，并在每段中随机选取一帧。</strong>在实验中，我们发现这样的采帧方式对骨骼行为识别尤其适用。</p>
+<p><img src="picture/image-20220221125927200.png" alt="image-20220221125927200"></p>
+</li>
+</ul>
+<h4 id="4-6-4-gcn-based">4.6.4 GCN-based</h4>
+<h5 id="4-6-4-1-st-gcn-2018-aaai-">4.6.4.1 ST-GCN（2018 AAAI）</h5>
 <blockquote>
 <p>Spatial Temporal Graph Convolutional Networks for Skeleton Based Action Recognition</p>
 </blockquote>
@@ -1003,19 +1120,32 @@ ret = pred × m + centroid
 <p><img src="picture/image-20220221124943045.png" alt="image-20220221124943045"></p>
 </li>
 </ul>
-<h4 id="4-6-4-posec3d-2021-">4.6.4 PoseC3D（2021）</h4>
+<h5 id="4-6-4-2-as-gcn-2019-cvpr-">4.6.4.2    AS-GCN（2019 CVPR）</h5>
 <blockquote>
-<p>Revisiting Skeleton-based Action Recognition</p>
+<p>Actional-Structural Graph Convolutional Networks for Skeleton-based Action Recognition</p>
 </blockquote>
-<ul>
-<li>基于提取好的 2D 姿态，我们需要堆叠<strong>T</strong>张形状为<strong>KxHxW</strong>的二维关键点热图以生成形状为<strong>KxTxHxW</strong>的 3D 热图堆叠作为输入。若我们事先将 2D 姿态存储成坐标形式，则需要先借助生成以 <strong>(x,y)</strong> 为中心的高斯分布，将其重新转换为热图形式。</li>
-</ul>
-<p><img src="picture/image-20220221125158638.png" alt="image-20220221125158638"></p>
-<ul>
-<li><p>我们同时利用均匀采样以减少 3D 热图堆叠在时间维度上的冗余。由于整个视频长度过长，难以处理，通常选取一个仅包含部分帧的子集构成一个片段，作为 3D-CNN 的输入。基于 RGB 模态的方法，通常只在一个较短的时间窗内采帧构成 3D-CNN 的输入（如 SlowFast 在一个长仅为 64 帧的时间窗内采帧）。由于这种采帧方式难以捕捉整个动作，因此在骨骼行为识别中，我们采用了均匀采样的方式：<strong>需要采 N 帧时，我们先将整个视频均分为长度相同的N 段，并在每段中随机选取一帧。</strong>在实验中，我们发现这样的采帧方式对骨骼行为识别尤其适用。</p>
-<p><img src="picture/image-20220221125927200.png" alt="image-20220221125927200"></p>
-</li>
-</ul>
+<h5 id="4-6-4-3-4s-shift-gcn-2020-cvpr-">4.6.4.3  4s Shift-GCN（2020 CVPR）</h5>
+<blockquote>
+<p>Skeleton-Based Action Recognition with Shift Graph Convolutional Network</p>
+</blockquote>
+<h4 id="4-6-5-transformer-based">4.6.5 Transformer-based</h4>
+<h5 id="4-6-5-1-ts-san-2020-wacv-">4.6.5.1 TS-SAN（2020 WACV）</h5>
+<blockquote>
+<p>Self-Attention Network for Skeleton-based Human Action Recognition</p>
+</blockquote>
+<h5 id="4-6-5-2-st-tr-2021-cviu-">4.6.5.2 ST-TR（2021 CVIU）</h5>
+<blockquote>
+<p>Skeleton-based action recognition via spatial and temporal transformer networks</p>
+</blockquote>
+<h5 id="4-6-5-3-mtt-2022-spl-">4.6.5.3 MTT（2022 SPL）</h5>
+<blockquote>
+<p>MTT: Multi-Scale Temporal Transformer for Skeleton-Based Action Recognition</p>
+</blockquote>
+<h4 id="4-6-6-self-supervision">4.6.6 Self-supervision</h4>
+<h5 id="4-6-6-1-ms2l-multi-task-self-supervised-learning-for-skeleton-based-action-recognition-2020-acm-multimedia-">4.6.6.1 MS2L: Multi-Task Self-Supervised Learning for Skeleton Based Action Recognition（2020 ACM Multimedia）</h5>
+<h5 id="4-6-6-2-self-supervised-3d-skeleton-action-representation-learning-with-motion-consistency-and-continuity-2021-iccv-">4.6.6.2 Self-supervised 3D Skeleton Action Representation Learning with Motion Consistency and Continuity（2021 ICCV）</h5>
+<h5 id="4-6-6-3-motion-transformer-self-supervised-pre-training-for-skeleton-based-action-recognition-2021-acm-multimedia-">4.6.6.3 Motion-transformer: self-supervised pre-training for skeleton-based action recognition（2021 ACM Multimedia）</h5>
+<h5 id="6-6-6-4-contrastive-self-supervised-learning-for-skeleton-action-recognition-2021-">6.6.6.4 Contrastive Self-Supervised Learning for Skeleton Action Recognition（2021）</h5>
 <h2 id="5-">5. 应用落地</h2>
 <p>应用：视频监控、人机交互、智能驾驶、机器人技术以及体育赛事辅助等</p>
 <h3 id="5-1-">5.1 体育赛事辅助</h3>
@@ -1041,6 +1171,10 @@ ret = pred × m + centroid
 <blockquote>
 <p><img src="picture/image-20220226160634130.png" alt="image-20220226160634130"></p>
 </blockquote>
+<h3 id="6-2-">6.2 自监督学习</h3>
+<h4 id="6-2-1-">6.2.1 对比学习</h4>
+<p>A simple framework for contrastive learning of visual representations</p>
+<p><img src="picture/image-20220302145648801.png" alt="image-20220302145648801"></p>
 
           	</article>
         </div>
