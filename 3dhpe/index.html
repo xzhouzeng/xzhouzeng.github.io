@@ -908,11 +908,14 @@ ret = pred × m + centroid
 </li>
 <li><p>基于RGB-D的行为识别综述</p>
 <p><a href="https://deepai.org/publication/rgb-d-based-human-motion-recognition-with-deep-learning-a-survey">基于RGB-D的深度学习人体运动识别：|调查深爱 (deepai.org)</a></p>
-<p><strong>注意：</strong>后面传统算法、Two-Stream、3D-Conv、CNN+LSTM基于视频数据，与骨骼数据相对。</p>
+</li>
+<li><p><strong>本文整理分类</strong></p>
+<p><img src="picture/image-20220305000932930.png" alt="image-20220122131931570"></p>
 </li>
 </ul>
-<h3 id="4-2-">4.2 传统算法</h3>
-<h4 id="4-2-1-dt-2013-ijcv-">4.2.1 DT（2013 IJCV）</h4>
+<h3 id="4-2-rgb-rgbd-">4.2 基于RGB/RGBD视频</h3>
+<h4 id="4-2-1-">4.2.1 传统算法</h4>
+<h5 id="4-2-1-1-dt-2013-ijcv-">4.2.1.1 DT（2013 IJCV）</h5>
 <blockquote>
 <p>Dense Trajectories and Motion Boundary Descriptors for Action Recognition</p>
 </blockquote>
@@ -927,7 +930,7 @@ ret = pred × m + centroid
 <p><img src="picture/image-20220122131931570.png" alt="image-20220122131931570"></p>
 </li>
 </ul>
-<h4 id="4-2-2-idt-2013-iccv-">4.2.2 iDT（2013 ICCV）</h4>
+<h5 id="4-2-1-2-idt-2013-iccv-">4.2.1.2 iDT（2013 ICCV）</h5>
 <blockquote>
 <p>Action Recognition with Improved Trajectories</p>
 </blockquote>
@@ -941,7 +944,7 @@ ret = pred × m + centroid
 </ul>
 </li>
 </ul>
-<h3 id="-4-">补充4 光流</h3>
+<h4 id="-4-">补充4 光流</h4>
 <ul>
 <li><p><strong>光流</strong>是空间运动物体在<strong>观察成像平面</strong>上的像素运动的<strong>瞬时速度</strong>，是利用图像序列中像素在时间域上的变化以及相邻帧之间的<strong>相关性</strong>来找到上一帧跟当前帧之间存在的对应关系，从而计算出相邻帧之间物体的运动信息的一种方法。</p>
 </li>
@@ -963,14 +966,14 @@ ret = pred × m + centroid
 <p>opencv提供函数计算，参考<a href="https://blog.csdn.net/xiao_lxl/article/details/95330541">OpenCV小例程——光流法_xiao_lxl的专栏-CSDN博客_opencv 光流算法</a></p>
 </li>
 </ul>
-<h3 id="4-3-two-stream">4.3 Two-Stream</h3>
+<h4 id="4-2-2-two-stream">4.2.2 Two-Stream</h4>
 <p>Two-Stream将动作识别中的特征提取分为两个分支，一个是RGB分支提取空间特征，另一个是光流分支提取时间上的光流特征，最后结合两种特征进行动作识别。</p>
 <ul>
 <li><p>解读：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/40964492">论文笔记——基于深度学习的视频行为识别/动作识别（一） - 知乎 (zhihu.com)</a></p>
 </li>
 </ul>
-<h4 id="4-3-1-twostreamcnn-2014-nips-">4.3.1 TwoStreamCNN（2014 NIPS）</h4>
+<h5 id="4-2-2-1-twostreamcnn-2014-nips-">4.2.2.1 TwoStreamCNN（2014 NIPS）</h5>
 <blockquote>
 <p>Two-stream convolutional networks for action recognition in videos</p>
 </blockquote>
@@ -984,17 +987,17 @@ ret = pred × m + centroid
 </li>
 <li><strong>模型：</strong><img src="picture/image-20220123101946274.png" alt="image-20220123101946274"></li>
 </ul>
-<h4 id="4-3-2-">4.3.2 其他模型</h4>
+<h5 id="4-2-2-2-">4.2.2.2 其他模型</h5>
 <p>Christoph Feichtenhofer等人对双流网络中空间和时间特征的融合进行优化。</p>
 <p>Limin Wang等人提出时域分割网络，采取了稀疏时间采样策略和基于视频监督的策略解决了普通双流网络只能处理短期运动问题。</p>
-<h3 id="4-4-3d-conv">4.4 3D-Conv</h3>
+<h4 id="4-2-3-3d-conv">4.2.3 3D-Conv</h4>
 <p>3D convolution 直接将2D卷积扩展到3D（添加了时间维度），直接提取包含时间和空间两方面的特征。</p>
 <ul>
 <li><p>解读：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/41659502">论文笔记——基于的视频行为识别/动作识别算法笔记(三) - 知乎 (zhihu.com)</a></p>
 </li>
 </ul>
-<h4 id="4-4-1-c3d-2015-iccv-">4.4.1 C3D（2015 ICCV）</h4>
+<h5 id="4-2-3-1-c3d-2015-iccv-">4.2.3.1 C3D（2015 ICCV）</h5>
 <blockquote>
 <p>Learning spatiotemporal features with 3d convolutional networks</p>
 </blockquote>
@@ -1002,16 +1005,16 @@ ret = pred × m + centroid
 <li>视频输入是C×L×H×W，C为图像通道(一般为3)，L为视频序列的长度，kernel size为3x3x3，stride为1，padding=True，滤波器个数为K的3D卷积后，输出的视频大小为K∗L∗H∗W。文章认为不那么过早地池化时间信息，可以在早期阶段保留更多的时间信息。网络的输入的视频长度为16帧，输入的视频帧尺寸为 112 × 112。</li>
 </ul>
 <p><img src="picture/image-20220221120529269.png" alt="image-20220221120529269"></p>
-<h4 id="4-4-2-">4.4.2 其他模型</h4>
+<h5 id="4-2-3-2-">4.2.3.2 其他模型</h5>
 <p>Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1x3x3)和时间的1D卷积(3x1x1)并以不同的串并联方式结合获得了显著效果。</p>
-<h3 id="4-5-cnn-lstm">4.5 CNN+LSTM</h3>
+<h4 id="4-2-4-cnn-lstm">4.2.4 CNN+LSTM</h4>
 <p>这种方法通常使用CNN提取空间特征，使用RNN（如LSTM）提取时序特征，进行行为识别。</p>
 <ul>
 <li><p>解读：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/41125934">论文笔记——基于深度学习的视频行为识别/动作识别（二） - 知乎 (zhihu.com)</a></p>
 </li>
 </ul>
-<h4 id="4-5-1-lrcn-2015-cvpr-">4.5.1 LRCN（2015 CVPR）</h4>
+<h5 id="4-2-4-1-lrcn-2015-cvpr-">4.2.4.1 LRCN（2015 CVPR）</h5>
 <blockquote>
 <p>Long-term recurrent convolutional networks for visual recognition and description</p>
 </blockquote>
@@ -1020,9 +1023,9 @@ ret = pred × m + centroid
 <li>LSTM的部分隐藏单元数量分别使用了256、512、1024，但数量增多效果增益不明显，最后隐藏单元数RGB输入时256个，光流输入时1024个。</li>
 </ul>
 <p><img src="picture/image-20220221121127752.png" alt="image-20220221121127752"></p>
-<h3 id="4-6-">4.6 基于骨骼关键节点</h3>
+<h3 id="4-3-">4.3 基于骨骼关键节点</h3>
 <p>基于骨架（Skeleton-based）的行为识别目前基本都是在用图卷积GCN</p>
-<h4 id="4-6-1-">4.6.1 基于骨骼关键节点的行为识别综述</h4>
+<h4 id="4-3-1-">4.3.1 基于骨骼关键节点的行为识别综述</h4>
 <ul>
 <li><p><a href="https://zhuanlan.zhihu.com/p/330856233">【骨骼行为识别】论文与数据集列表 - 知乎 (zhihu.com)</a></p>
 </li>
@@ -1038,61 +1041,161 @@ ret = pred × m + centroid
 <li>GCN-based：相对新的方法图卷积神经网络GCN也有用于骨架数据处理中，因为骨架数据本身就是一个自然的拓扑图数据结构（关节点和骨头可以被视为图的节点和边），而不是图像或序列那样的格式。这个方法最重要的问题仍然与骨架数据的表示有关，即如何将原始数据组织成特定的图形。</li>
 </ol>
 </li>
+<li><p>本文整理分类：传统算法、RNN-based、CNN-based、GCN-based、Transformer-based、Self-supervision</p>
+</li>
 </ul>
-<h4 id="4-6-2-rnn-based">4.6.2 RNN-based</h4>
-<h5 id="4-6-2-1-two-stream-rnn-2017-cvpr-">4.6.2.1 Two-Stream RNN（2017 CVPR）</h5>
+<h4 id="4-3-2-">4.3.2 传统算法</h4>
+<p>传统的基于骨骼的动作识别方法主要分为两类：基于关节的方法和基于身体部位的方法。</p>
+<h5 id="4-3-2-1-view-invariant-human-action-recognition-using-histograms-of-3d-joints-2012-cvpr-">4.3.2.1 View invariant human action recognition using histograms of 3d joints（2012 CVPR）</h5>
+<p>基于手工制作的低级特征，采用相对简单的时间序列模型，例如隐马尔可夫模。</p>
+<h5 id="4-3-2-2-joint-angles-similarities-and-hog2-for-action-recognition-2013-cvpr-">4.3.2.2 Joint angles similarities and hog2 for action recognition（2013 CVPR）</h5>
+<p>基于身体部位的方法将人体骨骼视为一组连接的片段，然后专注于单个或连接的身体部位对和关节角度。</p>
+<h5 id="4-3-2-3-human-action-recognition-using-a-temporal-hierarchy-of-covariance-descriptors-on-3d-joint-locations-2013-ijcai-">4.3.2.3 Human action recognition using a temporal hierarchy of covariance descriptors on 3d joint locations（2013 IJCAI）</h5>
+<p>基于关节的方法将人体骨骼视为一组点，并使用基于关节位置的各种特征，例如关节位置。</p>
+<h4 id="4-3-3-rnn-based">4.3.3 RNN-based</h4>
+<h5 id="4-3-3-1-two-stream-rnn-2017-cvpr-">4.3.3.1 Two-Stream RNN（2017 CVPR）</h5>
 <blockquote>
 <p>Modeling Temporal Dynamics and Spatial Configurations of Actions Using Two-Stream Recurrent Neural Networks</p>
 </blockquote>
+<ul>
+<li><strong>出发点：</strong>基于手工制作特征的传统方法仅限于表示运动模式的复杂性。使用递归神经网络（RNN）处理原始骨架的最新方法仅关注时间域中的上下文依赖性，而<strong>忽略了铰接骨架的空间配置</strong>。在本文中，我们提出了一种新的双流RNN架构，用于模拟基于骨架的动作识别的时间动力学和空间配置。</li>
+<li>我们引入了一种新颖的双流RNN架构，该架构结合了空间和时间网络，用于基于骨架的动作识别。<ul>
+<li>时态流使用基于RNN的模型从关节的坐标中学习不同时间步长的时间动态。我们采用两种不同的 RNN 模型，即<strong>堆叠 RNN 和分层 RNN</strong>。与堆叠RNN相比，分层RNN是根据人体运动学设计的，参数更少。</li>
+<li>空间流学习关节的空间依赖性。我们提出了一种简单有效的方法来模拟空间结构，该结构首先将铰接骨架的空间图转换为关节序列，然后将该结果序列馈送到RNN结构中。探索了不同的方法，将图形结构转换为序列，以更好地维护空间关系。<strong>包括链序列RNN和遍历序列RNN</strong></li>
+<li>然后，这两个通道通过后期融合进行组合，整个网络是端到端可训练的。</li>
+</ul>
+</li>
+<li>为了避免过度拟合和改进泛化，我们利用数据增强技术，使用3D变换，即旋转变换，缩放变换和剪切变换来变换训练期间骨架的3D坐标。</li>
+<li>RNN使用&quot;LSTM&quot;</li>
+</ul>
 <p><img src="picture/image-20220221133630244.png" alt="image-20220221133630244"></p>
 <ul>
-<li><p>时间堆叠式 RNN</p>
-<p>此结构为每个时间步长的所有关节的串联坐标馈送RNN网络。在这里，我们堆叠两层RNN，发现添加更多层不会显着提高性能。</p>
+<li><p><strong>时间堆叠式 RNN</strong></p>
+<p>此结构为每个时间步长的所有关节的<strong>串联坐标</strong>馈送RNN网络。在这里，我们堆叠两层RNN，发现添加更多层不会显着提高性能。</p>
 </li>
-<li><p>时间分层 RNN</p>
+<li><p><strong>时间分层 RNN</strong></p>
 <p>人体骨骼可分为五部分，即两条胳膊、两条腿和一条躯干。我们观察到，一个动作是由一个独立的部分或几个部分的组合来执行的。</p>
 <p><img src="picture/image-20220221134035500.png" alt="image-20220221134035500"></p>
 </li>
-<li><p>空间链序列RNN</p>
-<p>我们假设关节按照手臂，躯干和腿的顺序排列成链条状序列。躯干放在中间，因为它连接着手臂和腿。</p>
+<li><p><strong>空间链序列RNN</strong></p>
+<p>我们假设关节按照手臂，躯干和腿的顺序排列成链条状序列。躯干放在中间，因为它连接着手臂和腿。<strong>下图b</strong></p>
 </li>
-<li><p>空间遍历序列RNN</p>
-<p>一种图遍历方法，根据邻接关系访问序列中的关节，首先选择中央脊柱关节作为起点，并访问左臂的关节。在达到终点时，它会回到过去。然后我们参观右臂，上躯干等。在访问了所有关节之后，它终于回到了起点。我们根据访问顺序将图表排列成一系列关节。<strong>遍历序列通过在正向和反向方向上两次访问大多数关节来保证图形中的空间关系。</strong></p>
+<li><p><strong>空间遍历序列RNN</strong></p>
+<p>一种图遍历方法，根据邻接关系访问序列中的关节，访问顺序将图表排列成一系列关节。<strong>遍历序列通过在正向和反向方向上两次访问大多数关节来保证图形中的空间关系。下图c</strong></p>
+<p><img src="picture/image-20220304144748120.png" alt="image-20220304144748120"></p>
 </li>
 </ul>
-<h5 id="4-6-2-2-ensemble-ts-lstm-v2-2017-iccv-">4.6.2.2 Ensemble TS-LSTM v2（2017 ICCV）</h5>
+<h5 id="4-3-3-2-ensemble-ts-lstm-v2-2017-iccv-">4.3.3.2 Ensemble TS-LSTM v2（2017 ICCV）</h5>
 <blockquote>
 <p>Ensemble Deep Learning for Skeleton-based Action Recognition using Temporal Sliding LSTM networks</p>
 </blockquote>
-<h5 id="4-6-2-3-arrn-lstm-2018-icme-">4.6.2.3 ARRN-LSTM（2018 ICME）</h5>
+<h5 id="4-3-3-3-arrn-lstm-2018-icme-">4.3.3.3 ARRN-LSTM（2018 ICME）</h5>
 <blockquote>
 <p>Relational Network for Skeleton-Based Action Recognition</p>
 </blockquote>
-<h5 id="4-6-2-4-agc-lstm-2019-cvpr-">4.6.2.4 AGC-LSTM（2019 CVPR）</h5>
+<h5 id="4-3-3-4-agc-lstm-2019-cvpr-">4.3.3.4 AGC-LSTM（2019 CVPR）</h5>
 <blockquote>
 <p>An Attention Enhanced Graph Convolutional LSTM Network for Skeleton-Based Action Recognition</p>
 </blockquote>
-<h4 id="4-6-3-cnn-based">4.6.3 CNN-based</h4>
-<h5 id="4-6-3-1-p-cnn-2015-iccv-">4.6.3.1 P-CNN（2015 ICCV）</h5>
+<h4 id="4-3-4-cnn-based">4.3.4 CNN-based</h4>
+<h5 id="4-3-4-1-p-cnn-2015-iccv-">4.3.4.1 P-CNN（2015 ICCV）</h5>
 <blockquote>
 <p>P-CNN: Pose-based CNN Features for Action Recognition</p>
 </blockquote>
-<h5 id="4-6-3-2-cnn-motion-trans-2017-icmew-">4.6.3.2 CNN+Motion+Trans（2017 ICMEW）</h5>
+<h5 id="4-3-4-2-cnn-motion-trans-2017-icmew-">4.3.4.2 CNN+Motion+Trans（2017 ICMEW）</h5>
 <blockquote>
 <p>Skeleton-based action recognition with convolutional neural networks</p>
 </blockquote>
-<h5 id="4-6-3-3-hcn-2018-ijcai-">4.6.3.3 HCN（2018 IJCAI）</h5>
+<ul>
+<li><p>本文主要整理“分类任务”的行为识别。</p>
+</li>
+<li><p><strong>出发点：</strong>目前最先进的基于骨骼的行为识别方法主要基于递归神经网络（RNN）。在本文中，我们提出了一种基于卷积神经网络（CNN）的新型框架，用于行为分类和检测。原始骨架坐标以及骨架运动直接馈送到 CNN 中以进行标签预测。新型骨架变压器模块设计用于自动重新排列和选择重要的骨架接头。</p>
+<p><img src="picture/image-20220304184514327.png" alt="image-20220304184514327"></p>
+</li>
+<li><p><strong>双流CNN</strong></p>
+<p><strong>原始骨架坐标S和骨架运动M用作我们网络的两个输入流。</strong>骨架序列T帧可以表示为T×N×3数组，它被视为T×N大小的 3 通道图像。视频中的操作可能跨越不同的帧长度。由于骨架数据被视为图像数据，因此我们通过简单的图像大小调整操作将所有视频规范化为固定长度。<strong>请注意，我们不执行任何规范化。</strong></p>
+<p><img src="picture/image-20220304185351655.png" alt="image-20220304185351655"></p>
+</li>
+<li><p><strong>Skeleon Transformer</strong></p>
+<p>对于图像，像素的语义连续性至关重要。例如，如果我们随机随机地随机排列所有像素的位置，则生成的图像将是无意义的，并且对于人类和机器都难以识别。对于T×N×3骨架图像数据，排序N关节是任意选择的（例如左眼，右眼，鼻子等），这可能不是最佳的.</p>
+<p>为了解决这个问题，我们提出了一个骨架变压器模块。给定一个<strong>N×3骨架S</strong>，我们执行如下线性变换，<strong>W是一个N×M</strong>重量矩阵。S′是M新的插值接头。</p>
+<p>请注意，关节的顺序和位置都是重新排列的。该网络自动选择重要的身体关节，这可以解释为<strong>注意力机制的简单变体。</strong></p>
+<p><img src="picture/image-20220304185953596.png" alt="image-20220304185953596"></p>
+</li>
+<li><p><strong>Multi-Person Maxout</strong></p>
+<blockquote>
+<p>Maxout networks（2013 ICML）</p>
+</blockquote>
+<p>上述方法专为单人情况而设计。对于那些涉及人与人互动的活动（例如拥抱，握手），将有多个人。文献中常见的选择是<strong>将不同人的骨架连接起来作为网络输入。需要零填充来处理不同数量的人。</strong></p>
+<p>在本文中，我们采用多人的<strong>maxout方案</strong>。不同人的骨架经过相同的网络层，<strong>其特征图在最后一个卷积层之后通过元素最大操作进行合并</strong>。优点是双重的。首先，无需零填充即可优雅地解决人数不一的问题。其次，通过重量共享，我们的方法可以从两个人扩展到更多的人，而无需增加模型尺寸。</p>
+</li>
+<li><p><strong>网络架构</strong></p>
+<p>我们设计了一个微小的7层网络，由3个卷积层和4个完全连接的层组成（此时性能饱和）。我们的网络仅包含130万个参数。它可以从头开始轻松训练，无需任何预训练。与使用 ImageNet 预训练的 VGG19 网络 [8] 相比，我们的模型在紧凑的模型尺寸和快速推理速度方面更胜一筹。</p>
+</li>
+</ul>
+<h5 id="4-3-4-3-hcn-2018-ijcai-">4.3.4.3 HCN（2018 IJCAI）</h5>
 <blockquote>
 <p>Co-occurrence Feature Learning from Skeleton Data for Action Recognition and Detection with Hierarchical Aggregation</p>
 </blockquote>
-<h5 id="4-6-3-4-tsrji-2019-sibgrapi-">4.6.3.4 TSRJI（2019 SIBGRAPI）</h5>
+<ul>
+<li><p><strong>同现特征：</strong>也就是看除了自身特征，某些位置是否同时出现了某一特征来加强判断。</p>
+</li>
+<li><p><strong>出发点：</strong>之前基于CNN的方法通过将时间动力学和骨骼关节分别编码为行和列，将骨骼序列表示为图像，然后将其输入CNN以识别底层动作，就像图像分类一样。然而，在这种情况下，<strong>仅考虑卷积核内的相邻关节来学习共现特征</strong>。尽管在随后的卷积层中，感受野覆盖了骨骼的所有关节，但很难从所有关节有效地挖掘共现。==&gt;&gt;<strong>设计一个能够从所有关节获得全局响应的模型，以利用不同关节之间的相关性。</strong></p>
+</li>
+<li><p><strong>本文创新思路：</strong>👏</p>
+<ul>
+<li><strong>卷积层的输出是来自所有输入通道的全局响应。</strong>卷积运算可以分解为两个步骤：即跨空间域（宽度和高度）的局部特征聚合<strong>和</strong>跨通道的全局特征聚合。然后，我们可以得出一个简单但非常实用的方法来根据需求调节聚合程度。将T表示为d1×d2×d3三维张量。我们可以通过重组（转置）张量来分配不同的上下文。如果将维度di指定为通道，而另两个维度对本地上下文进行编码，那么来自维度di的任何信息都可以全局聚合。</li>
+<li>用到本文模型中：<strong>如果将骨架的每个关节视为一个通道，那么卷积层可以很容易地从所有关节学习共现特征。</strong>更具体地说，我们将骨架序列表示为形状为f rames×joints×3（最后一个维度为channel）的张量。我们首先使用核大小为n×1的卷积层独立地学习每个关节的点级特征。然后我们转换卷积层的输出，使关节的尺寸成为通道。在转置操作之后，后续层将按层次聚合来自所有关节的全局特征。</li>
+</ul>
+<p><img src="picture/image-20220304211055470.png" alt="image-20220304211055470"></p>
+<p>将3×3卷积分解为两步。（a） 每个输入通道的空间域中的独立二维卷积，其中特征从3×3邻域局部聚集。（b） 跨通道的元素求和，其中特征从所有输入通道全局聚合。</p>
+</li>
+<li><p><strong>本文贡献：</strong></p>
+<ul>
+<li>提出使用CNN模型从骨架数据中学习<strong>全局共现</strong>，该模型优于局部共现。</li>
+<li>我们设计了一个新颖的<strong>端到端分层特征学习网络</strong>，其中特征从点级特征逐渐聚合到全局共现特征</li>
+<li>我们全面开发了<strong>多人特征融合策略</strong>，使我们的网络能够很好地扩展到可变人数</li>
+<li>该框架在动作识别和检测任务的基准测试上都优于所有现有的最先进的方法。 </li>
+</ul>
+</li>
+<li><p><strong>模型</strong></p>
+<p>分层共现网络。绿色块是卷积层，其中最后一个维度表示输出通道的数量。尾随的“\/2”表示在卷积后附加了跨步为2的MaxPooling层。转置层根据顺序参数排列输入张量的维数。ReLU激活函数附加在conv1、conv5、conv6和fc7之后，以引入非线性。</p>
+<p><img src="picture/image-20220304233815425.png" alt="image-20220304233815425"></p>
+</li>
+<li><p><strong>输入：</strong></p>
+<p>除了关节共现外，关节的时间运动也是识别潜在动作的关键线索。原始骨架坐标<strong>S</strong>和骨架运动<strong>M</strong>通过双流模式独立输入网络。骨架序列X可以用T×N×D张量表示，其中T是序列中的帧数，N是骨架中的关节数，D是坐标尺寸（例如，3D骨架为3）。<strong>上述骨骼运动M的形状与X相同。</strong></p>
+<p><img src="picture/image-20220304185351655.png" alt="image-20220304185351655"></p>
+</li>
+<li><p><strong>模型解读</strong></p>
+<p>给定骨架序列和运动输入，按层次学习特征。</p>
+<ul>
+<li>原始骨架坐标<strong>S</strong>和骨架运动<strong>M</strong>直接作为两个输入流输入网络。这两个网络分支共享相同的体系结构。然而，它们的参数并不是单独共享和学习的。它们的特征图在conv4之后<strong>通过沿通道串联的方式进行融合</strong>。</li>
+<li>在第一阶段，点级特征用1×1（conv1）和n×1（conv2）卷积层编码。由于沿关节维度的核尺寸保持为1，因此它们必须独立地从每个关节的三维坐标学习点级表示。</li>
+<li>然后，我们用参数（0，2，1）转置特征映射，以便将关节维度移动到张量的通道。</li>
+<li>在第2阶段，所有后续的卷积层从一个人的所有关节中提取全局共现特征，</li>
+<li>然后，将特征地图展平为一个向量，并通过两个完全连接的层进行最终分类。</li>
+</ul>
+</li>
+<li><p><strong>Scalability to Multiple Persons</strong></p>
+<p>在拥抱和握手等活动中，涉及多人。为了使我们的框架能够扩展到多人场景，我们对不同的特征融合策略进行了综合评估。注意，基于元素的后期融合可以很好地推广到可变人数，而其他融合则需要预定义的最大人数。此外，与单人相比，没有引入额外的参数 。</p>
+<ul>
+<li><p><strong>Early fusion</strong>。多人的所有关节都作为网络输入进行叠加。对于可变人数，如果人数小于预定义的最大人数，则应用零填充。</p>
+</li>
+<li><p><strong>Late fusion</strong>。多个人的输入经过同一个子网络，他们的conv6特征图通过沿通道串联或元素最大\平均操作合并。</p>
+<p><img src="picture/image-20220305000719982.png" alt="image-20220305000719982"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-3-4-4-tsrji-2019-sibgrapi-">4.3.4.4 TSRJI（2019 SIBGRAPI）</h5>
 <blockquote>
 <p>Skeleton Image Representation for 3D Action Recognition Based on Tree Structure and Reference Joints</p>
 </blockquote>
-<h5 id="4-6-3-5-posec3d-2021-arxiv-">4.6.3.5 PoseC3D（2021 arXiv）</h5>
+<h5 id="4-3-4-5-posec3d-2021-arxiv-">4.3.4.5 PoseC3D（2021 arXiv）</h5>
 <blockquote>
 <p>Revisiting Skeleton-based Action Recognition</p>
 </blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/395588459">PoseC3D: 基于人体姿态的动作识别新范式 - 知乎 (zhihu.com)</a></p>
 <ul>
 <li>基于提取好的 2D 姿态，我们需要堆叠<strong>T</strong>张形状为<strong>KxHxW</strong>的二维关键点热图以生成形状为<strong>KxTxHxW</strong>的 3D 热图堆叠作为输入。若我们事先将 2D 姿态存储成坐标形式，则需要先借助生成以 <strong>(x,y)</strong> 为中心的高斯分布，将其重新转换为热图形式。</li>
 </ul>
@@ -1102,50 +1205,118 @@ ret = pred × m + centroid
 <p><img src="picture/image-20220221125927200.png" alt="image-20220221125927200"></p>
 </li>
 </ul>
-<h4 id="4-6-4-gcn-based">4.6.4 GCN-based</h4>
-<h5 id="4-6-4-1-st-gcn-2018-aaai-">4.6.4.1 ST-GCN（2018 AAAI）</h5>
+<h4 id="4-3-5-gcn-based">4.3.5 GCN-based</h4>
+<h5 id="4-3-5-1-st-gcn-2018-aaai-">4.3.5.1 ST-GCN（2018 AAAI）</h5>
 <blockquote>
 <p>Spatial Temporal Graph Convolutional Networks for Skeleton Based Action Recognition</p>
+<p><a href="https://github.com/open-mmlab/mmskeleton">https://github.com/open-mmlab/mmskeleton</a></p>
 </blockquote>
 <ul>
-<li><strong>骨架时空图：</strong>由结点和边（edges）组成。
-1）结点：骨架图的结点就是人骨架中的关节点。
-2）边：骨架图中的边就相当具有“时空特色”，边的类型分为两类。为了方便理解我使用“控制变量法”来描述：
- a）在同一时间（帧）内，某个骨架数据各个关节点之间连接关系称为第一类边。
- b）在同一关节点处，某个骨架数据的某个关节点在各个时间（帧）之间的连接关系称为第二类边</li>
+<li><strong>出发点：</strong>传统的骨架建模方法通常依赖于手工制作的零件或遍历规则，因此表达能力有限，难以推广。在这项工作中，我们提出了一种新的动态骨架模型，称为时空图卷积网络（ST-GCN），它通过从数据中自动学习空间和时间模式，超越了以往方法的局限性。</li>
+<li><strong>本文贡献：</strong><ul>
+<li>提出了ST-GCN，这是一种基于图形的通用动态骨架建模公式，这是<strong>第一个将基于图神经网络应用于这项任务</strong>的公式。</li>
+<li>提出了在ST-GCN中设计卷积核的几个原则，以满足骨架建模的具体要求。</li>
+<li>在两个大规模的基于骨架的动作识别数据集上，与以前使用手工零件或遍历规则的方法相比，该模型实现了更高的性能，而人工设计的工作量大大减少。</li>
+</ul>
+</li>
+<li><strong>骨架时空图：</strong>该模型建立在一系列骨架图之上，其中每个节点对应于人体的一个关节。有两种类型的边，即符合关节自然连接性的<strong>空间边</strong>和跨连续时间步连接相同关节的<strong>时间边</strong>。在此基础上构造了多个时空图卷积层，使得信息能够沿空间和时间维度进行集成。</li>
 </ul>
 <p><img src="picture/image-20220221123637172.png" alt="image-20220221123637172"></p>
 <ul>
-<li><p><strong>输入：</strong>(N , C, T, V)，N是batchsize；C是通道数（3个坐标）；T是帧数；V是关键节点数</p>
-<p><img src="picture/image-20220221124943045.png" alt="image-20220221124943045"></p>
+<li><p><strong>分区策略</strong></p>
+<p>在图卷积网络中，每个相邻节点上的特征向量将具有具有相同权重向量的内积。考虑<strong>通过分区策略来给不同的邻近节点分配不同的权重W</strong>。</p>
+<p><img src="picture/image-20220306004047683.png" alt="image-20220306004047683"></p>
+<ul>
+<li><p>（a）输入框架的示例。身体关节用蓝点绘制。D=1的滤镜的感受野用红色虚线圆圈绘制。<strong>（注意，权重W☞后面gcn中W）</strong></p>
+</li>
+<li><p>（b）<strong>Uni-labeling partitioning</strong>，其中邻域中的所有节点都具有相同的标签（绿色）。<strong>（1个权重W）</strong></p>
+</li>
+<li><p>（c） <strong>Distance partitioning</strong>。这两个子集是距离为0（绿色）的根节点本身和距离为1的其他相邻点。（蓝色）。<strong>（D+1个权重W）</strong></p>
+</li>
+<li><p>（d）<strong>Spatial configuration partitioning</strong>。根据节点到骨架重心（黑色十字）的距离（与根节点（绿色）的距离相比）对节点进行标记。向心节点的距离比根节点短（蓝色），而离心节点的距离比根节点长（黄色）。</p>
+<p>这一策略的灵感来自这样一个事实：身体部位的运动可以大致分为同心运动和偏心运动 <strong>（3个权重W）</strong></p>
+<ol>
+<li>根节点本身</li>
+<li>向心群：比根节点更靠近骨骼重心的相邻节点；</li>
+<li>离心组。</li>
+</ol>
 </li>
 </ul>
-<h5 id="4-6-4-2-as-gcn-2019-cvpr-">4.6.4.2    AS-GCN（2019 CVPR）</h5>
+</li>
+<li><p><strong>输入：</strong>(N , C, T, V, M)，N是batch_size；C是通道数（3个坐标）；T是帧数；V是关键节点数；M是单个帧中骨架数。</p>
+</li>
+<li><p><strong>模型</strong></p>
+<p><img src="picture/image-20220221124943045.png" alt="image-20220221124943045"></p>
+<p><img src="picture/image-20220306000114764.png" alt="image-20220306000114764"></p>
+<p>我们对视频进行姿势估计，并在骨架序列上构建时空图。将应用多层时空图卷积（ST-GCN），并逐步在图上生成更高级别的特征图。然后，它将由标准Softmax分类器分类为相应的行为类别。</p>
+<ul>
+<li><p>Conv2d中数字表示<strong>卷积核的大小与输出通道数</strong></p>
+</li>
+<li><p>permute操作是改变维度位置，如开始M从第4为改变到第一维</p>
+</li>
+<li><p>st_gcn_block中的残差连接是可选择的，如果为FALSE，则卷积变为全0输出函数（相对于没有）；如果输入通道数与输出通道数一致，则直接连接，不经过卷积。</p>
+</li>
+<li><p>st_gcn_block一共9个，具体输入输出通道如下：</p>
+<pre><code class="lang-python">self.st_gcn_networks = nn.ModuleList((
+    st_gcn_block(in_channels, 64, kernel_size, 1, residual=False, **kwargs0),
+    st_gcn_block(64, 64, kernel_size, 1, **kwargs),
+    st_gcn_block(64, 64, kernel_size, 1, **kwargs),
+    st_gcn_block(64, 64, kernel_size, 1, **kwargs),
+    st_gcn_block(64, 128, kernel_size, 2, **kwargs),
+    st_gcn_block(128, 128, kernel_size, 1, **kwargs),
+    st_gcn_block(128, 128, kernel_size, 1, **kwargs),
+    st_gcn_block(128, 256, kernel_size, 2, **kwargs),
+    st_gcn_block(256, 256, kernel_size, 1, **kwargs),
+    st_gcn_block(256, 256, kernel_size, 1, **kwargs),
+))
+</code></pre>
+</li>
+<li><p><strong>tcn</strong>是提取时间特征，只在T维度上进行卷积运算</p>
+</li>
+<li><p><strong>gcn</strong>是提取空间特征，只在单帧骨架中单独进行。<strong>根据分区策略的不同，gcn计算也不同。</strong></p>
+<ul>
+<li><p><strong>Uni-labeling partitioning</strong>（单个权重分区策略）</p>
+<p>与一般图卷积运算一致。<strong>Λ</strong>表示归一化矩阵，<strong>W</strong>是可学习矩阵，并节点间共享。</p>
+<p><img src="picture/image-20220306092748791.png" alt="image-20220306092748791"></p>
+</li>
+<li><p>对于具有多个权重的分区策略，<strong>即距离分区和空间配置分区</strong></p>
+<p>α 为0.01，防止归一化矩阵为0。</p>
+<p><img src="picture/image-20220306093202778.png" alt="image-20220306093202778"></p>
+<p>现在邻接矩阵被分解成几个矩阵<strong>Aj</strong>，其中<strong>A+I=Aj之和</strong>。例如，<strong>在距离分割策略中，A0=I和A1=A</strong> 。</p>
+</li>
+<li><p><strong>优化：</strong>实现可学习的边缘重要性权重很简单。对于每个邻接矩阵，我们附带一个<strong>可学习的权重矩阵M</strong>。我们将等式中的矩阵A+I和矩阵Aj替换为（A+I）⊗ M和Aj⊗ M、 分别。在这里⊗ 表示两个矩阵之间的元素乘积。掩码M被初始化为一个全一矩阵。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-3-5-2-as-gcn-2019-cvpr-">4.3.5.2    AS-GCN（2019 CVPR）</h5>
 <blockquote>
 <p>Actional-Structural Graph Convolutional Networks for Skeleton-based Action Recognition</p>
 </blockquote>
-<h5 id="4-6-4-3-4s-shift-gcn-2020-cvpr-">4.6.4.3  4s Shift-GCN（2020 CVPR）</h5>
+<h5 id="4-3-5-3-4s-shift-gcn-2020-cvpr-">4.3.5.3  4s Shift-GCN（2020 CVPR）</h5>
 <blockquote>
 <p>Skeleton-Based Action Recognition with Shift Graph Convolutional Network</p>
 </blockquote>
-<h4 id="4-6-5-transformer-based">4.6.5 Transformer-based</h4>
-<h5 id="4-6-5-1-ts-san-2020-wacv-">4.6.5.1 TS-SAN（2020 WACV）</h5>
+<h4 id="4-3-6-transformer-based">4.3.6 Transformer-based</h4>
+<h5 id="4-3-6-1-ts-san-2020-wacv-">4.3.6.1 TS-SAN（2020 WACV）</h5>
 <blockquote>
 <p>Self-Attention Network for Skeleton-based Human Action Recognition</p>
 </blockquote>
-<h5 id="4-6-5-2-st-tr-2021-cviu-">4.6.5.2 ST-TR（2021 CVIU）</h5>
+<h5 id="4-3-6-2-st-tr-2021-cviu-">4.3.6.2 ST-TR（2021 CVIU）</h5>
 <blockquote>
 <p>Skeleton-based action recognition via spatial and temporal transformer networks</p>
 </blockquote>
-<h5 id="4-6-5-3-mtt-2022-spl-">4.6.5.3 MTT（2022 SPL）</h5>
+<h5 id="4-3-6-3-mtt-2022-spl-">4.3.6.3 MTT（2022 SPL）</h5>
 <blockquote>
 <p>MTT: Multi-Scale Temporal Transformer for Skeleton-Based Action Recognition</p>
 </blockquote>
-<h4 id="4-6-6-self-supervision">4.6.6 Self-supervision</h4>
-<h5 id="4-6-6-1-ms2l-multi-task-self-supervised-learning-for-skeleton-based-action-recognition-2020-acm-multimedia-">4.6.6.1 MS2L: Multi-Task Self-Supervised Learning for Skeleton Based Action Recognition（2020 ACM Multimedia）</h5>
-<h5 id="4-6-6-2-self-supervised-3d-skeleton-action-representation-learning-with-motion-consistency-and-continuity-2021-iccv-">4.6.6.2 Self-supervised 3D Skeleton Action Representation Learning with Motion Consistency and Continuity（2021 ICCV）</h5>
-<h5 id="4-6-6-3-motion-transformer-self-supervised-pre-training-for-skeleton-based-action-recognition-2021-acm-multimedia-">4.6.6.3 Motion-transformer: self-supervised pre-training for skeleton-based action recognition（2021 ACM Multimedia）</h5>
-<h5 id="6-6-6-4-contrastive-self-supervised-learning-for-skeleton-action-recognition-2021-">6.6.6.4 Contrastive Self-Supervised Learning for Skeleton Action Recognition（2021）</h5>
+<h4 id="4-3-7-self-supervision">4.3.7 Self-supervision</h4>
+<h5 id="4-3-7-1-ms2l-multi-task-self-supervised-learning-for-skeleton-based-action-recognition-2020-acm-multimedia-">4.3.7.1 MS2L: Multi-Task Self-Supervised Learning for Skeleton Based Action Recognition（2020 ACM Multimedia）</h5>
+<h5 id="4-3-7-2-self-supervised-3d-skeleton-action-representation-learning-with-motion-consistency-and-continuity-2021-iccv-">4.3.7.2 Self-supervised 3D Skeleton Action Representation Learning with Motion Consistency and Continuity（2021 ICCV）</h5>
+<h5 id="4-3-7-3-motion-transformer-self-supervised-pre-training-for-skeleton-based-action-recognition-2021-acm-multimedia-">4.3.7.3 Motion-transformer: self-supervised pre-training for skeleton-based action recognition（2021 ACM Multimedia）</h5>
+<h5 id="4-3-7-4-contrastive-self-supervised-learning-for-skeleton-action-recognition-2021-">4.3.7.4 Contrastive Self-Supervised Learning for Skeleton Action Recognition（2021）</h5>
 <h2 id="5-">5. 应用落地</h2>
 <p>应用：视频监控、人机交互、智能驾驶、机器人技术以及体育赛事辅助等</p>
 <h3 id="5-1-">5.1 体育赛事辅助</h3>
