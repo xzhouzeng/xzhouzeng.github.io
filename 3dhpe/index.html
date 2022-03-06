@@ -1,7 +1,7 @@
 <html>
   <head>
 	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>3DHPE</title>
+    <title>调研文档</title>
 		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
 		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
 		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
@@ -1197,12 +1197,63 @@ ret = pred × m + centroid
 </blockquote>
 <p><a href="https://zhuanlan.zhihu.com/p/395588459">PoseC3D: 基于人体姿态的动作识别新范式 - 知乎 (zhihu.com)</a></p>
 <ul>
-<li>基于提取好的 2D 姿态，我们需要堆叠<strong>T</strong>张形状为<strong>KxHxW</strong>的二维关键点热图以生成形状为<strong>KxTxHxW</strong>的 3D 热图堆叠作为输入。若我们事先将 2D 姿态存储成坐标形式，则需要先借助生成以 <strong>(x,y)</strong> 为中心的高斯分布，将其重新转换为热图形式。</li>
-</ul>
-<p><img src="picture/image-20220221125158638.png" alt="image-20220221125158638"></p>
+<li><p><strong>出发点：</strong></p>
 <ul>
-<li><p>我们同时利用均匀采样以减少 3D 热图堆叠在时间维度上的冗余。由于整个视频长度过长，难以处理，通常选取一个仅包含部分帧的子集构成一个片段，作为 3D-CNN 的输入。基于 RGB 模态的方法，通常只在一个较短的时间窗内采帧构成 3D-CNN 的输入（如 SlowFast 在一个长仅为 64 帧的时间窗内采帧）。由于这种采帧方式难以捕捉整个动作，因此在骨骼行为识别中，我们采用了均匀采样的方式：<strong>需要采 N 帧时，我们先将整个视频均分为长度相同的N 段，并在每段中随机选取一帧。</strong>在实验中，我们发现这样的采帧方式对骨骼行为识别尤其适用。</p>
+<li><strong>问题：</strong>许多基于骨架的动作识别方法都采用图卷积网络（GCN）来提取人体骨架上的特征。尽管在以前的工作中取得了积极的成果，但基于GCN的方法<strong>在健壮性、互操作性和可扩展性方面受到限制</strong>。<ol>
+<li><strong>鲁棒性：</strong>GCN直接处理人体关节坐标时，其识别能力受到<strong>坐标分布偏移的影响</strong>，而在应用不同的姿态估计量获取时，往往会发生这种情况协调。因此，坐标中的小扰动常常导致完全不同的预测。</li>
+<li><strong>互操作性：</strong>以前的工作表明，来自不同模式的表示，如RGB、光流和骨架是互补的。因此，这种模式的有效组合往往会导致行动承认的业绩提高。然而，<strong>骨架表示的图形形式使其难以与其他模式融合</strong>，特别是在早期或低层次阶段，从而限制了组合的有效性。</li>
+<li><strong>可扩展性：</strong>此外，由于GCN将每个人体关节视为节点，GCN的复杂性与人员数量呈线性关系，<strong>限制了GCN对涉及多人的任务的适用性</strong>，例如组活动识别。</li>
+</ol>
+</li>
+<li>在这项工作中，我们提出了一种新的基于骨架的动作识别方法PoseC3D，它依赖于<strong>3D热图堆栈</strong>而不是图形序列作为人体骨架的基本表示。与基于GCN的方法相比，PoseC3D在学习时空特征方面更有效，对姿态估计噪声更具鲁棒性，并且在跨数据集环境下具有更好的通用性。此外，PoseC3D可以在<strong>不增加计算成本的情况下处理多人场景</strong>，其功能<strong>可以在早期融合阶段轻松与其他模式集成</strong>，这为进一步提高性能提供了巨大的设计空间。</li>
+</ul>
+</li>
+<li><p><strong>人体姿态估计</strong></p>
+<p>我们主要关注2D姿势，而不是3D姿势，因为需求中的姿势与现有3D姿势提取器估计的姿势之间存在<strong>质量差距</strong>。 </p>
+<p>我们选择自上而下的方法，尤其是在COCO关键点上训练的<strong>HRNet</strong>作为我们的姿势提取工具</p>
+</li>
+<li><p><strong>模型</strong></p>
+<ul>
+<li><p>基于提取好的 2D 姿态，我们需要堆叠<strong>T</strong>张形状为<strong>（KxHxW）</strong>的二维关键点热图以生成形状为<strong>（KxTxHxW）</strong>的 3D 热图堆叠作为输入。</p>
+<p><img src="picture/image-20220221125158638.png" alt="image-20220221125158638"></p>
+</li>
+<li><p>若我们事先将 2D 姿态存储成坐标形式，则需要先生成以 <strong>(x,y)</strong> 为中心的二维高斯热图。</p>
+<p><img src="picture/image-20220306220726464.png" alt="image-20220306220726464"></p>
+</li>
+</ul>
+</li>
+<li><p>我们进一步应用两种<strong>预处理</strong>技术来减少3D热图卷的冗余。</p>
+<ul>
+<li><p><strong>以主题为中心的裁剪</strong>。使热图与框架一样大是低效的，尤其是当所有人只出现在一个小区域时。因此，在这种情况下，我们首先找到最小的边界框，该边界框包含了跨帧的所有2D姿势。然后，我们根据找到的框裁剪所有帧，并将它们调整为目标大小，以便3D热图体积的大小沿空间维度减小。</p>
+</li>
+<li><p><strong>均匀抽样。</strong>由于整个视频长度过长，难以处理，通常选取一个仅包含部分帧的子集构成一个片段，作为 3D-CNN 的输入。基于 RGB 模态的方法，通常只在一个较短的时间窗内采帧构成 3D-CNN 的输入（如 SlowFast 在一个长仅为 64 帧的时间窗内采帧）。由于这种采帧方式难以捕捉整个动作，因此在骨骼行为识别中，我们采用了均匀采样的方式：<strong>需要采 N 帧时，我们先将整个视频均分为长度相同的N 段，并在每段中随机选取一帧。</strong>在实验中，我们发现这样的采帧方式对骨骼行为识别尤其适用。</p>
+</li>
+</ul>
 <p><img src="picture/image-20220221125927200.png" alt="image-20220221125927200"></p>
+</li>
+</ul>
+<ul>
+<li><p>本文设计了两个基于3D CNN的网络，即Pose-SlowOnly和RGBPose-SlowFast</p>
+<p>🍳An instantiation of the <strong>RGBPose-SlowFast</strong> network</p>
+<p>T×S^2，C表示时间、空间、通道数。Pose Pathway需要更密集的输入，对应于<strong>SlowFast</strong>中的快速路径。我们使用的主干是ResNet50。GAP表示全球平均池。 </p>
+<p><img src="picture/image-20220306221756925.png" alt="image-20220306221756925"></p>
+</li>
+<li><p><strong>Pose-SlowOnly</strong></p>
+<p>详细架构见上图Pose Pathway，与原始版本对比没有下采样操作、res2层被移除、通道宽度减少到其原始值的一半。</p>
+</li>
+<li><p><strong>RGBPose-SlowFast</strong></p>
+<ul>
+<li>RGBPose SlowFast用于<strong>人类骨骼和RGB帧的早期融合</strong>，这是由于在基于骨骼的动作识别中使用了3D CNN实现的。</li>
+<li>其中RGB Pathway以<strong>小帧速率和大通道宽度</strong>实例化，Pose Pathway是以<strong>大帧率和小通道宽度</strong>实例化的。此外，时间步长卷积被用作两条路径之间的横向连接，因此<strong>不同模式的语义可以充分交互。</strong></li>
+<li>在RGBPose SlowFast中进行了一些调整，以更好地适应这两种模式的特点。具体来说，姿势路径的res2被移除，侧连接只在res3和res4之前添加，我们使用<strong>双向侧连接</strong>，而不是单向连接，因为它们连接两个非常不同的模式，不同于最初的SlowFast。除了横向连接，两条通路的预测也以后期融合的方式结合在一起，这导致我们的实证研究进一步改进。最后，我们训练RGBPose-SlowFast，<strong>每个通路分别有两个单独的损失，因为从两种模式中联合学习的单个损失会导致严重的过度拟合</strong>。</li>
+</ul>
+</li>
+<li><p><strong>实验结果</strong></p>
+<p>PoseC3D is better or comparable to previous state-of-the-arts.</p>
+<p><img src="picture/image-20220306224231481.png" alt="image-20220306224231481"></p>
+</li>
+<li><p><strong>补充</strong></p>
+<p>PoseC3D也可以处理3D骨骼数据。例如，分别使用（x，y）、（y，z）和（x，z）将三维骨架（x，y，z）划分为三个二维骨架。</p>
 </li>
 </ul>
 <h4 id="4-3-5-gcn-based">4.3.5 GCN-based</h4>
@@ -1212,7 +1263,7 @@ ret = pred × m + centroid
 <p><a href="https://github.com/open-mmlab/mmskeleton">https://github.com/open-mmlab/mmskeleton</a></p>
 </blockquote>
 <ul>
-<li><strong>出发点：</strong>传统的骨架建模方法通常依赖于手工制作的零件或遍历规则，因此表达能力有限，难以推广。在这项工作中，我们提出了一种新的动态骨架模型，称为时空图卷积网络（ST-GCN），它通过从数据中自动学习空间和时间模式，超越了以往方法的局限性。</li>
+<li><strong>出发点：</strong>传统的骨架建模方法通常依赖于手工制作的零件或遍历规则，因此表达能力有限，难以推广<strong>。人类骨架数据本质上是拓扑图，而图神经网络在处理非欧数据上的突出表现。</strong>在这项工作中，我们提出了一种新的动态骨架模型，称为时空图卷积网络（ST-GCN），它通过从数据中自动学习空间和时间模式，超越了以往方法的局限性。</li>
 <li><strong>本文贡献：</strong><ul>
 <li>提出了ST-GCN，这是一种基于图形的通用动态骨架建模公式，这是<strong>第一个将基于图神经网络应用于这项任务</strong>的公式。</li>
 <li>提出了在ST-GCN中设计卷积核的几个原则，以满足骨架建模的具体要求。</li>
@@ -1307,7 +1358,81 @@ ret = pred × m + centroid
 <h5 id="4-3-6-2-st-tr-2021-cviu-">4.3.6.2 ST-TR（2021 CVIU）</h5>
 <blockquote>
 <p>Skeleton-based action recognition via spatial and temporal transformer networks</p>
+<p><a href="https://github.com/Chiaraplizz/ST-TR">https://github.com/Chiaraplizz/ST-TR</a></p>
 </blockquote>
+<ul>
+<li><p>本文可以理解是在<strong>ST-GCN</strong>（参考前述）基础上结合Transformer Self-attention做改进。</p>
+</li>
+<li><p><strong>出发点：</strong></p>
+<ul>
+<li><strong>目前问题：</strong><ul>
+<li>目前对三维骨架潜在信息的有效编码仍然是一个有待解决的问题，尤其是在从关节运动模式及其相关性中提取有效信息时。</li>
+<li>表示人体的图形的拓扑结构对于所有层和所有动作都是<strong>固定</strong>的；这可能会阻止提取时间段内骨架运动的丰富表示，尤其是在图形链接有方向且信息只能沿预定义路径流动的情况下。（ST-GCN）</li>
+<li>空间和时间卷积都是从标准的二维卷积开始实现的，学习到的局部特征受卷积内核大小的限制。 </li>
+<li><strong>人体骨骼中没有连接的身体关节之间的相关性</strong>，例如左手和右手，即使与“鼓掌”等动作相关，也会被低估。</li>
+</ul>
+</li>
+<li>基于Transforer的灵活性、建模长期依赖性及其他优秀特点。我们提出了一种新的时空变换网络（ST-TR），该网络使用<strong>Transforer</strong>自我注意机制来建模关节之间的依赖关系。在我们的ST-TR模型中，空间自注意模块（SSA）用于理解帧内不同身体部位之间的相互作用，时间自注意模块（TSA）用于建模帧间相关性。二者结合在一个双流网络中。</li>
+</ul>
+</li>
+<li><p><strong>本文贡献：</strong></p>
+<ul>
+<li>提出了一种新的基于双流<strong>Transformer</strong>的骨骼活动识别模型，在空间和时间维度上都采用了自我注意。</li>
+<li>我们设计了一个空间自我注意（SSA）模块，以动态建立骨骼关节之间的联系，代表人体各部位之间的关系，以动作为条件，<strong>独立于自然的人体结构。</strong></li>
+<li>在时间维度上，我们引入了时间自我注意（TSA）模块来研究关节随时间的动力学。</li>
+</ul>
+</li>
+<li><p><strong>自注意力</strong></p>
+<p><a href="https://zhuanlan.zhihu.com/p/340149804">Vision Transformer 超详细解读 (原理分析+代码解读) (一) - 知乎 (zhihu.com)</a></p>
+<p>其中Q、K和V是分别包含预测查询、键向量和值向量的矩阵，dk是键向量的<strong>通道维度</strong>。除√dk是为了在训练期间<strong>增加梯度稳定性</strong>。为了获得更好的表现，通常会采用一种称为多头注意的机制，该机制包括使用不同的可学习参数多次应用注意，即一个头部，然后将结果合并 。</p>
+<p><img src="picture/image-20220306165309667.png" alt="image-20220306165309667"></p>
+</li>
+<li><p><strong>模型</strong></p>
+<p><img src="picture/image-20220306163212013.png" alt="image-20220306163212013"></p>
+<ul>
+<li><p>输入<strong>(N , C, T, V, M)</strong>，N是batch_size；C是通道数（3个坐标）；T是帧数；V是关键节点数；M是单个帧中骨架数。相关处理同ST-GCN，==&gt;&gt;<strong>(N*M , C, T, V,)</strong></p>
+</li>
+<li><p>ST-GCN layer由一个GCN与TCN组成。</p>
+<p><img src="picture/image-20220306165640471.png" alt="image-20220306165640471"></p>
+<p>TCN是卷积核为（K,1）的二维卷积操作；GCN有两种选择：</p>
+<ul>
+<li><p><strong>ST-GCN</strong></p>
+<p><img src="picture/image-20220306165808194.png" alt="image-20220306165808194"></p>
+</li>
+<li><p><strong>A-GCN</strong></p>
+<blockquote>
+<p>Two-stream adaptive graph convolutional networks for skeleton-based action recognition（2019 CVPR）</p>
+</blockquote>
+<p>ST-GCN图形结构是预定义的，邻接矩阵是固定的。为了使其具有适应性。A-GCN做改进，其中Ak与等式1中的相同，Bk在训练期间学习，Ck通过相似性函数确定两个顶点是否连接 。</p>
+<p><img src="picture/image-20220306165826218.png" alt="image-20220306165826218"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>S-TR/T-TR</strong></p>
+<p>Kt是时间维度（TCN）上具有内核，根据输入顺序不同可能是（Kt,1）</p>
+<p><img src="picture/image-20220306170335663.png" alt="image-20220306170335663"></p>
+<p><img src="picture/image-20220306170511937.png" alt="image-20220306170511937"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Spatial Self-Attention (SSA)</strong></p>
+<p>空间自我注意模块在每个<strong>帧内</strong>应用自我注意，提取嵌入身体部位之间关系的低层特征。这是通过<strong>独立计算每一帧中每对关节之间的相关性</strong>来实现的。单个样本维度<strong>（1,C,V）</strong></p>
+<p><img src="picture/image-20220306170821552.png" alt="image-20220306170821552"></p>
+<p>SSA模块的图示。通过在批次维度中<strong>移动T</strong>（T相当于batch_size）来重塑输入，从而使自我注意在每个时间帧上分别运作。SSA实现为矩阵乘法，其中Q、K和V分别是查询矩阵、键矩阵和值矩阵，以及⊗ 表示矩阵乘法。</p>
+<p><img src="picture/image-20220306171213379.png" alt="image-20220306171213379"></p>
+</li>
+<li><p><strong>Temporal Self-Attention (TSA)</strong></p>
+<p>使用时间自我注意（TSA）模块，沿着所有框架分别研究每个关节的动力学，即<strong>每个关节被视为独立的</strong>，通过比较同一身体关节沿时间维度嵌入的变化来计算框架之间的相关性，在时间上提取节点之间的帧间关系。单个样本维度<strong>（1,C,T）</strong></p>
+<p><strong>TSA的实现是同上面SSA图，唯一的区别是尺寸V对应于T和反之亦然</strong></p>
+<p><img src="picture/image-20220306171011545.png" alt="image-20220306171011545"></p>
+</li>
+<li><p><strong>实验结果</strong>（NTU RGB+D）</p>
+<p><img src="picture/image-20220306212731504.png" alt="image-20220306212731504"></p>
+</li>
+<li><p><strong>总结：</strong></p>
+<p>提出了一种新的方法，在骨骼活动识别中<strong>引入Transformer自我注意，作为图形卷积的替代</strong>。通过对NTU-60、NTU-120和动力学的大量实验，我们证明了我们的空间自我注意模块（SSA）可以取代图形卷积，实现更灵活和动态的表示。类似地，时间自注意模块（TSA）克服了标准卷积的严格局部性，能够提取动作的长期依赖性。</p>
+</li>
+</ul>
 <h5 id="4-3-6-3-mtt-2022-spl-">4.3.6.3 MTT（2022 SPL）</h5>
 <blockquote>
 <p>MTT: Multi-Scale Temporal Transformer for Skeleton-Based Action Recognition</p>
@@ -1334,7 +1459,8 @@ ret = pred × m + centroid
 <li>医院周边安防应用：实时分析并警报是否有暴动伤医、危险人员等情况；</li>
 </ul>
 <h2 id="6-">6. 其他</h2>
-<h3 id="6-1-huber-loss">6.1 Huber loss</h3>
+<h3 id="6-1-">6.1 损失函数</h3>
+<h4 id="6-1-1-huber-loss">6.1.1 Huber loss</h4>
 <p><a href="https://zhuanlan.zhihu.com/p/136047113">机器学习（十）：损失函数 - 知乎 (zhihu.com)</a></p>
 <p>MSE 损失收敛快但容易受 outlier 影响，MAE 对 outlier 更加健壮但是收敛慢。</p>
 <p><strong>Huber Loss</strong>则是一种将 MSE 与 MAE 结合起来，取两者优点的损失函数，也被称作 Smooth Mean Absolute Error Loss 。其原理很简单，就是在<strong>误差接近 0 时使用 MSE，误差较大时使用 MAE</strong>，公式为</p>
