@@ -1170,17 +1170,19 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
 
 传统的基于骨骼的动作识别方法主要分为两类：基于关节的方法和基于身体部位的方法。
 
-##### 4.3.2.1 View invariant human action recognition using histograms of 3d joints（2012 CVPR）
+##### 4.3.2.1 View invariant human action recognition using histograms of 3d joints（2012 CVPRW）
 
 基于手工制作的低级特征，采用相对简单的时间序列模型，例如隐马尔可夫模。
 
-##### 4.3.2.2 Joint angles similarities and hog2 for action recognition（2013 CVPR）
+##### 4.3.2.2 Joint angles similarities and hog2 for action recognition（2013 CVPRW）
 
 基于身体部位的方法将人体骨骼视为一组连接的片段，然后专注于单个或连接的身体部位对和关节角度。
 
 ##### 4.3.2.3 Human action recognition using a temporal hierarchy of covariance descriptors on 3d joint locations（2013 IJCAI）
 
 基于关节的方法将人体骨骼视为一组点，并使用基于关节位置的各种特征，例如关节位置。
+
+##### 4.3.2.4 Human action recognition by representing 3d skeletons as points in a lie group（2014 CVPR）
 
 #### 4.3.3 RNN-based
 
@@ -1217,6 +1219,19 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
   一种图遍历方法，根据邻接关系访问序列中的关节，访问顺序将图表排列成一系列关节。**遍历序列通过在正向和反向方向上两次访问大多数关节来保证图形中的空间关系。下图c**
   
   ![image-20220304144748120](picture/image-20220304144748120.png)
+  
+- **实验结果**
+
+  - 双流RNN的表现始终优于单个时间RNN和空间RNN，这证实了空间和时间通道既有效又互补。
+
+  - 时态 RNN 的结果比空间 RNN 的结果要好得多。这一观察结果与以下事实一致：以前大多数基于 RNN 的方法都采用时态 RNN 来识别操作。
+
+  - 对于时态 RNN，**分层结构通常比堆叠结构的性能更好。**
+
+  - 对于空间RNN，***遍历序列*的结果优于*链序列*的结果**，因为遍历方法通过在正向和反向方向上访问大多数关节两次来保持图形结构的更好的空间关系。
+  - 3D变换技术为基于骨架的识别带来了显著的性能提升，因为旋转变换会从不同的视图随机生成新的骨架，从而使我们的双流RNN对视点变化具有鲁棒性。
+
+  ![image-20220309105724890](picture/image-20220309105724890.png)
 
 ##### 4.3.3.2 Ensemble TS-LSTM v2（2017 ICCV）
 
@@ -1281,6 +1296,18 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
 - **网络架构**
 
   我们设计了一个微小的7层网络，由3个卷积层和4个完全连接的层组成（此时性能饱和）。我们的网络仅包含130万个参数。它可以从头开始轻松训练，无需任何预训练。
+  
+- **实验结果**
+
+  - Ablation study
+
+    对NTU RGB + D数据集进行了烧蚀研究。使用普通的CNN，我们已经优于STA-LSTM（一个强大的LSTM基线）
+
+    ![image-20220309134055777](picture/image-20220309134055777.png)
+
+  - **NTU RGB+D**
+
+    ![image-20220309134128447](picture/image-20220309134128447.png)
 
 ##### 4.3.4.3 HCN（2018 IJCAI）
 
@@ -1337,6 +1364,22 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
   - **Late fusion**。多个人的输入经过同一个子网络，他们的conv6特征图通过沿通道串联或元素最大\平均操作合并。
 
     ![image-20220305000719982](picture/image-20220305000719982.png)
+  
+- **实验结果**
+
+  - **Multi-person Feature Fusion**
+
+    **所有后期融合方法都优于早期融合方法。**原因可能是不同的人的特征在高级语义空间中比在原始输入空间中更一致，因此更兼容。在三种后期融合实现中，**元素最大化操作达到了最佳精度。**这是由于单人动作零填充的副作用造成的。也就是说，与多人样本相比，在串联和元素平均两种情况下，单人样本的特征都会因填充零而减弱。而元素方面的最大值不会受到这个问题的影响。（NTU RGB+D ）
+
+    ![image-20220308204356901](picture/image-20220308204356901.png)
+
+  - NTU RGB+D数据下与其他先进模型对比
+
+    ![image-20220308204617138](picture/image-20220308204617138.png)
+
+- **最后文章思考**
+
+  促使我们探索不同层次的情境聚合的原因是，我们要弄清楚在动作识别中对关节点之间的交互进行建模的重要性。给定一个或多个受试者的特定类型的动作，关节的全部或部分交互作用是否有助于地球上的认知？从我们的实验中得到的答案最初是反直觉的，但有意义的，这已经被许多类似的工作所证明。所谓的**背景语境是提高任务绩效的关键因素**，在动作识别中也是如此。为了识别一个特定的动作，例如打电话，**不感兴趣的关节，比如脚踝，扮演着与背景语境相似的角色，**其贡献用CNN隐式编码。这正是我们的方法从中受益的见解。
 
 ##### 4.3.4.4 TSRJI（2019 SIBGRAPI）
 
@@ -1404,7 +1447,31 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
 
 - **实验结果**
 
-  PoseC3D is better or comparable to previous state-of-the-arts.
+  - 姿态：2D骨架**VS**3D骨架质量
+
+    我们在两个数据集：NTU-60（第1行）和FineGYM（第2行）上可视化3D骨骼（通过传感器收集或使用最先进的估计器估计）和估计2D骨骼。3D骷髅偏移严重，而2D骨架具有优异的质量。 
+
+    ![image-20220308191251370](picture/image-20220308191251370.png)
+
+    使用MSG3D[22]（基于骨架的动作识别的最新GCN），对2D和3D关键点使用相同的配置和训练，在动作识别中，**估计的2D关键点（即使是低质量的）始终优于3D关键点（传感器收集或估计）。**
+
+    ![image-20220308192019202](picture/image-20220308192019202.png)
+
+  - 预处理相关
+
+    均匀采样优于固定步长![image-20220308200142920](picture/image-20220308200142920.png)
+
+    而且均匀采样主要提高了数据集中较长视频的识别性能。
+
+    ![image-20220308200853731](picture/image-20220308200853731.png)
+
+    热图关节还是四肢？根据我们保存的坐标，我们可以生成关节和肢体的伪热图。总的来说，我们发现关节的伪热图是3D-CNN更好的输入，而**四肢的伪热图会导致类似或较差的性能**。将两个分别在肢体和关节热图上训练的模型进行融合，可以进一步提高性能。
+
+  - **为了测试这PoseC3D模型的稳健性，我们可以在输入中删除一部分关键点，看看这种扰动将如何影响最终的精度**。并与其模型比较，通过在每一帧中以概率p随机删除1个肢体关键点来测试：
+
+    ![image-20220308201357351](picture/image-20220308201357351.png)
+
+  - PoseC3D（Pose-Pathway） is better or comparable to previous state-of-the-arts.
 
   ![image-20220306224231481](picture/image-20220306224231481.png)
 
@@ -1468,6 +1535,7 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
   - st_gcn_block一共9个，具体输入输出通道如下：
   
     ```python
+    # (intput_channels,output_channels,..)
     self.st_gcn_networks = nn.ModuleList((
         st_gcn_block(in_channels, 64, kernel_size, 1, residual=False, **kwargs0),
         st_gcn_block(64, 64, kernel_size, 1, **kwargs),
@@ -1508,7 +1576,7 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
 
     - Ablation Study
 
-      ST-GCN中分区策略的效果对比，多个权重的分区会比单标记分区好。一些说明：distance partitioning*表示使用分区策略，但W1=-W0（相对于只有一个可学习权重）；ST-GCN + Imp表示使用(A + I) ⊗ M优化后的结果。
+      ST-GCN中**分区策略的效果对比**，多个权重的分区会比单标记分区好。一些说明：distance partitioning*表示使用分区策略，但W1=-W0（相对于只有一个可学习权重）；ST-GCN + Imp表示使用(A + I) ⊗ M优化后的结果。
 
       ![image-20220308165622623](picture/image-20220308165622623.png)
 
@@ -1619,7 +1687,19 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
 
   ![image-20220306171011545](picture/image-20220306171011545.png)
 
-- **实验结果**（NTU RGB+D）
+- **实验结果**
+
+  - **Ablation Study**
+
+    - 我们首先使用仅包含联合信息的输入数据来分析S-TR流、T-TR流及其组合的性能。**(a)**
+
+    - 在**(b)**实验中，SSA（TSA）从第一层开始在S-TR（T-TR）流上替代GCN（TCN）。（命名为S-TR-alllayers）中报告的配置性能比表**a**中相应的配置差，但仍优于基线ST-GCN）。
+
+    - 当SSA和TSA组合在一个单流体系结构中时，我们测试了模型的效率（称为**S-TR-1s**）。在此配置中，特征提取仍由原始GCN和TCN模块执行，**而从第四层开始，每一层由SSA和TSA组成，**即ST-TR-1s（x）=TSA（SSA（x））。
+
+  ![image-20220309141018564](picture/image-20220309141018564.png)
+
+  - **NTU RGB+D**
 
   ![image-20220306212731504](picture/image-20220306212731504.png)
 
@@ -1669,7 +1749,7 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
 [Kinetics-Skeleton dataset Benchmark (Skeleton Based Action Recognition) | Papers With Code](https://paperswithcode.com/sota/skeleton-based-action-recognition-on-kinetics)
 
 - 可以理解由**Kinetics-400**经过
-- 在这**ST-GCN**中，使用像素坐标系中估计的关节位置作为输入，并丢弃原始RGB帧。为了获得关节位置，我们首先将所有视频的分辨率调整为340×256，并将帧速率转换为30 FPS。然后，我们使用公开的**OpenPose**工具箱来估计剪辑每一帧上18个关节的位置。工具箱给出像素坐标系中的二维坐标（X，Y）和18个人体关节的置信度C。因此，我们用一个**（X，Y，C）**元组表示每个关节，并将一个骨架帧记录为一个由18个元组组成的数组。对于多人情况，我们在每个片段中选择两个关节平均置信度最高的人。通过这种方式，一个带有T帧的片段被转换成这些元组的骨架序列。实际上，我们用（3，T，18，2）维的张量表示剪辑。为了简单起见，我们通过从开始到T=300重放序列来填充每个片段。
+- 在这**ST-GCN**中，使用像素坐标系中估计的关节位置作为输入，并丢弃原始RGB帧。为了获得关节位置，我们首先将所有视频的分辨率调整为340×256，并将帧速率转换为30 FPS。然后，我们使用公开的**OpenPose**工具箱来估计剪辑每一帧上18个关节的位置。工具箱给出像素坐标系中的二维坐标（X，Y）和18个人体关节的置信度C。因此，我们用一个**（X，Y，C）**元组表示每个关节，并将一个骨架帧记录为一个由18个元组组成的数组。对于多人情况，我们在每个片段中选择**两个**关节平均置信度最高的人。通过这种方式，一个带有T帧的片段被转换成这些元组的骨架序列。实际上，我们用（3，T，18，2）维的张量表示剪辑。为了简单起见，我们通过从开始到T=300重放序列来填充每个片段。
 
 #### 4.5.2 NTU RGB+D
 
@@ -1689,6 +1769,10 @@ https://blog.csdn.net/weixin_51450749/article/details/111768242
 #### 4.5.3 NTU RGB+D++
 
 
+
+#### 4.5.4 SBU Kinect Interaction
+
+SBU Kinect交互数据集是一个Kinect捕获的人类活动识别数据集，描述了两人交互。数据集较小，它包含8类的282个骨架序列和6822帧。每个骨架有15个关节。对于评估，可以使用独立于受试者的5倍交叉验证。
 
 ## 5. 应用落地
 
