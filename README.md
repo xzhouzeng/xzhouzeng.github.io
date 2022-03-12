@@ -1154,6 +1154,12 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
 
 基于骨架（Skeleton-based）的行为识别目前基本都是在用图卷积GCN
 
+一般来说，人体骨架序列有三个显著的特征:
+
+- 每个节点与其相邻节点之间具有很强的相关性，因此骨架框架包含了丰富的人体结构信息。
+- 时间连续性不仅存在于相同的关节(如手、腕、肘)，也存在于身体结构中。
+- 时空域之间存在共现关系。
+
 #### 4.3.1 基于骨骼关键节点的行为识别综述
 
 - [【骨骼行为识别】论文与数据集列表 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/330856233)
@@ -1169,6 +1175,8 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
   3. GCN-based：相对新的方法图卷积神经网络GCN也有用于骨架数据处理中，因为骨架数据本身就是一个自然的拓扑图数据结构（关节点和骨头可以被视为图的节点和边），而不是图像或序列那样的格式。这个方法最重要的问题仍然与骨架数据的表示有关，即如何将原始数据组织成特定的图形。
   
 - 本文整理分类：传统算法、RNN-based、CNN-based、GCN-based、Transformer-based、Self-supervision
+
+  **（分类不完全互斥，有很多融合模型）**
 
 #### 4.3.2 传统算法
 
@@ -1215,6 +1223,8 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
   <img src="picture/image-20220310235513370.png" alt="image-20220310235513370" style="zoom:80%;" />
 
 - 使用一种动态规划方法加速Cov3DJ描述符的计算。✏
+
+- 使用线性**SVM**分类器。在训练或测试之前，描述符被规范化为具有L2单元规范。协方差矩阵本质上是移动不变的。为了使其尺度不变，在计算描述符之前，我们将序列上的关节坐标归一化，使其在所有维度上的范围从0到1。
 
 - **实验结果**
 
@@ -1349,7 +1359,77 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
 
 > An Attention Enhanced Graph Convolutional LSTM Network for Skeleton-Based Action Recognition
 
+- 如何有效地提取有区别的时空特征仍然是一个具有挑战性的问题。本文提出了一种新的注意增强图卷积LSTM网络(AGC-LSTM)，图卷积LSTM在这一任务中的首次尝试，用于从骨骼数据中识别人体动作。所提出的AGC-LSTM不仅能捕获**空间形态和时间动态的判别特征**，而且能探索**时空域间的共现关系**。我们还提出了一种**时间层次结构**来增加顶层AGC-LSTM层的时间接受域，提高了高级语义表示的学习能力，并显著降低了计算成本。此外，利用**注意机制**对AGC-LSTM各层的关键节点信息进行增强，以选择有区别的空间信息。
 
+- 图卷积神经网络
+
+  利用邻接矩阵表示，同ST-GCN
+
+  <img src="picture/image-20220312102328164.png" alt="image-20220312102328164" style="zoom:80%;" />
+
+- **LSTM**
+
+  [（译）理解长短期记忆(LSTM) 神经网络 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/24018768)
+
+- **模型**
+
+  <img src="picture/image-20220312102417541.png" alt="image-20220312102417541" style="zoom:80%;" />
+
+  - **首先利用线性层和LSTM层将每个关节的三维坐标映射到高维特征空间：**将每个关节的坐标转化为具有线性层（关节共享）的位置特征（N×256）；**位置特征**是有益的学习空间结构特征图模型。两帧连续帧间的**帧差特征**有助于AGC-LSTM的动态信息获取。为了考虑到这两种优势，将两个特征连接起来作为一个增强特征来丰富特征信息。为了消除两个特征之间的**尺度差异**，采用共享LSTM对每个关节序列进行处理。
+
+    <img src="picture/image-20220312103212289.png" alt="image-20220312103212289" style="zoom:80%;" />
+
+    Eti为关节i在t时刻的增强特征。
+
+  - 接下来，我们应用三个**AGC-LSTM层**来建模时空特征。
+
+    - 输入：**{E1, E2，…ET}**将作为节点特征馈送到以下GC-LSTM层。
+
+    - 如下AGC-LSTM单元的结构。与LSTM相比，AGC-LSTM的内部算子是图卷积计算。
+
+      ![image-20220312104431159](picture/image-20220312104431159.png)
+
+      AGC-LSTM也包含三个门:一个输入门**i<sub>t</sub>**，一个遗忘门**f<sub>t</sub>**，一个输出门**o<sub>t</sub>**。**∗g表示图卷积算子**，att表示注意力机制
+
+      <img src="picture/image-20220312104523866.png" alt="image-20220312104523866" style="zoom:80%;" />
+
+    - 该方法采用了一种软注意机制
+
+      <img src="picture/image-20220312104925724.png" alt="image-20220312104925724" style="zoom:80%;" />
+
+      W是可学参数矩阵
+
+      <img src="picture/image-20220312150011055.png" alt="image-20220312150011055" style="zoom:80%;" />
+
+      节点vti的隐藏状态**Hti**也可以表示：
+
+      <img src="picture/image-20220312150023910.png" alt="image-20220312150023910" style="zoom:80%;" />
+
+  - - 受CNN空间池化的启发，我们提出了一种**基于时间平均池化的时间层次结构**，以增加顶层AGC-LSTM的时间接受域。通过时间层次结构，AGC-LSTM顶层的每次时间输入的时间接受域都变成了一个帧的短期剪辑，对时间动态的感知更加敏感。此外，在提高性能的前提下，可以显著降低计算成本。
+
+    - 在最后的AGC-LSTM层，**将所有节点特征的聚合作为全局特征**，**聚焦节点的加权和作为局部特征:**
+  
+      <img src="picture/image-20220312150106618.png" alt="image-20220312150106618" style="zoom:80%;" />
+  
+    - 最后，我们利用最后一层AGC-LSTM中所有关节的全局特征和聚焦关节的局部特征来预测人类行为的类别。将每个时间步长的全局特征$\mathbf{F}_{t}^{g}$和局部特征$\mathbf{F}_{t}^{l}$转化为C类的评分$\mathbf{O}_{t}^{g}$和$\mathbf{O}_{t}^{l}$，其中$\mathbf{O}_{t}=\left(o_{t 1}, o_{t 2}, \ldots, o_{t C}\right)$。则预测概率为第i类:
+
+      <img src="picture/image-20220312150126646.png" alt="image-20220312150126646" style="zoom:80%;" />
+
+  - 在训练过程中，考虑到AGC-LSTM顶部每个时间步长的隐藏状态包含一个短期动态，我们用以下**损失函数**:
+  
+    <img src="picture/image-20220312150140362.png" alt="image-20220312150140362" style="zoom:80%;" />
+  
+    其中y = (y1，…yC)是groundtruth标签。Tj为第j AGC-LSTM层的时间步长。第三项的目标是对不同的关节给予同等的关注。最后一项是限制感兴趣节点的数量。λ和β是重量衰减系数。预测时使用两者**概率和**来预测人类行为的类别。
+  
+  - 虽然基于关节的模型达到了最先进的结果，我们也探索了所提出的模型在零件层面上的性能。**根据人体的身体结构，人体可分为几个部分。类似于基于关节的AGC-LSTM网络，**我们首先用线性层和共享LSTM层捕获部分特征。然后将作为节点表示的零件特征送入三个AGC-LSTM层，对时空特征进行建模。此外，基于关节和部件的双流模型可以进一步提高性能。
+  
+    <img src="picture/image-20220312114449974.png" alt="image-20220312114449974" style="zoom:80%;" />
+  
+  - **实验结果**
+  
+    - TH表示时间层次结构。与LSTM和GC-LSTM相比，LSTM+TH和GC-LSTM+TH可以增加顶层各时间步长的时间接受野。改进后的性能证明了时间层次结构能够有效地表达时间动态。用GC-LSTM替代LSTM, GCLSTM+TH在NTU数据集上的准确率分别提高到2.5%、4.9%和10.9%。性能的显著提高验证了GC-LSTM的有效性，它可以从骨架数据中捕获更有区别的时空特征。与GC-LSTM相比，AGC-LSTM可以利用空间注意机制来选择关键节点的空间信息，提高了特征表示能力。此外，基于零件和基于关节的AGC-LSTM的融合可以进一步提高性能。
+  
+      <img src="picture/image-20220312123423036.png" alt="image-20220312123423036" style="zoom:80%;" />
 
 #### 4.3.4 CNN-based
 
@@ -1686,15 +1766,27 @@ Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1
 
     ![image-20220308165457816](picture/image-20220308165457816.png)
 
-##### 4.3.5.2	AS-GCN（2019 CVPR）
+##### 4.3.5.2 A-GCN（2019 CVPR）
+
+> Two-stream adaptive graph convolutional networks for skeleton-based action recognition
+
+
+
+##### 4.3.5.3 AS-GCN（2019 CVPR）
 
 > Actional-Structural Graph Convolutional Networks for Skeleton-based Action Recognition
 
 
 
-##### 4.3.5.3  4s Shift-GCN（2020 CVPR）
+##### 4.3.5.4  4s Shift-GCN（2020 CVPR）
 
 > Skeleton-Based Action Recognition with Shift Graph Convolutional Network
+
+
+
+##### 4.3.5.5 CTR-GCN （ICCV 2021）
+
+> Channel-wise Topology Refinement Graph Convolution for Skeleton-Based Action Recognition
 
 
 
