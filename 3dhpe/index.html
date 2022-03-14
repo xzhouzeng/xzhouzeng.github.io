@@ -1076,7 +1076,7 @@ ret = pred × m + centroid
 <p>一组N个随机变量的协方差矩阵是一个<strong>N × N</strong>的矩阵，其元素是每一对变量之间的协方差。设X是N个随机变量的向量。随机向量X的协方差矩阵定义为<strong>COV(X) = E[(X−E(X))(X−E(X))‘]</strong>，其中E()为期望算子。<strong>协方差矩阵编码关于随机变量集合的联合概率分布形状的信息</strong>。（<strong>‘</strong>表示转置）</p>
 </li>
 <li><p>假设体由K个关节表示，设S为单个骨架所有关节位置的向量，即<strong>S = [x1，…， xK, y1，…， yK, z1，…， zK]’</strong>，有N = 3K的元素。然后，该序列的协方差描述符为COV(S)。通常情况下，S的概率分布是未知的，我们用样本协方差代替，它是由方程给出的</p>
-<p><img src="picture/image-20220310233740561.png" alt="image-20220310233740561"  /></p>
+<p><img src="picture/image-20220310233740561.png" alt="image-20220310233740561" style="zoom:80%;" /></p>
 <p>其中¯S是S的样本均值，对于描述符，我们只使用它的<strong>上三角形</strong>（协方差矩阵对称）。例如，对于有20个关节的骨骼，N = 3 × 20 = 60。在这种情况下，协方差矩阵的上三角形是<strong>N(N + 1)/2 = 1830</strong>，这是描述符的长度。</p>
 </li>
 </ul>
@@ -1236,6 +1236,8 @@ ret = pred × m + centroid
 <p>AGC-LSTM也包含三个门:一个输入门<strong>i<sub>t</sub></strong>，一个遗忘门<strong>f<sub>t</sub></strong>，一个输出门<strong>o<sub>t</sub></strong>。<strong>∗g表示图卷积算子</strong>，att表示注意力机制</p>
 <p><img src="picture/image-20220312104523866.png" alt="image-20220312104523866" style="zoom:80%;" /></p>
 </li>
+</ul>
+</li>
 <li><p>该方法采用了一种软注意机制</p>
 <p><img src="picture/image-20220312104925724.png" alt="image-20220312104925724" style="zoom:80%;" /></p>
 <p>W是可学参数矩阵</p>
@@ -1243,9 +1245,6 @@ ret = pred × m + centroid
 <p>节点vti的隐藏状态<strong>Hti</strong>也可以表示：</p>
 <p><img src="picture/image-20220312150023910.png" alt="image-20220312150023910" style="zoom:80%;" /></p>
 </li>
-</ul>
-</li>
-<li><ul>
 <li><p>受CNN空间池化的启发，我们提出了一种<strong>基于时间平均池化的时间层次结构</strong>，以增加顶层AGC-LSTM的时间接受域。通过时间层次结构，AGC-LSTM顶层的每次时间输入的时间接受域都变成了一个帧的短期剪辑，对时间动态的感知更加敏感。此外，在提高性能的前提下，可以显著降低计算成本。</p>
 </li>
 <li><p>在最后的AGC-LSTM层，<strong>将所有节点特征的聚合作为全局特征</strong>，<strong>聚焦节点的加权和作为局部特征:</strong></p>
@@ -1267,8 +1266,6 @@ ret = pred × m + centroid
 <ul>
 <li><p>TH表示时间层次结构。与LSTM和GC-LSTM相比，LSTM+TH和GC-LSTM+TH可以增加顶层各时间步长的时间接受野。改进后的性能证明了时间层次结构能够有效地表达时间动态。用GC-LSTM替代LSTM, GCLSTM+TH在NTU数据集上的准确率分别提高到2.5%、4.9%和10.9%。性能的显著提高验证了GC-LSTM的有效性，它可以从骨架数据中捕获更有区别的时空特征。与GC-LSTM相比，AGC-LSTM可以利用空间注意机制来选择关键节点的空间信息，提高了特征表示能力。此外，基于零件和基于关节的AGC-LSTM的融合可以进一步提高性能。</p>
 <p><img src="picture/image-20220312123423036.png" alt="image-20220312123423036" style="zoom:80%;" /></p>
-</li>
-</ul>
 </li>
 </ul>
 </li>
@@ -1583,14 +1580,215 @@ self.st_gcn_networks = nn.ModuleList((
 <blockquote>
 <p>Two-stream adaptive graph convolutional networks for skeleton-based action recognition</p>
 </blockquote>
+<ul>
+<li><p><strong>出发点：</strong></p>
+<ul>
+<li><p><strong>问题：</strong>在现有的基于GCN的方法中，<strong>图形的拓扑是手动设置的，并且在所有层和输入样本上都是固定的。</strong>这对于GCN的层次结构和动作识别任务中的不同样本可能不是最优的。<strong>图结构应该是数据相关的</strong>。</p>
+<p>此外，ST-GCN每个顶点上附着的特征向量只包含关节的二维或三维坐标，可以看作骨架数据的一阶信息。但是，<strong>表示两个关节之间骨骼特征的二阶信息没有被利用。</strong>通常，骨骼的长度和方向自然更具信息性，并且对动作识别更具辨别力。</p>
+</li>
+<li><p>我们提出了一种新的用于基于骨架的动作识别的<strong>双流自适应图卷积网络</strong>（2s AGCN）。我们的模型中的<strong>图的拓扑可以通过BP算法以端到端的方式统一或单独地学习。</strong>这种数据驱动的方法增加了图形构造模型的灵活性，并带来了更大的通用性，以适应各种数据样本。</p>
+<p>为了利用骨架数据的二阶信息，将骨骼的长度和方向表示为从骨骼源关节指向目标关节的矢量。与一阶信息相似，将矢量输入自适应图卷积网络中，对动作标签进行预测。同时，<strong>提出了一种二流框架，将一阶和二阶信息融合起来，</strong>进一步提高了性能。</p>
+</li>
+</ul>
+</li>
+<li><p>图构造同ST-GCN，其中关节表示为顶点，其在人体中的自然连接表示为空间边。对于时间维度，两个相邻帧之间的对应关节与时间边连接。<strong>每个关节的坐标向量设置为对应顶点的属性。</strong> </p>
+</li>
+<li><p><strong>自适应图卷积层</strong> </p>
+<ul>
+<li><p>为了使图形结构自适应，我们提出了一种自适应图卷积层。它以端到端学习的方式，将图的拓扑结构与网络的其他参数一起优化。<strong>对于不同的层和样本，该图是唯一的</strong>，这大大增加了模型的灵活性。自适应图卷积公式：✨</p>
+<p><img src="picture/image-20220313232544110.png" alt="image-20220313232544110" style="zoom:80%;" /></p>
+</li>
+<li><p>主要区别在于图的邻接矩阵，它分为<strong>三部分：Ak、Bk和Ck：</strong></p>
+<ul>
+<li><p>第一部分<strong>（Ak）</strong>与原始<strong>归一化N×N邻接矩阵Ak相同</strong>，它代表了人体的物理结构。</p>
+</li>
+<li><p>第二部分<strong>（Bk）</strong>也是一个<strong>N×N邻接矩阵</strong>。与Ak相比，Bk的元素在训练过程中与其他参数一起被参数化和优化。Bk的值没有限制，这意味着图形完全是<strong>根据训练数据学习的</strong>。通过这种数据驱动的方式，该模型可以学习完全针对识别任务的图形，并且对于不同层中包含的不同信息更加个性化。请注意，矩阵中的元素可以是任意值。它不仅表明两个接头之间存在连接，还表明连接的强度。</p>
+</li>
+<li><p>第三部分<strong>（Ck）</strong>是一个<strong>数据相关图，它为每个样本学习一个唯一的图。</strong>为了确定两个顶点之间是否存在连接以及连接的强度，我们应用归一化嵌入高斯函数来计算<strong>两个顶点的相似性</strong>：</p>
+<p><img src="picture/image-20220313233059053.png" alt="image-20220313233059053" style="zoom:80%;" /></p>
+<p><strong>其中N是顶点的总数。我们使用点积来衡量嵌入空间中两个顶点的相似性。</strong>具体地说，给定尺寸为<strong>C~in~×T×N</strong>的输入特征映射f~in~，我们首先使用两个嵌入函数，<strong>即θ和φ，</strong>将其嵌入到<strong>Ce×T×N</strong>中。在这里，通过大量实验，我们选择了一个1×1卷积层作为嵌入函数。这两个嵌入的特征映射被重新排列和重塑为一<strong>个N×Ce*T 矩阵和一个Ce* T×N 矩阵。然后将它们相乘，得到N×N相似矩阵Ck</strong>，其元素<strong>C^ij^ k表示顶点vi和顶点vj的相似性。</strong>矩阵的值被归一化为0− 1，用作两个顶点的软边。由于归一化高斯函数配备了SOFTMAX运算，我们可以根据计算Ck：</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="picture/image-20220313233552005.png" alt="image-20220313233552005" style="zoom:80%;" /></p>
+<ul>
+<li><p><strong>自适应图卷积层的图示。</strong>每一层共有三种图形，即Ak、Bk和Ck。<strong>橙色框表示该参数是可学习的</strong>。（1×1）表示卷积的核大小。Kv表示子集的数量。⊕ 表示元素相加。⊗ 表示matirx乘法。仅当Cin与Cout不同时，才需要残差框（虚线）。</p>
+<p><img src="picture/image-20220313233957086.png" alt="image-20220313233957086" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>补充</strong>📢</p>
+<p><strong>我们没有直接用Bk或Ck替换原来的Ak，而是将它们添加到Ak中。</strong>Bk的值以及θ和φ的参数初始化为0。这样可以在不降低原有性能的前提下增强模型的灵活性。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>自适应图卷积块 </strong></p>
+<p><strong>时间维度的卷积与ST-GCN相同</strong>，即在C×T×N特征图上执行Kt×1卷积。在空间GCN和时间GCN之后是批量标准化（BN）层和ReLU层。一个基本块是一个空间GCN（Convs）、一个时间GCN（Convt）和另一个丢弃层的组合，丢弃率设置为0.5。为了稳定训练，为每个区块添加一个残差连接 。</p>
+<p><img src="picture/image-20220313234728832.png" alt="image-20220313234728832" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>自适应图卷积网络 </strong></p>
+<p>自适应图卷积网络（A-GCN）是基本块的堆栈，总共有9个街区。每个块的输出通道数为64、64、64、128、128、256、256和256。在开始处添加数据BN层，以规范化输入数据。在末端执行<strong>全局平均池层</strong>，以将不同样本的特征映射池到相同大小。最终输出被发送到Softmax分类器以获得预测。<strong>（每个块的三个数字分别代表输入通道数、输出通道数和步幅。）</strong></p>
+<p><img src="picture/image-20220313234919943.png" alt="image-20220313234919943" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>双流网络</strong></p>
+<p><strong>输入：</strong></p>
+<ol>
+<li>一阶信息——<strong>关节坐标</strong>。</li>
+<li>二阶信息——<strong>骨骼信息</strong>。由于每个骨骼都与两个关节绑定，因此我们定义<strong>靠近骨骼重心的关节为源关节，远离重心的关节为目标关节。</strong>每个骨骼都表示为一个从源关节指向目标关节的向量，该向量不仅包含长度信息，还包含方向信息。例如，给定一个骨骼，其源关节v1=（x1，y1，z1）和目标关节v2=（x2，y2，z2），该骨骼的向量计算为<strong>e~v1,v2~=（x2− x1，y2− y1，z2− z1）。</strong></li>
+</ol>
+<p><strong>补充：</strong>由于骨骼数据的图形没有循环，因此可以为每个骨骼指定唯一的目标关节。<strong>关节数比骨骼数多一个，</strong>因为中心关节未指定给任何骨骼。为了简化网络的设计，<strong>我们向中心关节添加一个值为0的空骨骼。</strong>通过这种方式，骨骼的图形和网络可以与关节的图形和网络设计相同，因为每个骨骼都可以与唯一的关节绑定。</p>
+<p><strong>模型：</strong>我们分别使用J-Stream和B-Stream来表示关节和骨骼的网络。整体架构（2sAGCN）如图。给定一个样本，我们首先根据关节数据计算骨骼数据。然后，将关节数据和骨骼数据分别输入J-Stream和B-Stream。最后，<strong>将两个流的SOFTMAX分数相加，得到融合分数并预测动作标签。</strong></p>
+<p><img src="picture/image-20220313235149217.png" alt="image-20220313235149217" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>实验结果</strong></p>
+<p>(使用NTU-RGBD数据集上的X-View基准测试)</p>
+<ul>
+<li><p><strong>Adaptive graph convolutional block</strong></p>
+<p>自适应图卷积块中有3种类型的图，即A、B和C。我们<strong>手动删除其中一种图，并在选项卡中显示它们的性能。</strong>（wo/X表示删除X模块。）</p>
+<p><img src="picture/image-20220314101810839.png" alt="image-20220314101810839" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>Visualization of the learned graphs</strong></p>
+<p>左矩阵是NTU-RGBD数据集中第二个子集的<strong>原始邻接矩阵</strong>。右矩阵是我们的模型学<strong>习到的相应自适应邻接矩阵</strong>的一个例子</p>
+<p><img src="picture/image-20220314104253464.png" alt="image-20220314104253464" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>一个样本不同层的骨架图可视化</strong></p>
+<p>这些骨架是根据人体的物理联系绘制的。每个圆代表一个关节，它的大小代表我们模型的学习自适应图中当前关节和第25个关节之间的连接强度。研究表明，传统的人体物理连接并不是动作识别任务的最佳选择，<strong>不同的层次需要具有不同拓扑结构的图形。</strong></p>
+<p><img src="picture/image-20220314104514659.png" alt="image-20220314104514659" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>相同层不同样本的骨架可视化</strong></p>
+<p>从模型第五层的第二个子集中提取学习到的邻接矩阵。结果表明，即使对于同一卷积子集和同一层，我们的模型<strong>对不同样本学习到的图结构也是不同的</strong>。它验证了我们的观点，即不同的样本需要不同的图拓扑，<strong>数据驱动的图结构优于固定的图结构。</strong> </p>
+<p><img src="picture/image-20220314104714509.png" alt="image-20220314104714509" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>Two-stream framework</strong></p>
+<p>比较单独使用每种类型的输入数据的性能，显然，两流方法优于基于一流的方法。 </p>
+<p><img src="picture/image-20220314104826552.png" alt="image-20220314104826552" style="zoom:80%;" /></p>
+</li>
+</ul>
+</li>
+</ul>
 <h5 id="4-3-5-3-as-gcn-2019-cvpr-">4.3.5.3 AS-GCN（2019 CVPR）</h5>
 <blockquote>
 <p>Actional-Structural Graph Convolutional Networks for Skeleton-based Action Recognition</p>
 </blockquote>
-<h5 id="4-3-5-4-4s-shift-gcn-2020-cvpr-">4.3.5.4  4s Shift-GCN（2020 CVPR）</h5>
+<h5 id="4-3-5-4-shift-gcn-2020-cvpr-">4.3.5.4 Shift-GCN（2020 CVPR）</h5>
 <blockquote>
 <p>Skeleton-Based Action Recognition with Shift Graph Convolutional Network</p>
+<p> <a href="https://github.com/kchengiva/Shift-GCN">https://github.com/kchengiva/Shift-GCN</a></p>
 </blockquote>
+<ul>
+<li><p><strong>出发点：</strong></p>
+<ul>
+<li><strong>问题：</strong>基于gcn的方法有两个缺点。(1)<strong>计算复杂度过高</strong>。例如，ST-GCN为一个动作样本花费16.2 GFLOPs1。由于引入增量模块和多流融合策略，最近的一些工作甚至达到了100个GFLOPs。(2)<strong>空间图和时间图的接收域都不灵活</strong>。虽然一些研究通过引入增量自适应模块来增强空间图的表达能力，但我们的实验表明，它们的表达性仍然受到常规GCN结构的限制。</li>
+<li>受到移位CNN的启发，我们提出了<strong>移位图卷积网络</strong>(Shift-GCN)来解决这两个缺点。它使用一种轻量级的移位操作作为2D卷积的替代，可以<strong>通过简单地改变移位距离来调整接收域。</strong>算法由<strong>空间移位图卷积</strong>和<strong>时间移位图卷积</strong>两部分组成：<ul>
+<li>针对空间骨架图建模提出了两种空间移位图操作（局部移位图运算和非局部移位图运算）。我们的非局部空间位移图运算具有较高的计算效率和较强的性能。</li>
+<li>提出了两种用于时态骨架图建模的时态移位图操作（朴素时态移位图操作和自适应时态移位图操作）。我们的自适应时间转移图运算能够自适应地调整接受域，并且在计算量小的情况下优于常规时间模型。</li>
+<li>在三个基于骨架的动作识别数据集上，所提出的移位GCN以超过10×更少的计算成本超过了最先进的方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Shift-CNNs</strong></p>
+<blockquote>
+<p>Shift: A Zero FLOP, Zero Parameter Alternative to Spatial Convolutions（2018 CVPR）</p>
+</blockquote>
+<ul>
+<li>shift卷积过程相当于将原输入的矩阵在某个方向进行平移，这也是为什么该操作称之为shift的原因。虽然简单的平移操作似乎没有提取到空间信息，但是考虑到我们之前说到的，<strong>通道域是空间域信息的层次化扩散</strong>。因此通过设置不同方向的shift卷积核，可以将输入张量不同通道进行平移，随后配合1x1卷积实现跨通道的信息融合，即可实现空间域和通道域的信息提取。</li>
+</ul>
+<p><img src="picture/image-20220313153347141.png" alt="image-20220313153347141" style="zoom:80%;" /></p>
+<ul>
+<li><p>CNN中的规则卷积核可以被视为几个逐点卷积核的融合，其中每个核在指定的位置上运行，如图（A）中不同颜色的显示。例如，一个3×3卷积核是9个逐点卷积核的融合。</p>
+</li>
+<li><p>空间GCN中的规则卷积核是3个逐点卷积核的融合，每个核在指定的空间分区上运行，如图（c）中的不同颜色所示。如ST-GCN，空间分区由3个不同的相邻矩阵指定，分别表示“向心”、“根”、“离心”。</p>
+</li>
+<li>CNNs中的移位卷积包含<strong>移位运算</strong>和<strong>逐点卷积核</strong>，其中接收域由移位运算指定，如图2（b）所示。</li>
+</ul>
+</li>
+<li><p><strong>Spatial shift graph convolution</strong></p>
+<p>移位图操作的主要思想是将<strong>相邻节点的特征转移到当前卷积节点。</strong>具体来说，我们提出了两种移位图卷积：局部移位图卷积和非局部移位图卷积。</p>
+<p><img src="picture/image-20220313161045545.png" alt="image-20220313161045545" style="zoom:80%;" /></p>
+<ul>
+<li><p><strong>局部移位图卷积</strong></p>
+<p>对于局部移位图卷积，<strong>感受野由人体的物理结构指定</strong>，该结构由骨架数据集预定义。</p>
+<p>在此设置中，移位图操作在身体物理图的相邻节点之间执行。因为身体关节之间的连接不像CNN特征那样有序，不同的节点有不同数量的邻居。设v表示一个节点，Bv={B^1^v，B^2^v，···，B^n^v}表示其相邻节点集，其中<strong>n表示v的相邻节点数</strong>。我们将<strong>节点v的通道平均划分为n+1个分区</strong>。我们让<strong>第一个分区保留v的特征。其他n个分区分别从B1v、B2v、···、Bnv转移</strong>。F维度<strong>(N,C)</strong>。我们在F的每个节点上进行移位操作 ：</p>
+<p><img src="picture/image-20220313161636510.png" alt="image-20220313161636510" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>局部移位图卷积有两个缺点：</strong></p>
+<ol>
+<li><strong>没有利用某些信息。</strong>如节点3中的最后四分之一通道在轮班操作期间被直接放弃。这是因为不同的节点有不同数量的邻居。</li>
+<li>最近的研究表明，<strong>仅考虑局部连接并不是骨骼动作识别的最佳选择。</strong>例如，双手之间的关系对于识别“鼓掌”和“阅读”等动作很重要，但双手在身体结构中彼此距离较远。</li>
+</ol>
+</li>
+<li><p><strong>非局部移位图卷积</strong></p>
+<ul>
+<li><p>针对局部两个缺点，非局部移位图运算<strong>使每个节点的感受野覆盖整个骨架图</strong>。</p>
+</li>
+<li><p><strong>步骤：</strong>给定一个空间骨架特征图F（维度N×C），<strong>第i个通道的移位距离为i mod N</strong>。移位出的通道用于填充相应的空白。非局部移位后，该特征看起来像一个螺旋，使每个节点从所有其他节点获取信息，将<strong>非局部移位图运算与逐点卷积相结合</strong>，得到非局部移位图卷积。</p>
+</li>
+<li><p><strong>改进：</strong>在非局部移位图卷积中，<strong>不同节点之间的连接强度是相同的。</strong>但人类骨骼的重要性是不同的。因此，我们引入了一种<strong>自适应非局部移位机制</strong>。我们计算移位特征和可学习掩码之间的元素乘积： </p>
+<p><img src="picture/image-20220313163330951.png" alt="image-20220313163330951" style="zoom:80%;" /></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Temporal shift graph convolution</strong></p>
+<p>给定骨架序列特征F（维度：<strong>N×T×C</strong>）</p>
+<ul>
+<li><p><strong>朴素时间移位图卷积图</strong></p>
+<p>图的时间方面是通过连接时间维度上的连续帧来构造的。因此，<strong>CNN中的移位操作可以直接扩展到时域。</strong>我们将通道平均划分为2u+1个分区，每个分区的<strong>时间偏移距离</strong>分别为−u，−u+1，··，0，··，u− ，u。移出的通道被截断，空通道被零填充。在移位操作之后，每个帧从其相邻帧获取信息。通过将这种时态移位操作与时态逐点卷积相结合，我们得到了简单的时态移位图卷积。</p>
+</li>
+<li><p><strong>朴素时间移位图卷积图缺点：</strong></p>
+<p>虽然朴素的时间移位图卷积是轻量级的，但其<strong>超参数u的设置是手动的</strong>。这导致了两个缺点：</p>
+<ol>
+<li><p>在视频分类任务中，<strong>不同层次</strong>需要不同的时间感受野。对u的所有可能组合进行彻底搜索是很难的。</p>
+</li>
+<li><p><strong>不同的数据集</strong>可能需要不同的时间感受野，这限制了原始时间移位图卷积的泛化能力。</p>
+<p>（这两个缺点也存在于常规时间卷积中，其内核大小是手动设置的。）</p>
+</li>
+</ol>
+</li>
+<li><p><strong>自适应时间移位图卷积</strong> </p>
+<p>每个通道都有一个<strong>可学习的时间移位参数Si</strong>，i=1,2，···，C。我们将时间移位参数从整数约束放宽为实数。非整数移位可通过线性插值计算：</p>
+<p><img src="picture/image-20220313165659981.png" alt="image-20220313165659981" style="zoom:80%;" /></p>
+<p><strong>λ=Si− ⌊Si⌋</strong>. 这种操作是可微的，可以通过反向传播进行训练。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Spatiotemporal shift GCN</strong></p>
+<p>使用最先进的方法的主干（ST-GCN）来构建时空移位GCN。ST-GCN主干由一个输入块和9个残差时空图卷积块组成，其中每个块包含一个规则的空间卷积和一个规则的时间卷积。我们用<strong>空间移位运算和空间逐点卷积来代替规则的空间卷积</strong>。我们用<strong>时间移位操作和时间逐点卷积来代替常规的时间卷积</strong>。</p>
+<p>将移位运算与逐点卷积相结合有两种模式：shift-Conv和shift-Conv-Shift。Shift Conv Shift模式具有更大的感受野，实验证明可获得更好的性能。</p>
+<p><img src="picture/image-20220313170121491.png" alt="image-20220313170121491" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>实验结果</strong></p>
+<ul>
+<li><p><strong>Ablation Study</strong>（NTU RGB+D X-view）</p>
+<ol>
+<li><p><strong>Spatial shift graph convolution</strong></p>
+<p>我们将ST-GCN中的规则空间卷积替换为简单的点卷积，构建了一个轻量级的点式空间基线。我们的空间移位GCN和该逐点基线之间的唯一区别是插入空间移位操作。<strong>非局部移位图操作比局部移位图操作更有效。</strong></p>
+<p><img src="picture/image-20220313172207964.png" alt="image-20220313172207964" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>Temporal shift graph convolution</strong></p>
+<p>我们将空间模型固定为ST-GCN的规则空间卷积，并评估不同时间模型的有效性和效率 。我们对常规时间卷积和朴素时间移位操作的最佳感受野进行了详尽的搜索。<strong>我们的自适应时间移位操作不需要麻烦的穷举搜索，并且优于其他两种方法的最佳结果。</strong>（Kt是卷积核大小）</p>
+<p><img src="picture/image-20220313172514845.png" alt="image-20220313172514845" style="zoom:80%;" /></p>
+</li>
+</ol>
+</li>
+<li><p><strong>Comparison with the SOTA</strong></p>
+<ul>
+<li><p>许多最先进的方法利用多流融合策略。为了进行公平比较，我们采用了相同的多流融合策略，即<strong>使用4个流</strong>。</p>
+<ol>
+<li>第一个流使用原始骨架坐标作为输入，称为“关节流”；</li>
+<li>第二个流使用空间坐标的差分作为输入，称为“骨骼流”；</li>
+<li>第三和第四个流使用时间维度上的差分作为输入，分别称为“关节运动流”和“骨骼运动流”。</li>
+</ol>
+</li>
+<li><p><strong>将多个流的softmax分数相加以获得融合分数。</strong>我们的时空移位GCN（shift-GCN）有三种设置：1-stream，它只使用联合流；2-stream，同时使用关节流和骨流；4-stream，它使用所有4个流。</p>
+</li>
+</ul>
+<p><img src="picture/image-20220313172856440.png" alt="image-20220313172856440" style="zoom:80%;" /></p>
+</li>
+</ul>
+</li>
+</ul>
 <h5 id="4-3-5-5-ctr-gcn-iccv-2021-">4.3.5.5 CTR-GCN （ICCV 2021）</h5>
 <blockquote>
 <p>Channel-wise Topology Refinement Graph Convolution for Skeleton-Based Action Recognition</p>
@@ -1767,6 +1965,9 @@ Cross-Subject按照人物ID来划分训练集和测试集，训练集40320个样
 <h4 id="6-2-1-">6.2.1 对比学习</h4>
 <p>A simple framework for contrastive learning of visual representations</p>
 <p><img src="picture/image-20220302145648801.png" alt="image-20220302145648801" style="zoom: 67%;" /></p>
+<h3 id="6-3-">6.3 网络优化</h3>
+<h4 id="6-3-1-shift-">6.3.1 Shift操作</h4>
+<p><a href="https://zhuanlan.zhihu.com/p/312348288">解读模型压缩4：你一定从未见过如此通俗易懂的模型压缩Shift操作解读 - 知乎 (zhihu.com)</a></p>
 
           	</article>
         </div>
