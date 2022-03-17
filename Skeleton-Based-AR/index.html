@@ -75,11 +75,11 @@
 <li><p>深度图像 = 普通RGB三通道彩色图像 + 深度图</p>
 </li>
 <li><p>深度图：包含与视点场景对象表面距离有关信息的图像通道，通道本身类似于灰度图像，每个像素值是物体到离摄像头平面最近的距离（<strong>相机坐标系的z值</strong>）</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25ieHV3ZW50YW8=,size_16,color_FFFFFF,t_70.png" alt="img" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25ieHV3ZW50YW8=,size_16,color_FFFFFF,t_70.png" alt="img" style="zoom:80%;" /></p>
 </li>
 <li><p>RGB图和深度图之间需要对齐，保证像素之间一一对应
 如kinect2获得的数据：RGB图像大小：（1080, 1920） 深度图像大小：（424, 512）</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220185150057.png" alt="image-20220220185150057" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220185150057.png" alt="image-20220220185150057" style="zoom:80%;" /></p>
 </li>
 </ul>
 <h3 id="1-2-">1.2 分类（根据原理）</h3>
@@ -93,11 +93,11 @@
 </ul>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221140430753.png" alt="image-20220221140430753" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221140430753.png" alt="image-20220221140430753" style="zoom:67%;" /></p>
 <h4 id="1-2-2-">1.2.2 结构光</h4>
 <ul>
 <li><p>原理：结构光技术就是使用提前设计好的具有特殊<strong>结构的图案</strong>（比如离散光斑、条纹光、编码结构光等），然后将图案投影到三维空间物体表面上，使用另外一个相机观察在三维物理表面成像的畸变情况。如果结构光图案投影在该物体表面是一个平面，那么观察到的成像中结构光的图案就和投影的图案类似，没有变形，只是根据距离远近产生一定的尺度变化。但是，如果物体表面不是平面，那么观察到的结构光图案就会因为物体表面不同的几何形状而产生不同的扭曲变形，而且根据距离的不同而不同，根据已知的结构光图案及观察到的变形，就能根据算法计算被测物的三维形状及深度信息。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220191206801.png" alt="image-20220220191206801" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220191206801.png" alt="image-20220220191206801" style="zoom:67%;" /></p>
 </li>
 <li><p>结构化图案：</p>
 <ul>
@@ -112,10 +112,10 @@
 <li><p>原理：连续发射不可见光脉冲到被测物体上，接受从物体反射回的光脉冲，探测光脉冲的飞行时间计算被测物体距离。</p>
 </li>
 <li><p>i-ToF，即 indirect ToF，通过传感器在不同时间窗口采集到能量值的比例关系，解析出信号相位，间接测量发射信号和接收信号的时间差，进而得到深度。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220192213695.png" alt="image-20220220192213695" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220192213695.png" alt="image-20220220192213695" style="zoom:67%;" /></p>
 </li>
 <li><p>d-ToF 即 direct ToF，相比于 i-ToF 技术用测量信号的相位来间接地获得光的来回飞行时间，d-ToF (direct time-of-flight) 技术直接测量光脉冲的发射和接收的时间差。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220192345575.png" alt="image-20220220192345575" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220192345575.png" alt="image-20220220192345575" style="zoom:67%;" /></p>
 </li>
 <li><p>优点：可调节发射脉冲的频率改变测量距离；测量精度不会随着测量距离增大而降低；抗干扰能力强；适合距离比较远的(无人驾驶</p>
 </li>
@@ -123,7 +123,7 @@
 </li>
 </ul>
 <h3 id="1-3-">1.3 总结</h3>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220193247277.png" alt="image-20220220193247277" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220193247277.png" alt="image-20220220193247277" style="zoom:67%;" /></p>
 <h2 id="-1-3d-">补充1 3D数据表示</h2>
 <p>图中是3D数据的不同表示类型:（a）点云（Point clouds）；(b) 体素网格(Voxel grids)； (c) 多边形网格(Polygon meshes)； (d) 多视图表示(Multi-view representations)</p>
 <p>其中：</p>
@@ -135,7 +135,7 @@
 </ul>
 <p>理解：体素网格是用固定大小的立方块作为最小单元，来表示三维物体的一种数据结构。
 体素可以看成粗略版的点云。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20211229162528207.png" alt="image-20211229162528207" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20211229162528207.png" alt="image-20211229162528207" style="zoom:67%;" /></p>
 <h2 id="-2-">补充2 相机四大坐标系</h2>
 <p><a href="https://blog.csdn.net/weixin_44278406/article/details/112986651">相机标定（1）——四个坐标系<em>白水煮蝎子-CSDN博客</em>相机主点坐标</a></p>
 <blockquote>
@@ -151,31 +151,31 @@
 <li><strong>相机坐标系：</strong>以相机的光心为坐标系原点， 轴平行于图像坐标系的x , y 轴，相机的光轴为Z c 轴，坐标系满足右手法则。相机的光心可理解为相机透镜的几何中心。</li>
 <li><strong>世界坐标系：</strong>用于表示空间物体的绝对坐标，使用<strong>( X w , Y w , Z w )</strong> 表示，世界坐标系可通过旋转和平移得到相机坐标系。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDI3ODQwNg==,size_16,color_FFFFFF,t_70.png" alt="img" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDI3ODQwNg==,size_16,color_FFFFFF,t_70.png" alt="img" style="zoom: 80%;" /></p>
 <h3 id="3-">3. 世界坐标系-相机坐标系</h3>
 <p>刚体变换只改变物体的空间位置(平移)和朝向(旋转)，而不改变其形状的变换，可用两个变量来描述：正交单位旋转矩阵R RR，三维平移矢量t 。平移比较好理解，世界坐标系原点移动到相机坐标系；旋转一共有三个自由度，即绕x , y , z旋转，根据旋转角度可以分别得三个方向上的旋转矩阵R x , R y , R z，而旋转矩阵即为他们的乘积，R = R x × R y × R z</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220205403082.png" alt="image-20220220205403082" style="zoom: 80%;" /></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220205425530.png" alt="image-20220220205425530" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220205403082.png" alt="image-20220220205403082" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220205425530.png" alt="image-20220220205425530" style="zoom: 80%;" /></p>
 <p>同理可求的Ry,Rz，于是可得旋转矩阵R = R x R y R z ，其中<strong>[<em>R</em>∣<em>t</em>]为外参</strong>，总的转换公式：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220210543920.png" alt="image-20220220210543920" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220210543920.png" alt="image-20220220210543920" style="zoom:80%;" /></p>
 <p>写成齐次坐标系形式为：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220210608154.png" alt="image-20220220210608154" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220210608154.png" alt="image-20220220210608154" style="zoom:80%;" /></p>
 <h3 id="4-">4. 相机坐标系-图像坐标系</h3>
 <p><strong>以图象中心为坐标系：</strong>相机坐标系到图像坐标系是透视关系，利用相似三角形进行计算：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220205330219.png" alt="image-20220220205330219" style="zoom:67%;" /></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220205552232.png" alt="image-20220220205552232" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220205330219.png" alt="image-20220220205330219" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220205552232.png" alt="image-20220220205552232" style="zoom:80%;" /></p>
 <p>写成齐次坐标形式的矩阵相乘为，其中<strong>K 称为相机内参数矩阵</strong>。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220205609577.png" alt="image-20220220205609577" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220205609577.png" alt="image-20220220205609577" style="zoom:67%;" /></p>
 <p><strong>当主点不是坐标系原点时</strong>，相机内参数矩阵形式如下：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220205810401.png" alt="image-20220220205810401"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220205810401.png" alt="image-20220220205810401"></p>
 <h3 id="5-">5. 图像坐标系-像素坐标系</h3>
 <p>像素坐标系是图像坐标系的离散化表示，实际CCD相机每个像素对应一个感光点，是个矩形，假设其物理尺寸为<strong>dx宽</strong>，<strong>dy高</strong>。以CCD传感器的左上角为坐标原点建立的坐标系与以成像平面中心建立的坐标系的转换关系如下。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220210044007.png" alt="image-20220220210044007" style="zoom:50%;" /></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220210100960.png" alt="image-20220220210100960" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220210044007.png" alt="image-20220220210044007" style="zoom:50%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220210100960.png" alt="image-20220220210100960" style="zoom:80%;" /></p>
 <p>齐次坐标矩阵形式为：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220210120736.png" alt="image-20220220210120736" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220210120736.png" alt="image-20220220210120736" style="zoom:80%;" /></p>
 <h3 id="6-">6. 综合（像素坐标系-世界坐标系）</h3>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220210432873.png" alt="image-20220220210432873" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220210432873.png" alt="image-20220220210432873" style="zoom: 80%;" /></p>
 <h2 id="2-">2. 点云数据</h2>
 <h3 id="2-1-">2.1 概念</h3>
 <p><a href="https://zhuanlan.zhihu.com/p/22581673">绪论：什么是点云？ - 知乎 (zhihu.com)</a></p>
@@ -194,7 +194,7 @@
 <p>解读：</p>
 <p><a href="https://vision.in.tum.de/data/datasets/rgbd-dataset/file_formats">Computer Vision Group - File Formats (tum.de)</a></p>
 <p><a href="https://blog.csdn.net/lixianjun913/article/details/10032019">相机标定(2)---摄像机标定原理_不系之舟的专栏-QQ讨论群331590339-CSDN博客</a></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20211229193655423.png" alt="image-20211229193655423" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20211229193655423.png" alt="image-20211229193655423" style="zoom:80%;" /></p>
 <pre><code class="lang-python">fx = 525.0  # focal length x
 fy = 525.0  # focal length y
 cx = 319.5  # optical center x
@@ -227,7 +227,7 @@ np.random.choice(num, NUM_POINT, replace=False) #当前点云个数&gt;需要个
 </li>
 <li><p><strong>均匀下采样</strong></p>
 <p>均匀下采样有多种不同的采样方式，其中<strong>最远点采样</strong>是较为简单的一种，首先需要选取一个种子点，并设置一个内点集合，每次从点云中不属于内点的集合找出一点距离内点最远的点，如下图，这里的距离计算方式为<strong>该点至内点所有点的最小距离</strong>。这种方式的下采样点云分布均匀，但是算法复杂度较高效率低。<strong>采样点一般先分布在边界附近</strong>。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220223125838675.png" alt="image-20220223125838675" style="zoom: 67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220223125838675.png" alt="image-20220223125838675" style="zoom: 67%;" /></p>
 </li>
 <li><p><strong>曲率下采样</strong></p>
 <p>稳定性高，通过几何特征区域的划分，使得采样结果抗噪性更强</p>
@@ -238,7 +238,7 @@ np.random.choice(num, NUM_POINT, replace=False) #当前点云个数&gt;需要个
 <li><p>设置一个角度阈值，比如5度。点的邻域夹角值大于这个阈值的点，被放入几何特征区域G。这样点云就分成了两部分，几何特征区域G和其它区域。</p>
 </li>
 <li><p>均匀采样几何特征区域G和其它区域，采样数分别为S <em> (1 - U)，S </em> U。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220223135400090.png" alt="image-20220223135400090" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220223135400090.png" alt="image-20220223135400090" style="zoom:67%;" /></p>
 </li>
 </ol>
 </li>
@@ -337,7 +337,7 @@ ret = pred × m + centroid
 <li>在特征的各个维度上执行maxpooling操作来得到最终的全局特征。<strong>（针对点云无序性使用对称函数）</strong></li>
 <li>对分类任务，将全局特征通过mlp来预测最后的分类分数；对分割任务，将全局特征和之前学习到的各点云的局部特征进行串联，再通过mlp得到每个数据点的分类结果。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20211230120344582.png" alt="image-20211230120344582" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20211230120344582.png" alt="image-20211230120344582" style="zoom:80%;" /></p>
 <ul>
 <li><p><strong>两个定理：</strong></p>
 <ul>
@@ -365,7 +365,7 @@ ret = pred × m + centroid
 </ul>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220223210545410.png" alt="image-20220223210545410" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220223210545410.png" alt="image-20220223210545410" style="zoom: 80%;" /></p>
 <ul>
 <li><p><strong>网络参数说明</strong></p>
 <ul>
@@ -393,7 +393,7 @@ ret = pred × m + centroid
 <p>interpolate前后点集分别以<strong>P1,P2</strong>表示</p>
 <p>P2的的每一个点x，找在原始点云坐标空间下，在P1点集中找到与x最近的k个点。</p>
 <p>对k个点的特征加权求和，得到x的特征。其中这个权重是与x和P1中点的距离成反向相关的，意思就是距离越远的点，对x特征的贡献程度越小。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220223220017972.png" alt="image-20220223220017972" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220223220017972.png" alt="image-20220223220017972" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>unit pointnet</strong></p>
 <p>1x1conv与Relu层</p>
@@ -404,7 +404,7 @@ ret = pred × m + centroid
 <p>对当前层的每个中心点，取不同radius的query ball，可以得到多个不同大小的同心球，也就是得到了多个相同中心但规模不同的局部邻域，分别对这些局部邻域表征，并将所有表征拼接。</p>
 </li>
 <li><p><strong>Multi-resolution grouping（MRG）</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220223213911789.png" alt="image-20220223213911789" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220223213911789.png" alt="image-20220223213911789" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
@@ -415,12 +415,12 @@ ret = pred × m + centroid
 </blockquote>
 <p><a href="https://zhuanlan.zhihu.com/p/85857744">Dynamic Graph CNN for Learning on Point Clouds 笔记 - 知乎 (zhihu.com)</a></p>
 <p>论文提出了两个新的概念：<strong>EdgeConv</strong>和<strong>Dynamic Graph</strong>，EdgeConv主要实现对点云中节点的feature的更新操作，改进了PointNet中缺少局部信息的缺点。Dynamic Graph主要是对点云中的点使用knn算法是基于点的特征而不是起初的三维坐标，特征是改变的，每一层都会得到一个不同的图。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220223222127040.png" alt="image-20220223222127040" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220223222127040.png" alt="image-20220223222127040" style="zoom:80%;" /></p>
 <ul>
 <li><p><strong>EdgeConv</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303110108522.png" alt="image-20220303110108522"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303110108522.png" alt="image-20220303110108522"></p>
 <blockquote>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220223235812718.png" alt="image-20220223235812718" style="zoom: 67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220223235812718.png" alt="image-20220223235812718" style="zoom: 67%;" /></p>
 </blockquote>
 </li>
 <li><p><strong>Dynamic Graph</strong></p>
@@ -447,7 +447,7 @@ ret = pred × m + centroid
 <li>Voxel-based的缺点已经是为人所熟知的，主要就是在将点云变为voxel的过程中，信息的丢失程度与resolution的大小有关。但随着resolution的增加，计算和内存要求是三次方增加的。</li>
 <li>point-based的方法的输入是无序的点云，在前向计算过程中，需要找出某些点邻域内的点，由于点云是无序的，所以不能通过其在点云中的位置进行索引，需要使用KNN方法去计算寻找，而这个计算过程则是非常慢的。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220224134604261.png" alt="image-20220224134604261" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220224134604261.png" alt="image-20220224134604261" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>Point-Based</strong></p>
 <p>不再使用邻域的点，而是使用MLP直接计算每个点的feature。</p>
@@ -472,7 +472,7 @@ ret = pred × m + centroid
 <p>Ce Zheng, Wenhan Wu, Taojiannan Yang, Sijie Zhu, Chen Chen, Ruixu Liu, Ju Shen, Nasser Kehtarnavaz and Mubarak Shah. “Deep Learning-Based Human Pose Estimation: A Survey” arXiv: Computer Vision and Pattern Recognition (2020): n. pag.</p>
 </blockquote>
 <h4 id="3-1-1-skeleton-based-model">3.1.1 skeleton-based model</h4>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220212630075.png" alt="image-20220220212630075" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220212630075.png" alt="image-20220220212630075" style="zoom: 80%;" /></p>
 <h4 id="3-1-2-volumetric-models">3.1.2 Volumetric models</h4>
 <p><strong>3D human body models：</strong></p>
 <p><a href="https://zhuanlan.zhihu.com/p/256358005">SMPL论文解读和相关基础知识介绍 - 知乎 (zhihu.com)</a></p>
@@ -483,7 +483,7 @@ ret = pred × m + centroid
 <li><p><strong>形状参数β：</strong>代表人体高矮胖瘦、头身比等比例的10个参数。</p>
 </li>
 <li><p><strong>姿态参数θ：</strong>一组姿态参数有着24 ×3维度的数字，去描述某个时刻人体的动作姿态，其中的24表示的是24个定义好的人体关节点，其中的3并不是如同识别问题里面定义的(x,y,z)空间位置坐标，而是指的是<strong>该节点针对于其父节点的旋转角度的轴角式表达</strong>。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220213121532.png" alt="image-20220220213121532" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220213121532.png" alt="image-20220220213121532" style="zoom:80%;" /></p>
 </li>
 </ol>
 </li>
@@ -512,7 +512,7 @@ ret = pred × m + centroid
 </li>
 <li><p>热图输出维度（n,H,W,D）,n个关键节点，立体热图（H,W,D）中值最大点表示改关键节点位置（选择方法不止这个）</p>
 <p>如下是2D姿态估计的每个关键节点热图，3D类似：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220224150811152.png" alt="image-20220224150811152" style="zoom: 67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220224150811152.png" alt="image-20220224150811152" style="zoom: 67%;" /></p>
 </li>
 </ul>
 <p>基于RGB图像与其他输入（点云等）的3D人体姿态估计输出区别：（大多数情况，不绝对）</p>
@@ -536,7 +536,7 @@ ret = pred × m + centroid
 <li>对三维空间进行网格划分，将问题转换为主体周围离散化空间中的 3D 关键点定位</li>
 <li>Coarse-to-Fine 渐进优化，主要是针对 第三维度深度 z 而言的，d 的取值为 {1,2,4,8,16,32,64}</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220215313532.png" alt="image-20220220215313532" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220215313532.png" alt="image-20220220215313532" style="zoom:67%;" /></p>
 <h5 id="3-3-1-2-simple-baseline-3d-2017-iccv-">3.3.1.2 Simple-baseline-3D（2017 ICCV）</h5>
 <blockquote>
 <p>A simple yet effective baseline for 3d human pose estimation</p>
@@ -548,7 +548,7 @@ ret = pred × m + centroid
 <li>使用2d/3d姿态的坐标分别作为输入与输出</li>
 <li>RGB图像到2D关键节点使用stacked hourglass，微调</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220215434983.png" alt="image-20220220215434983" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220215434983.png" alt="image-20220220215434983" style="zoom:80%;" /></p>
 <h5 id="3-3-1-3-repnet-2019-cvpr-">3.3.1.3 RepNet（2019 CVPR）</h5>
 <blockquote>
 <p>RepNet:Weakly Supervised Training of an Adversarial Reprojection Network for 3D Human PoseEstimation</p>
@@ -583,10 +583,10 @@ ret = pred × m + centroid
 <li><p>传统方法是基于2D深度图直接回归关节点坐标，而该模型是把2D深度图投影到3D空间，然后用3D卷积去操作，这能解决2D深度图的透视畸变问题。</p>
 </li>
 <li><p>该模型不是直接回归关节点坐标，而是估计每个点云所属某关节点的概率值。（用热图表示）</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/format,png.png" alt="img" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/format,png.png" alt="img" style="zoom:80%;" /></p>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjExODY1Nw==,size_16,color_FFFFFF,t_70.jpeg" alt="img" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjExODY1Nw==,size_16,color_FFFFFF,t_70.jpeg" alt="img" style="zoom:80%;" /></p>
 <ul>
 <li>作者认为3D识别关节点的好处：<ul>
 <li>第一个是2D深度图中的透视失真。由于2D深度图的像素值表示物体与深度相机的物理距离，因此深度图本质上是3D数据。然而，大多数先前的方法仅将深度图作为2S图像形式，其可以通过将其投影到2D图像空间来扭曲3D空间中的实际对象的形状。因此，网络看到一个扭曲的对象，并负担执行失真不变的估计。</li>
@@ -606,10 +606,10 @@ ret = pred × m + centroid
 <li><strong>Point Clouds Proposal Module</strong>，我们使用紧凑而有效的全卷积网络，通过2D热图从输入深度中提取2D人体姿势，并使用2D人体姿势对点云进行采样。然后，使用估计的根关节对采样的点云进行归一化;</li>
 <li><strong>3D Pose Regression Module</strong>，我们根据生成对抗网络（GAN）恢复3D人体姿势。对于生成器，我们使用分层的基于 PointNet 的回归（以采样的点云作为输入）来恢复人体姿势。对于鉴别器，我们使用完全连接的神经网络来区分估计的人类姿势和真实人体姿势。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220235023316.png" alt="image-20220220235023316" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220235023316.png" alt="image-20220220235023316" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>Point Clouds Proposal Module</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220234915724.png" alt="image-20220220234915724" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220234915724.png" alt="image-20220220234915724" style="zoom:80%;" /></p>
 </li>
 </ul>
 <ol>
@@ -618,7 +618,7 @@ ret = pred × m + centroid
 <li><p>我们从深度图中以检测到的 <strong>2D 关节为中心</strong>裁剪<strong>d=20*20</strong>像素的边界框，通过深度摄像头参数转换成点云，总采样点数<strong>N=d*J</strong></p>
 </li>
 <li><p>通过将采样的点云馈送到具有ResNet骨干网（称为根估计网络（RENet））的微小回归网络，从而获得根关节Root的位置。采样的点云可以归一化为 [−1， 1]^3由，<strong>L</strong>是预定义边界框的大小（实验为<strong>[1.5,1.5,2]</strong>）。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220224202624818.png" alt="image-20220224202624818" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220224202624818.png" alt="image-20220224202624818" style="zoom: 80%;" /></p>
 <p><strong>注意：</strong>此转换同样应用于采样的点云、真实关键节点坐标和<strong>初始 3D 人体姿势</strong>，保证一致性。</p>
 </li>
 <li><p>初始3D姿态为预测的2D关键节点回溯投影到点云中的坐标，并将每个关节的深度设置为我们估计的根关节深度。(如上标准化处理)</p>
@@ -631,25 +631,25 @@ ret = pred × m + centroid
 </li>
 <li><h5 id="discriminator">Discriminator</h5>
 <p>判别器旨在判断恢复的3D人体姿势是真假的。该网络使用预测的 3D 关节位置作为输入，并预测预测的 3D 关节位置是真实的还是假的。判别器由两个具有Leaky RELU 功能和跳过连接的全连接层 （FC）、一个具有Leaky ReLU 功能的完全连接层、另一个全连接层和一个 softmax 功能组成。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220224204423145.png" alt="image-20220224204423145" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220224204423145.png" alt="image-20220224204423145" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>损失函数</strong></p>
 <p>*<em>表示真实值</em></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220224205154075.png" alt="image-20220224205154075" style="zoom: 67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220224205154075.png" alt="image-20220224205154075" style="zoom: 67%;" /></p>
 <p>为了惩罚不合逻辑的骨长度比，我们添加了骨长度比正则化损失:</p>
 <blockquote>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220224205308743.png" alt="image-20220224205308743" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220224205308743.png" alt="image-20220224205308743" style="zoom: 80%;" /></p>
 </blockquote>
 </li>
 <li><p><strong>对抗学习</strong></p>
 <p>在训练阶段，按照 GAN 的典型训练程序，我们交替地在判别器D与生成器G之间训练更新网络参数。</p>
 </li>
 </ul>
-<p>  <img src="../md文档/基于关键节点的行为识别/picture/image-20220224205626678.png" alt="image-20220224205626678"></p>
+<p>  <img src="../md文档/基于骨骼的行为识别/picture/image-20220224205626678.png" alt="image-20220224205626678"></p>
 <p>  （a） 使用固定的3D姿势生成器的参数来训练判别器;</p>
-<p>  <img src="../md文档/基于关键节点的行为识别/picture/image-20220224205944453.png" alt="image-20220224205944453" style="zoom:80%;" /></p>
+<p>  <img src="../md文档/基于骨骼的行为识别/picture/image-20220224205944453.png" alt="image-20220224205944453" style="zoom:80%;" /></p>
 <p>  （b） 通过同时使用完全标记的数据和弱标记的数据来训练3D姿态生成器。总损失：</p>
-<p>  <img src="../md文档/基于关键节点的行为识别/picture/image-20220224210036213.png" alt="image-20220224210036213" style="zoom:80%;" /></p>
+<p>  <img src="../md文档/基于骨骼的行为识别/picture/image-20220224210036213.png" alt="image-20220224210036213" style="zoom:80%;" /></p>
 <h4 id="-5-leaky-relu-">补充 5 Leaky ReLU函数</h4>
 <p><a href="https://blog.csdn.net/hy592070616/article/details/120617996">机器学习中的数学——激活函数（四）：Leaky ReLU函数_冯·诺依曼实验室-CSDN博客_leakyrelu函数公式</a></p>
 <p>Leaky ReLU函数的特点：</p>
@@ -658,7 +658,7 @@ ret = pred × m + centroid
 <li>Leaky有助于扩大ReLU函数的范围，通常α的值为0.01左右。</li>
 <li>Leaky ReLU的函数范围是负无穷到正无穷。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220224163548455.png" alt="image-20220224163548455" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220224163548455.png" alt="image-20220224163548455" style="zoom:80%;" /></p>
 <h4 id="3-4-6-learning-to-estimate-3d-human-pose-from-point-cloud-2020-jsen-">3.4.6 Learning to Estimate 3D Human Pose From Point Cloud（2020 JSEN）</h4>
 <p><a href="https://ieeexplore.ieee.org/document/9107101">Learning to Estimate 3D Human Pose From Point Cloud | IEEE Journals &amp; Magazine | IEEE Xplore</a></p>
 <ul>
@@ -669,8 +669,8 @@ ret = pred × m + centroid
 <li><p>使用DGCNN网络提出的EdgeConv，学习点云的领域信息，通过堆叠EdgeConv模块或循环使用，可以提取到全局形状信息。</p>
 </li>
 <li><p><strong>对点云数据预处理，消除背景。</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220232734813.png" alt="image-20220220232734813" style="zoom:80%;" /></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220234238139.png" alt="image-20220220234238139"  /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220232734813.png" alt="image-20220220232734813" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220234238139.png" alt="image-20220220234238139"  /></p>
 </li>
 </ul>
 <h3 id="3-5-rgbd-3d-">3.5 基于RGBD数据的3D人体姿态估计</h3>
@@ -698,7 +698,7 @@ ret = pred × m + centroid
 </blockquote>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220225829293.png" alt="image-20220220225829293" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220225829293.png" alt="image-20220220225829293" style="zoom:80%;" /></p>
 <ul>
 <li><p><strong>Color Keypoint Detector</strong></p>
 <p>使用2D-HPE模型（openpose）检测人体关键点，输出热图（H,W,J），然后沿着z轴平铺得（H,W,D,J）。这里H,W,D=64，与跟体素网格相同大小。</p>
@@ -736,12 +736,12 @@ ret = pred × m + centroid
 </blockquote>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220232002793.png" alt="image-20220220232002793" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220232002793.png" alt="image-20220220232002793" style="zoom:80%;" /></p>
 <h4 id="3-5-4-rgb-d-fusion-for-point-cloud-based-3d-human-pose-estimation-2021-icip-">3.5.4 RGB-D FUSION FOR POINT-CLOUD-BASED 3D HUMAN POSE ESTIMATION（2021 ICIP）</h4>
 <ul>
 <li>模型由三个模块组成。<strong>2D fusion module</strong>首先通过2D姿态估计模型从 RGB 图像生成热图。热图充当初步但有用的预测，有助于在后期阶段进行3D估计。接下来，2D 融合模块将热图与深度图像融合，并输出一个点云，其中每个点都赋予了一个颜色特征矢量。然后将缩减采样的点馈送到<strong>3D learning module</strong>中，以生成逐点特征。最后，为了更好地利用局部特征，设计了一个逐点投票机制<strong>Dense prediction module</strong>，可以预测从每个点到目标关键点的接近度分数和偏移向量，最终结果由所有积分投票选出。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220220225757764.png" alt="image-20220220225757764" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220220225757764.png" alt="image-20220220225757764" style="zoom:80%;" /></p>
 <ul>
 <li><p><strong>2D fusion module</strong></p>
 <p>采用2D姿势估计器（SimpleBaseline ）从RGB图像生成热图（颜色特征），热图上采样为原始图像大小，然后颜色特征以点云的形式与深度图像集成。在馈送到下游模块之前，点云被随机下采样到固定大小的<em>N</em>。</p>
@@ -754,17 +754,17 @@ ret = pred × m + centroid
 <p><strong>密集预测有利于网络的收敛。</strong>（论文提到试过直接回归未能收敛）</p>
 <ul>
 <li><p>第一个分支输出每个点与目标关键点的<strong>接近度分数</strong>。具体而言，它预测点是否位于关键点的邻域。真实接近度分数生成为：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220225224010982.png" alt="image-20220225224010982" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220225224010982.png" alt="image-20220225224010982" style="zoom:80%;" /></p>
 </li>
 <li><p>另一个分支计算从每个点到每个关键点的偏移量：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220225224252785.png" alt="image-20220225224252785" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220225224252785.png" alt="image-20220225224252785" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>左膝关节的网络输出示例</strong></p>
 <p>（a） 红点表示左膝的相邻点。（b） 箭头表示从不同点到目标关键点的偏移量。为了获得更好的可视化效果，仅可视化了一部分矢量。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220225224115726.png" alt="image-20220225224115726" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220225224115726.png" alt="image-20220225224115726" style="zoom:80%;" /></p>
 </li>
 <li><p>最后预测的关键节点坐标：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220225224928615.png" alt="image-20220225224928615" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220225224928615.png" alt="image-20220225224928615" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
@@ -772,17 +772,17 @@ ret = pred × m + centroid
 <p>损失函数由三个项组成</p>
 <ul>
 <li><p>预测的3D人体姿态与真实值：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220225225219793.png" alt="image-20220225225219793" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220225225219793.png" alt="image-20220225225219793" style="zoom:80%;" /></p>
 <p>选择Huber loss而不是MSE loss，因为它对<strong>异常值不太敏感</strong>，同时将强凸性保持在零附近。该功能将更侧重于减少小错误，并有助于生成尽可能准确的结果。</p>
 </li>
 <li><p>接近度估计误差：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220225225417718.png" alt="image-20220225225417718" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220225225417718.png" alt="image-20220225225417718" style="zoom:80%;" /></p>
 </li>
 <li><p>使用 Huber loss的偏移分支：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220225225430958.png" alt="image-20220225225430958" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220225225430958.png" alt="image-20220225225430958" style="zoom:80%;" /></p>
 </li>
 <li><p>整体损失函数是上述三项的加权和：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220225230336571.png" alt="image-20220225230336571" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220225230336571.png" alt="image-20220225230336571" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
@@ -808,7 +808,7 @@ ret = pred × m + centroid
 <h3 id="3-6-3d-">3.6 基于点云数据3D人体姿态估计</h3>
 <p>基于深度图或RGBD图像的3D人体姿态估计大部分可归为基于点云数据的模型</p>
 <h4 id="3-6-1-a-review-point-cloud-based-3d-human-joints-estimation-2021-sensors-">3.6.1 A Review: Point Cloud-Based 3D Human Joints Estimation（2021 Sensors）</h4>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221104727876.png" alt="image-20220221104727876" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221104727876.png" alt="image-20220221104727876" style="zoom:67%;" /></p>
 <ul>
 <li><strong>不同方法特点：</strong><ul>
 <li>基于模板的方法首先需要建立模板库或参数化模板，然后比较人体点云与模板库或目标模型中的样本之间的相似性。这种方法相对粗糙且耗时。鉴于样本数据的多样性和多尺度结构，人体的相同姿势在空间中可能非常不同。因此，基于模板的方法的准确性非常有限。</li>
@@ -826,7 +826,7 @@ ret = pred × m + centroid
 <li><p>本文提出了一种新的基于无序点云的手势估计方法。采用1024个三维点作为输入，不需要额外的信息。本文以置换等变层(PEL)为基本单元，提出一个PEL版本的ResNet用于手势识别任务。此外，还提出了一个基于投票的方案(Voting-Based Scheme)，合并各个点的信息用于最终手势预测。</p>
 </li>
 <li><p>我们的方法取N个任意阶三维点P∈R^N×3作为输入，最后输出矢量化的三维手部姿态y∈R^J，其中<strong>J = 3 × #关节</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303094724043.png" alt="image-20220303094724043"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303094724043.png" alt="image-20220303094724043"></p>
 </li>
 <li><p><strong>预处理</strong></p>
 <ol>
@@ -846,13 +846,13 @@ ret = pred × m + centroid
 <p>Deep learning with sets and point clouds（2016）</p>
 </blockquote>
 <blockquote>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303102035247.png" alt="image-20220303102035247" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303102035247.png" alt="image-20220303102035247" style="zoom: 80%;" /></p>
 </blockquote>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303101448739.png" alt="image-20220303101448739"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303101448739.png" alt="image-20220303101448739"></p>
 <p><strong>注意到权值γ和λ是共享的</strong>，因为每个点使用自己的输入特征和各个特征维度上的最大值计算自己的特征。所以PEL能处理无序数据，而且各个点在一定程度上相当于使用Xmax交换信息。</p>
 </li>
 <li><p><strong>Residual network of permutation equivariant layer</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303101430625.png" alt="image-20220303101430625"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303101430625.png" alt="image-20220303101430625"></p>
 </li>
 </ul>
 </li>
@@ -860,29 +860,29 @@ ret = pred × m + centroid
 <p>通过ResNet-PEL得到NxF维特征，每一行F维向量表示一个点的局部特征。使用Point-to-Pose voting方式估计关节点坐标，文章提出了检测和回归两种版本(回归效果更好)。</p>
 <ul>
 <li><p>Regression version</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303103440332.png" alt="image-20220303103440332" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303103440332.png" alt="image-20220303103440332" style="zoom:80%;" /></p>
 <p>G表示3D点n对于关节点j预测的贡献程度(置信水平)，y`为网    络输出的每个3D点预测的关节点j的坐标激励值，根据每个3D点对每个关节点的贡献程度及自身估计的坐标激励值，综合归一化得到最终的估计值。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303103422957.png" alt="image-20220303103422957" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303103422957.png" alt="image-20220303103422957" style="zoom:80%;" /></p>
 </li>
 <li><p>Detection version</p>
 <p>首先检测出各位姿维数的概率分布，然后将分布积分得到位姿。两个完全连接的模块的最后一层是sigmoid函数。G和D的值范围是 [0, 1]。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303104201059.png" alt="image-20220303104201059" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303104201059.png" alt="image-20220303104201059" style="zoom:80%;" /></p>
 <p><strong>weighted fusion：</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303104237754.png" alt="image-20220303104237754" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303104237754.png" alt="image-20220303104237754" style="zoom:80%;" /></p>
 <p>D表示输出构成分布，其中每个点对J输出维度做出自己的预测。每个输出姿态维用一个B bins表示为离散分布，表示[−r， +r]的值范围，每个桶的分辨率∆d = 2r/B。对于输出姿态<strong>yj</strong>，其本身对应的bin索引是：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303104617912.png" alt="image-20220303104617912" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303104617912.png" alt="image-20220303104617912" style="zoom:80%;" /></p>
 <p>真实训练分布，真实姿势周围的三个<strong>bin</strong>i被设为1，其他<strong>bin</strong>被设为0。：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303104710395.png" alt="image-20220303104710395" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303104710395.png" alt="image-20220303104710395" style="zoom:80%;" /></p>
 <p>最终的姿态y是通过对分布的积分来估计的：<strong>（存疑）</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303105032326.png" alt="image-20220303105032326" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303105032326.png" alt="image-20220303105032326" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
 <li><p><strong>损失函数</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303103708070.png" alt="image-20220303103708070" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303103708070.png" alt="image-20220303103708070" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>结果</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220303105416421.png" alt="image-20220303105416421" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220303105416421.png" alt="image-20220303105416421" style="zoom:80%;" /></p>
 </li>
 </ul>
 <h4 id="3-6-4-skeleton-aware-3d-human-shape-reconstruction-from-point-clouds-2019-iccv-">3.6.4 Skeleton-Aware 3D Human Shape Reconstruction From Point Clouds（2019 ICCV）</h4>
@@ -902,7 +902,7 @@ ret = pred × m + centroid
 </ul>
 </li>
 <li><p>行为识别算法分类：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/103566134">一文了解通用行为识别ActionRecognition：了解及分类 - 知乎 (zhihu.com)</a><img src="../md文档/基于关键节点的行为识别/picture/v2-d1df4c0d34ccb1cda0a5627ac80966ed_r.jpg" alt="preview"></p>
+<p><a href="https://zhuanlan.zhihu.com/p/103566134">一文了解通用行为识别ActionRecognition：了解及分类 - 知乎 (zhihu.com)</a><img src="../md文档/基于骨骼的行为识别/picture/v2-d1df4c0d34ccb1cda0a5627ac80966ed_r.jpg" alt="preview"></p>
 </li>
 <li><p>框架：</p>
 <p><a href="https://github.com/open-mmlab/mmaction2">open-mmlab/mmaction2: OpenMMLab&#39;s Next Generation Video Understanding Toolbox and Benchmark (github.com)</a></p>
@@ -914,7 +914,7 @@ ret = pred × m + centroid
 <p><a href="https://deepai.org/publication/rgb-d-based-human-motion-recognition-with-deep-learning-a-survey">基于RGB-D的深度学习人体运动识别：|调查深爱 (deepai.org)</a></p>
 </li>
 <li><p><strong>本文整理分类</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220305000932930.png" alt="image-20220122131931570"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220305000932930.png" alt="image-20220122131931570"></p>
 </li>
 </ul>
 <h3 id="4-2-rgb-rgbd-">4.2 基于RGB/RGBD视频</h3>
@@ -931,7 +931,7 @@ ret = pred × m + centroid
 <p>在得到视频对应的特征后，DT算法采用SVM分类器进行分类，采用one-against-rest策略训练多类分类器。</p>
 </li>
 <li><p><strong>模型：</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220122131931570.png" alt="image-20220122131931570" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220122131931570.png" alt="image-20220122131931570" style="zoom:80%;" /></p>
 </li>
 </ul>
 <h5 id="4-2-1-2-idt-2013-iccv-">4.2.1.2 iDT（2013 ICCV）</h5>
@@ -960,10 +960,10 @@ ret = pred × m + centroid
 </li>
 <li><p><strong>光流的计算方法</strong></p>
 <p>假设第一帧图像中的像素 <em>I(x, y, t)</em> 在时间 <em>dt</em> 后移动到第二帧图像的 <em>(x+dx, y+dy)</em> 处。根据上述第一条假设：灰度值不变，我们可以得到：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221153601761.png" alt="image-20220221153601761" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221153601761.png" alt="image-20220221153601761" style="zoom:80%;" /></p>
 <p>对等号右侧进行泰勒级数展开，消去相同项，两边都除以 <em>dt</em> ，得到如下方程：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221153623441.png" alt="image-20220221153623441" style="zoom:80%;" /></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221153635509.png" alt="image-20220221153635509"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221153623441.png" alt="image-20220221153623441" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221153635509.png" alt="image-20220221153635509"></p>
 <p>fx,fy均可由图像数据求得，而<strong>(u,v)即为所求光流矢量</strong>。</p>
 <p>上述一个等式中有两个未知数。有几个方法可以解决这个问题，其中的一个是 Lucas-Kanade 法 。增加有一个假设：</p>
 <p>这里就要用到上面提到的第二个假设条件，领域内的所有像素点具有相同的运动。Lucas-Kanade法就是利用一个3x3的领域中的9个像素点具有相同的运动，就可以得到9个点的光流方程(即上述公式)，用这些方程来求得<em>(u, v)</em> 这两个未知数，显然这是个约束条件过多的方程组，不能解得精确解，一个好的解决方法就是使用最小二乘来拟合。</p>
@@ -989,7 +989,7 @@ ret = pred × m + centroid
 <li><a href="https://blog.csdn.net/liuxiao214/article/details/78377791">(1条消息) 【论文学习】Two-Stream Convolutional Networks for Action Recognition in Videos_I am what i am-CSDN博客</a></li>
 </ul>
 </li>
-<li><strong>模型：</strong><img src="../md文档/基于关键节点的行为识别/picture/image-20220123101946274.png" alt="image-20220123101946274" style="zoom:80%;" /></li>
+<li><strong>模型：</strong><img src="../md文档/基于骨骼的行为识别/picture/image-20220123101946274.png" alt="image-20220123101946274" style="zoom:80%;" /></li>
 </ul>
 <h5 id="4-2-2-2-">4.2.2.2 其他模型</h5>
 <p>Christoph Feichtenhofer等人对双流网络中空间和时间特征的融合进行优化。</p>
@@ -1008,7 +1008,7 @@ ret = pred × m + centroid
 <ul>
 <li>视频输入是C×L×H×W，C为图像通道(一般为3)，L为视频序列的长度，kernel size为3x3x3，stride为1，padding=True，滤波器个数为K的3D卷积后，输出的视频大小为K∗L∗H∗W。文章认为不那么过早地池化时间信息，可以在早期阶段保留更多的时间信息。网络的输入的视频长度为16帧，输入的视频帧尺寸为 112 × 112。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221120529269.png" alt="image-20220221120529269"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221120529269.png" alt="image-20220221120529269"></p>
 <h5 id="4-2-3-2-">4.2.3.2 其他模型</h5>
 <p>Zhaofan Qiu等人受Inception v3启发将3D卷积核拆成了空间的2D卷积(1x3x3)和时间的1D卷积(3x1x1)并以不同的串并联方式结合获得了显著效果。</p>
 <h4 id="4-2-4-cnn-lstm">4.2.4 CNN+LSTM</h4>
@@ -1026,7 +1026,7 @@ ret = pred × m + centroid
 <li>CNN的部分仍然用传统的AlexNet，但实验中发现全连接层fc6和fc7差距较小，舍弃了fc7，将fc6的结果作为LSTM的输入；</li>
 <li>LSTM的部分隐藏单元数量分别使用了256、512、1024，但数量增多效果增益不明显，最后隐藏单元数RGB输入时256个，光流输入时1024个。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221121127752.png" alt="image-20220221121127752" style="zoom: 67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221121127752.png" alt="image-20220221121127752" style="zoom: 67%;" /></p>
 <h3 id="4-3-">4.3 基于骨骼关键节点</h3>
 <p>基于骨架（Skeleton-based）的行为识别目前基本都是在用图卷积GCN</p>
 <p>一般来说，人体骨架序列有三个显著的特征:</p>
@@ -1076,7 +1076,7 @@ ret = pred × m + centroid
 <p>一组N个随机变量的协方差矩阵是一个<strong>N × N</strong>的矩阵，其元素是每一对变量之间的协方差。设X是N个随机变量的向量。随机向量X的协方差矩阵定义为<strong>COV(X) = E[(X−E(X))(X−E(X))‘]</strong>，其中E()为期望算子。<strong>协方差矩阵编码关于随机变量集合的联合概率分布形状的信息</strong>。（<strong>‘</strong>表示转置）</p>
 </li>
 <li><p>假设体由K个关节表示，设S为单个骨架所有关节位置的向量，即<strong>S = [x1，…， xK, y1，…， yK, z1，…， zK]’</strong>，有N = 3K的元素。然后，该序列的协方差描述符为COV(S)。通常情况下，S的概率分布是未知的，我们用样本协方差代替，它是由方程给出的</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310233740561.png" alt="image-20220310233740561" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310233740561.png" alt="image-20220310233740561" style="zoom:80%;" /></p>
 <p>其中¯S是S的样本均值，对于描述符，我们只使用它的<strong>上三角形</strong>（协方差矩阵对称）。例如，对于有20个关节的骨骼，N = 3 × 20 = 60。在这种情况下，协方差矩阵的上三角形是<strong>N(N + 1)/2 = 1830</strong>，这是描述符的长度。</p>
 </li>
 </ul>
@@ -1085,7 +1085,7 @@ ret = pred × m + centroid
 <p>Cov3DJ描述符捕获操作执行期间不同关节位置之间的依赖关系。然而，<strong>它不能捕捉到运动的时间顺序</strong>。因此，如果给定序列的帧被随机打乱，协方差矩阵不会改变。这可能会有问题，例如，当两个活动的时间顺序是相反的，例如“推”和“拉”。</p>
 <p>为了<strong>将时间信息添加到Cov3DJ中</strong>，我们使用了Cov3DJ的层次结构，顶级Cov3DJ是在整个视频序列上计算的。较低的层次是在整个序列的较小窗口(重叠或不重叠)上计算的。</p>
 <p>下图只显示了层次结构中的两个级别。顶层矩阵覆盖整个序列，用C00表示。在序列的T /2l帧上计算第l级的协方差矩阵。从一个窗口到下一个窗口的步骤要么是窗口的长度，要么是窗口的一半。如果步骤是窗口长度的一半，则窗口相互重叠。在图中，第二层的协方差矩阵重叠。<strong>添加更多级别并允许重叠增强了分类器使用描述符区分操作的能力</strong>。然而，我们添加的层越多，允许重叠的层越多，描述符的长度就越长。对于图中的描述符配置，用20个关节表示的骨架将得到长度为4 × 1830 = 7320的描述符。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310235513370.png" alt="image-20220310235513370" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310235513370.png" alt="image-20220310235513370" style="zoom:80%;" /></p>
 </li>
 <li><p>使用一种动态规划方法加速Cov3DJ描述符的计算。✏</p>
 </li>
@@ -1093,13 +1093,13 @@ ret = pred × m + centroid
 </li>
 <li><p><strong>实验结果</strong></p>
 <p>时间层次中不同级别的分类精度。一般来说，我们可以推断，添加更多的级别可以增强描述符的识别能力，从而提高分类的准确性。重叠也提高了分类精度。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310235850098.png" alt="image-20220310235850098" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310235850098.png" alt="image-20220310235850098" style="zoom:80%;" /></p>
 </li>
 </ul>
 <h5 id="4-3-2-4-human-action-recognition-by-representing-3d-skeletons-as-points-in-a-lie-group-2014-cvpr-">4.3.2.4 Human action recognition by representing 3d skeletons as points in a lie group（2014 CVPR）</h5>
 <ul>
 <li><p>大多数现有的基于骨骼的方法使用<strong>关节位置</strong>或<strong>关节角度</strong>来表示人类骨骼。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310111300287.png" alt="image-20220310111300287" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310111300287.png" alt="image-20220310111300287" style="zoom: 80%;" /></p>
 </li>
 <li><p>提出了一种新的<strong>骨架表示</strong>，该表示在3D空间中使用旋转和平移显式地模拟了各种身体部位之间的3D几何关系。由于3D刚体运动是特殊欧几里得群SE（3）的成员，因此建议的骨架表示位于李群SE（3）×...×SE（3），它是一个弯曲的流形。使用所提出的表示，人类行为可以建模为这个李群中的曲线。由于在这个<strong>李群中对曲线进行分类不是一件容易的事</strong>，所以我们将动作曲线<strong>从李群映射到它的李代数</strong>，这是一个向量空间。然后，我们使用动态时间扭曲，傅里叶时间金字塔表示和线性SVM的组合进行分类。</p>
 </li>
@@ -1107,42 +1107,42 @@ ret = pred × m + centroid
 <p><a href="https://zhuanlan.zhihu.com/p/33156814">第四讲：李群和李代数 - 知乎 (zhihu.com)</a></p>
 <ul>
 <li><p>特殊欧几里得群，由 <strong>SE（3）</strong> 表示，是以下形式的所有 4 x 4 矩阵的<strong>集合</strong>，R是旋转矩阵，d是平移向量</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310130139099.png" alt="image-20220310130139099" style="zoom: 67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310130139099.png" alt="image-20220310130139099" style="zoom: 67%;" /></p>
 </li>
 <li><p>在单位矩阵<strong>I</strong>与 SE（3） 的切线平面被称为 SE（3） 的李代数，表示为se（3）.它是一个 6 维向量空间，由以下形式的所有 4 x 4 矩阵形成</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310132723602.png" alt="image-20220310132723602" style="zoom:67%;" /></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310132733246.png" alt="image-20220310132733246" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310132723602.png" alt="image-20220310132723602" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310132733246.png" alt="image-20220310132733246" style="zoom: 80%;" /></p>
 </li>
 <li><p>李群与李代数转换</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310133719308.png" alt="image-20220310133719308" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310133719308.png" alt="image-20220310133719308" style="zoom:67%;" /></p>
 </li>
 </ul>
 </li>
 <li><p><strong>李群李代数骨架表示</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310134722716.png" alt="image-20220310134722716" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310134722716.png" alt="image-20220310134722716" style="zoom:80%;" /></p>
 <ul>
 <li>给定一对身体部位em和en，为了描述它们的相对几何形状，我们在附加到另一个的局部坐标系中表示它们中的每一个。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310134444412.png" alt="image-20220310134444412" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310134444412.png" alt="image-20220310134444412" style="zoom:80%;" /></p>
 <ul>
 <li>使用所有身体部位对之间的相对几何形状，我们表示在时间实例t中骨架S：<strong>M</strong>是身体部位个数，如上图是19（e1~e19）</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310134428270.png" alt="image-20220310134428270" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310134428270.png" alt="image-20220310134428270" style="zoom:80%;" /></p>
 <ul>
 <li><p>使用建议的骨架表示，描述动作的骨骼序列可以表示为曲线{C(t），t∈[0，T]}在SE(3）×...×SE(3).弯曲空间中动作曲线的分类SE(3）×...×SE(3)这不是一项微不足道的任务。此外，<strong>SVM等标准分类方法和傅里叶分析等时间建模方法并不直接适用于这一空间。</strong>为了克服这些困难，我们从SE(3）×...×SE(3)到它的李代数se（3）×...×（3），这是单位元素处的切线空间。对应于的李代数曲线（以向量表示形式）C(t)由</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310134844354.png" alt="image-20220310134844354" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310134844354.png" alt="image-20220310134844354" style="zoom:80%;" /></p>
 <p>C（t）是维度的向量<strong>6M(M−1)</strong>，因此，我们将行为表示为6M(M−1)-维向量</p>
 </li>
 </ul>
 </li>
 <li><p><strong>时态建模和分类</strong></p>
 <p>😵</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310135554564.png" alt="image-20220310135554564" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310135554564.png" alt="image-20220310135554564" style="zoom:80%;" /></p>
 <ul>
 <li><p>由于各种问题，如速率变化，时间错位，噪声等，将李代数中的曲线分类为不同的动作类别并不简单。我们使用 <strong>DTW</strong>来处理速率变化。</p>
 </li>
 <li><p>在训练期间，对于每个动作类别，我们使用下面描述的算法<strong>计算一条标称曲线</strong>，并使用 DTW 将所有训练曲线扭曲为该标称曲线。我们使用李代数中的平方欧几里得距离来表示 DTW。请注意，要计算标称曲线，所有曲线都应具有相等数量的样本。为此，我们使用插值算法。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220310135613275.png" alt="image-20220310135613275" style="zoom: 67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220310135613275.png" alt="image-20220310135613275" style="zoom: 67%;" /></p>
 </li>
 <li><p>为了处理时间不对中和噪声问题，我们使用最近提出的<strong>傅里叶时间金字塔表示来表示扭曲曲线</strong>，从而消除了高频系数。我们分别对每个维度应用 <strong>FTP</strong>，<strong>并连接所有傅里叶系数以获得最终的特征向量</strong>。</p>
 </li>
@@ -1167,21 +1167,21 @@ ret = pred × m + centroid
 <li>为了避免过度拟合和改进泛化，我们利用数据增强技术，使用3D变换，即旋转变换，缩放变换和剪切变换来变换训练期间骨架的3D坐标。</li>
 <li>RNN使用&quot;LSTM&quot;</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221133630244.png" alt="image-20220221133630244"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221133630244.png" alt="image-20220221133630244"></p>
 <ul>
 <li><p><strong>时间堆叠式 RNN</strong></p>
 <p>此结构为每个时间步长的所有关节的<strong>串联坐标</strong>馈送RNN网络。在这里，我们堆叠两层RNN，发现添加更多层不会显着提高性能。</p>
 </li>
 <li><p><strong>时间分层 RNN</strong></p>
 <p>人体骨骼可分为五部分，即两条胳膊、两条腿和一条躯干。我们观察到，一个动作是由一个独立的部分或几个部分的组合来执行的。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221134035500.png" alt="image-20220221134035500"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221134035500.png" alt="image-20220221134035500"></p>
 </li>
 <li><p><strong>空间链序列RNN</strong></p>
 <p>我们假设关节按照手臂，躯干和腿的顺序排列成链条状序列。躯干放在中间，因为它连接着手臂和腿。<strong>下图b</strong></p>
 </li>
 <li><p><strong>空间遍历序列RNN</strong></p>
 <p>一种图遍历方法，根据邻接关系访问序列中的关节，访问顺序将图表排列成一系列关节。<strong>遍历序列通过在正向和反向方向上两次访问大多数关节来保证图形中的空间关系。下图c</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220304144748120.png" alt="image-20220304144748120"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220304144748120.png" alt="image-20220304144748120"></p>
 </li>
 <li><p><strong>实验结果</strong></p>
 <ul>
@@ -1195,7 +1195,7 @@ ret = pred × m + centroid
 </li>
 <li>3D变换技术为基于骨架的识别带来了显著的性能提升，因为旋转变换会从不同的视图随机生成新的骨架，从而使我们的双流RNN对视点变化具有鲁棒性。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220309105724890.png" alt="image-20220309105724890"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220309105724890.png" alt="image-20220309105724890"></p>
 </li>
 </ul>
 <h5 id="4-3-3-2-ensemble-ts-lstm-v2-2017-iccv-">4.3.3.2 Ensemble TS-LSTM v2（2017 ICCV）</h5>
@@ -1215,16 +1215,16 @@ ret = pred × m + centroid
 </li>
 <li><p>图卷积神经网络</p>
 <p>利用邻接矩阵表示，同ST-GCN</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312102328164.png" alt="image-20220312102328164" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312102328164.png" alt="image-20220312102328164" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>LSTM</strong></p>
 <p><a href="https://zhuanlan.zhihu.com/p/24018768">（译）理解长短期记忆(LSTM) 神经网络 - 知乎 (zhihu.com)</a></p>
 </li>
 <li><p><strong>模型</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312102417541.png" alt="image-20220312102417541" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312102417541.png" alt="image-20220312102417541" style="zoom:80%;" /></p>
 <ul>
 <li><p><strong>首先利用线性层和LSTM层将每个关节的三维坐标映射到高维特征空间：</strong>将每个关节的坐标转化为具有线性层（关节共享）的位置特征（N×256）；<strong>位置特征</strong>是有益的学习空间结构特征图模型。两帧连续帧间的<strong>帧差特征</strong>有助于AGC-LSTM的动态信息获取。为了考虑到这两种优势，将两个特征连接起来作为一个增强特征来丰富特征信息。为了消除两个特征之间的<strong>尺度差异</strong>，采用共享LSTM对每个关节序列进行处理。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312103212289.png" alt="image-20220312103212289" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312103212289.png" alt="image-20220312103212289" style="zoom:80%;" /></p>
 <p>Eti为关节i在t时刻的增强特征。</p>
 </li>
 <li><p>接下来，我们应用三个<strong>AGC-LSTM层</strong>来建模时空特征。</p>
@@ -1232,40 +1232,40 @@ ret = pred × m + centroid
 <li><p>输入：<strong>{E1, E2，…ET}</strong>将作为节点特征馈送到以下GC-LSTM层。</p>
 </li>
 <li><p>如下AGC-LSTM单元的结构。与LSTM相比，AGC-LSTM的内部算子是图卷积计算。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312104431159.png" alt="image-20220312104431159"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312104431159.png" alt="image-20220312104431159"></p>
 <p>AGC-LSTM也包含三个门:一个输入门<strong>i<sub>t</sub></strong>，一个遗忘门<strong>f<sub>t</sub></strong>，一个输出门<strong>o<sub>t</sub></strong>。<strong>∗g表示图卷积算子</strong>，att表示注意力机制</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312104523866.png" alt="image-20220312104523866" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312104523866.png" alt="image-20220312104523866" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
 <li><p>该方法采用了一种软注意机制</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312104925724.png" alt="image-20220312104925724" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312104925724.png" alt="image-20220312104925724" style="zoom:80%;" /></p>
 <p>W是可学参数矩阵</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312150011055.png" alt="image-20220312150011055" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312150011055.png" alt="image-20220312150011055" style="zoom:80%;" /></p>
 <p>节点vti的隐藏状态<strong>Hti</strong>也可以表示：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312150023910.png" alt="image-20220312150023910" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312150023910.png" alt="image-20220312150023910" style="zoom:80%;" /></p>
 </li>
 <li><p>受CNN空间池化的启发，我们提出了一种<strong>基于时间平均池化的时间层次结构</strong>，以增加顶层AGC-LSTM的时间接受域。通过时间层次结构，AGC-LSTM顶层的每次时间输入的时间接受域都变成了一个帧的短期剪辑，对时间动态的感知更加敏感。此外，在提高性能的前提下，可以显著降低计算成本。</p>
 </li>
 <li><p>在最后的AGC-LSTM层，<strong>将所有节点特征的聚合作为全局特征</strong>，<strong>聚焦节点的加权和作为局部特征:</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312150106618.png" alt="image-20220312150106618" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312150106618.png" alt="image-20220312150106618" style="zoom:80%;" /></p>
 </li>
 <li><p>最后，我们利用最后一层AGC-LSTM中所有关节的全局特征和聚焦关节的局部特征来预测人类行为的类别。将每个时间步长的全局特征$\mathbf{F}<em>{t}^{g}$和局部特征$\mathbf{F}</em>{t}^{l}$转化为C类的评分$\mathbf{O}<em>{t}^{g}$和$\mathbf{O}</em>{t}^{l}$，其中$\mathbf{O}<em>{t}=\left(o</em>{t 1}, o_{t 2}, \ldots, o_{t C}\right)$。则预测概率为第i类:</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312150126646.png" alt="image-20220312150126646" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312150126646.png" alt="image-20220312150126646" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
 <li><p>在训练过程中，考虑到AGC-LSTM顶部每个时间步长的隐藏状态包含一个短期动态，我们用以下<strong>损失函数</strong>:</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312150140362.png" alt="image-20220312150140362" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312150140362.png" alt="image-20220312150140362" style="zoom:80%;" /></p>
 <p>其中y = (y1，…yC)是groundtruth标签。Tj为第j AGC-LSTM层的时间步长。第三项的目标是对不同的关节给予同等的关注。最后一项是限制感兴趣节点的数量。λ和β是重量衰减系数。预测时使用两者<strong>概率和</strong>来预测人类行为的类别。</p>
 </li>
 <li><p>虽然基于关节的模型达到了最先进的结果，我们也探索了所提出的模型在零件层面上的性能。<strong>根据人体的身体结构，人体可分为几个部分。类似于基于关节的AGC-LSTM网络，</strong>我们首先用线性层和共享LSTM层捕获部分特征。然后将作为节点表示的零件特征送入三个AGC-LSTM层，对时空特征进行建模。此外，基于关节和部件的双流模型可以进一步提高性能。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312114449974.png" alt="image-20220312114449974" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312114449974.png" alt="image-20220312114449974" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>实验结果</strong></p>
 <ul>
 <li><p>TH表示时间层次结构。与LSTM和GC-LSTM相比，LSTM+TH和GC-LSTM+TH可以增加顶层各时间步长的时间接受野。改进后的性能证明了时间层次结构能够有效地表达时间动态。用GC-LSTM替代LSTM, GCLSTM+TH在NTU数据集上的准确率分别提高到2.5%、4.9%和10.9%。性能的显著提高验证了GC-LSTM的有效性，它可以从骨架数据中捕获更有区别的时空特征。与GC-LSTM相比，AGC-LSTM可以利用空间注意机制来选择关键节点的空间信息，提高了特征表示能力。此外，基于零件和基于关节的AGC-LSTM的融合可以进一步提高性能。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220312123423036.png" alt="image-20220312123423036" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220312123423036.png" alt="image-20220312123423036" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
@@ -1283,17 +1283,17 @@ ret = pred × m + centroid
 <li><p>本文主要整理“分类任务”的行为识别。</p>
 </li>
 <li><p><strong>出发点：</strong>目前最先进的基于骨骼的行为识别方法主要基于递归神经网络（RNN）。在本文中，我们提出了一种基于卷积神经网络（CNN）的新型框架，用于行为分类和检测。原始骨架坐标以及骨架运动直接馈送到 CNN 中以进行标签预测。新型骨架变压器模块设计用于自动重新排列和选择重要的骨架接头。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220304184514327.png" alt="image-20220304184514327" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220304184514327.png" alt="image-20220304184514327" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>双流CNN</strong></p>
 <p><strong>原始骨架坐标S和骨架运动M用作我们网络的两个输入流。</strong>骨架序列T帧可以表示为T×N×3数组，它被视为T×N大小的 3 通道图像。视频中的操作可能跨越不同的帧长度。由于骨架数据被视为图像数据，因此我们通过简单的图像大小调整操作将所有视频规范化为固定长度。<strong>请注意，我们不执行任何规范化。</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220304185351655.png" alt="image-20220304185351655"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220304185351655.png" alt="image-20220304185351655"></p>
 </li>
 <li><p><strong>Skeleon Transformer</strong></p>
 <p>对于图像，像素的语义连续性至关重要。例如，如果我们随机随机地随机排列所有像素的位置，则生成的图像将是无意义的，并且对于人类和机器都难以识别。对于T×N×3骨架图像数据，排序N关节是任意选择的（例如左眼，右眼，鼻子等），这可能不是最佳的.</p>
 <p>为了解决这个问题，我们提出了一个骨架变压器模块。给定一个<strong>N×3骨架S</strong>，我们执行如下线性变换，<strong>W是一个N×M</strong>重量矩阵。S′是M新的插值接头。</p>
 <p>请注意，关节的顺序和位置都是重新排列的。该网络自动选择重要的身体关节，这可以解释为<strong>注意力机制的简单变体。</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220304185953596.png" alt="image-20220304185953596"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220304185953596.png" alt="image-20220304185953596"></p>
 </li>
 <li><p><strong>Multi-Person Maxout</strong></p>
 <blockquote>
@@ -1309,10 +1309,10 @@ ret = pred × m + centroid
 <ul>
 <li><p>Ablation study</p>
 <p>对NTU RGB + D数据集进行了烧蚀研究。使用普通的CNN，我们已经优于STA-LSTM（一个强大的LSTM基线）</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220309134055777.png" alt="image-20220309134055777" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220309134055777.png" alt="image-20220309134055777" style="zoom:67%;" /></p>
 </li>
 <li><p><strong>NTU RGB+D</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220309134128447.png" alt="image-20220309134128447" style="zoom:67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220309134128447.png" alt="image-20220309134128447" style="zoom:67%;" /></p>
 </li>
 </ul>
 </li>
@@ -1331,7 +1331,7 @@ ret = pred × m + centroid
 <li><strong>卷积层的输出是来自所有输入通道的全局响应。</strong>卷积运算可以分解为两个步骤：即跨空间域（宽度和高度）的局部特征聚合<strong>和</strong>跨通道的全局特征聚合。然后，我们可以得出一个简单但非常实用的方法来根据需求调节聚合程度。将T表示为d1×d2×d3三维张量。我们可以通过重组（转置）张量来分配不同的上下文。如果将维度di指定为通道，而另两个维度对本地上下文进行编码，那么来自维度di的任何信息都可以全局聚合。</li>
 <li>用到本文模型中：<strong>如果将骨架的每个关节视为一个通道，那么卷积层可以很容易地从所有关节学习共现特征。</strong>更具体地说，我们将骨架序列表示为形状为f rames×joints×3（最后一个维度为channel）的张量。我们首先使用核大小为n×1的卷积层独立地学习每个关节的点级特征。然后我们转换卷积层的输出，使关节的尺寸成为通道。在转置操作之后，后续层将按层次聚合来自所有关节的全局特征。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220304211055470.png" alt="image-20220304211055470"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220304211055470.png" alt="image-20220304211055470"></p>
 <p>将3×3卷积分解为两步。（a） 每个输入通道的空间域中的独立二维卷积，其中特征从3×3邻域局部聚集。（b） 跨通道的元素求和，其中特征从所有输入通道全局聚合。</p>
 </li>
 <li><p><strong>本文贡献：</strong></p>
@@ -1344,11 +1344,11 @@ ret = pred × m + centroid
 </li>
 <li><p><strong>模型</strong></p>
 <p>分层共现网络。绿色块是卷积层，其中最后一个维度表示输出通道的数量。尾随的“\/2”表示在卷积后附加了跨步为2的MaxPooling层。转置层根据顺序参数排列输入张量的维数。ReLU激活函数附加在conv1、conv5、conv6和fc7之后，以引入非线性。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220304233815425.png" alt="image-20220304233815425"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220304233815425.png" alt="image-20220304233815425"></p>
 </li>
 <li><p><strong>输入：</strong></p>
 <p>除了关节共现外，关节的时间运动也是识别潜在动作的关键线索。原始骨架坐标<strong>S</strong>和骨架运动<strong>M</strong>通过双流模式独立输入网络。骨架序列X可以用T×N×D张量表示，其中T是序列中的帧数，N是骨架中的关节数，D是坐标尺寸（例如，3D骨架为3）。<strong>上述骨骼运动M的形状与X相同。</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220304185351655.png" alt="image-20220304185351655"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220304185351655.png" alt="image-20220304185351655"></p>
 </li>
 <li><p><strong>模型解读</strong></p>
 <p>给定骨架序列和运动输入，按层次学习特征。</p>
@@ -1366,7 +1366,7 @@ ret = pred × m + centroid
 <li><p><strong>Early fusion</strong>。多人的所有关节都作为网络输入进行叠加。对于可变人数，如果人数小于预定义的最大人数，则应用零填充。</p>
 </li>
 <li><p><strong>Late fusion</strong>。多个人的输入经过同一个子网络，他们的conv6特征图通过沿通道串联或元素最大\平均操作合并。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220305000719982.png" alt="image-20220305000719982"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220305000719982.png" alt="image-20220305000719982"></p>
 </li>
 </ul>
 </li>
@@ -1374,10 +1374,10 @@ ret = pred × m + centroid
 <ul>
 <li><p><strong>Multi-person Feature Fusion</strong></p>
 <p><strong>所有后期融合方法都优于早期融合方法。</strong>原因可能是不同的人的特征在高级语义空间中比在原始输入空间中更一致，因此更兼容。在三种后期融合实现中，<strong>元素最大化操作达到了最佳精度。</strong>这是由于单人动作零填充的副作用造成的。也就是说，与多人样本相比，在串联和元素平均两种情况下，单人样本的特征都会因填充零而减弱。而元素方面的最大值不会受到这个问题的影响。（NTU RGB+D ）</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220308204356901.png" alt="image-20220308204356901" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220308204356901.png" alt="image-20220308204356901" style="zoom:80%;" /></p>
 </li>
 <li><p>NTU RGB+D数据下与其他先进模型对比</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220308204617138.png" alt="image-20220308204617138" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220308204617138.png" alt="image-20220308204617138" style="zoom: 80%;" /></p>
 </li>
 </ul>
 </li>
@@ -1413,10 +1413,10 @@ ret = pred × m + centroid
 <li><p><strong>模型</strong></p>
 <ul>
 <li><p>基于提取好的 2D 姿态，我们需要堆叠<strong>T</strong>张形状为<strong>（KxHxW）</strong>的二维关键点热图以生成形状为<strong>（KxTxHxW）</strong>的 3D 热图堆叠作为输入。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221125158638.png" alt="image-20220221125158638"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221125158638.png" alt="image-20220221125158638"></p>
 </li>
 <li><p>若我们事先将 2D 姿态存储成坐标形式，则需要先生成以 <strong>(x,y)</strong> 为中心的二维高斯热图。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306220726464.png" alt="image-20220306220726464"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306220726464.png" alt="image-20220306220726464"></p>
 </li>
 </ul>
 </li>
@@ -1427,14 +1427,14 @@ ret = pred × m + centroid
 <li><p><strong>均匀抽样。</strong>由于整个视频长度过长，难以处理，通常选取一个仅包含部分帧的子集构成一个片段，作为 3D-CNN 的输入。基于 RGB 模态的方法，通常只在一个较短的时间窗内采帧构成 3D-CNN 的输入（如 SlowFast 在一个长仅为 64 帧的时间窗内采帧）。由于这种采帧方式难以捕捉整个动作，因此在骨骼行为识别中，我们采用了均匀采样的方式：<strong>需要采 N 帧时，我们先将整个视频均分为长度相同的N 段，并在每段中随机选取一帧。</strong>在实验中，我们发现这样的采帧方式对骨骼行为识别尤其适用。</p>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221125927200.png" alt="image-20220221125927200"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221125927200.png" alt="image-20220221125927200"></p>
 </li>
 </ul>
 <ul>
 <li><p>本文设计了两个基于3D CNN的网络，即Pose-SlowOnly和RGBPose-SlowFast</p>
 <p>🍳An instantiation of the <strong>RGBPose-SlowFast</strong> network</p>
 <p>T×S^2，C表示时间、空间、通道数。Pose Pathway需要更密集的输入，对应于<strong>SlowFast</strong>中的快速路径。我们使用的主干是ResNet50。GAP表示全球平均池。 </p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306221756925.png" alt="image-20220306221756925"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306221756925.png" alt="image-20220306221756925"></p>
 </li>
 <li><p><strong>Pose-SlowOnly</strong></p>
 <p>详细架构见上图Pose Pathway，与原始版本对比没有下采样操作、res2层被移除、通道宽度减少到其原始值的一半。</p>
@@ -1450,23 +1450,23 @@ ret = pred × m + centroid
 <ul>
 <li><p>姿态：2D骨架<strong>VS</strong>3D骨架质量</p>
 <p>我们在两个数据集：NTU-60（第1行）和FineGYM（第2行）上可视化3D骨骼（通过传感器收集或使用最先进的估计器估计）和估计2D骨骼。3D骷髅偏移严重，而2D骨架具有优异的质量。 </p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220308191251370.png" alt="image-20220308191251370"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220308191251370.png" alt="image-20220308191251370"></p>
 <p>使用MSG3D[22]（基于骨架的动作识别的最新GCN），对2D和3D关键点使用相同的配置和训练，在动作识别中，<strong>估计的2D关键点（即使是低质量的）始终优于3D关键点（传感器收集或估计）。</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220308192019202.png" alt="image-20220308192019202"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220308192019202.png" alt="image-20220308192019202"></p>
 </li>
 <li><p>预处理相关</p>
-<p>均匀采样优于固定步长<img src="../md文档/基于关键节点的行为识别/picture/image-20220308200142920.png" alt="image-20220308200142920"></p>
+<p>均匀采样优于固定步长<img src="../md文档/基于骨骼的行为识别/picture/image-20220308200142920.png" alt="image-20220308200142920"></p>
 <p>而且均匀采样主要提高了数据集中较长视频的识别性能。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220308200853731.png" alt="image-20220308200853731"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220308200853731.png" alt="image-20220308200853731"></p>
 <p>热图关节还是四肢？根据我们保存的坐标，我们可以生成关节和肢体的伪热图。总的来说，我们发现关节的伪热图是3D-CNN更好的输入，而<strong>四肢的伪热图会导致类似或较差的性能</strong>。将两个分别在肢体和关节热图上训练的模型进行融合，可以进一步提高性能。</p>
 </li>
 <li><p><strong>为了测试这PoseC3D模型的稳健性，我们可以在输入中删除一部分关键点，看看这种扰动将如何影响最终的精度</strong>。并与其模型比较，通过在每一帧中以概率p随机删除1个肢体关键点来测试：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220308201357351.png" alt="image-20220308201357351"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220308201357351.png" alt="image-20220308201357351"></p>
 </li>
 <li><p>PoseC3D（Pose-Pathway） is better or comparable to previous state-of-the-arts.</p>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306224231481.png" alt="image-20220306224231481"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306224231481.png" alt="image-20220306224231481"></p>
 </li>
 <li><p><strong>补充</strong></p>
 <p>PoseC3D也可以处理3D骨骼数据。例如，分别使用（x，y）、（y，z）和（x，z）将三维骨架（x，y，z）划分为三个二维骨架。</p>
@@ -1488,11 +1488,11 @@ ret = pred × m + centroid
 </li>
 <li><strong>骨架时空图：</strong>该模型建立在一系列骨架图之上，其中每个节点对应于人体的一个关节。有两种类型的边，即符合关节自然连接性的<strong>空间边</strong>和跨连续时间步连接相同关节的<strong>时间边</strong>。在此基础上构造了多个时空图卷积层，使得信息能够沿空间和时间维度进行集成。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221123637172.png" alt="image-20220221123637172"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221123637172.png" alt="image-20220221123637172"></p>
 <ul>
 <li><p><strong>分区策略</strong></p>
 <p>在图卷积网络中，每个相邻节点上的特征向量将具有具有相同权重向量的内积。考虑<strong>通过分区策略来给不同的邻近节点分配不同的权重W</strong>。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306004047683.png" alt="image-20220306004047683"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306004047683.png" alt="image-20220306004047683"></p>
 <ul>
 <li><p>（a）输入框架的示例。身体关节用蓝点绘制。D=1的滤镜的感受野用红色虚线圆圈绘制。<strong>（注意，权重W☞后面gcn中W）</strong></p>
 </li>
@@ -1513,8 +1513,8 @@ ret = pred × m + centroid
 <li><p><strong>输入：</strong>(N , C, T, V, M)，N是batch_size；C是通道数（3个坐标）；T是帧数；V是关键节点数；M是单个帧中骨架数。</p>
 </li>
 <li><p><strong>模型</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220221124943045.png" alt="image-20220221124943045"></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306000114764.png" alt="image-20220306000114764"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220221124943045.png" alt="image-20220221124943045"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306000114764.png" alt="image-20220306000114764"></p>
 <p>我们对视频进行姿势估计，并在骨架序列上构建时空图。将应用多层时空图卷积（ST-GCN），并逐步在图上生成更高级别的特征图。然后，它将由标准Softmax分类器分类为相应的行为类别。</p>
 <ul>
 <li><p>Conv2d中数字表示<strong>卷积核的大小与输出通道数</strong></p>
@@ -1545,11 +1545,11 @@ self.st_gcn_networks = nn.ModuleList((
 <ul>
 <li><p><strong>Uni-labeling partitioning</strong>（单个权重分区策略）</p>
 <p>与一般图卷积运算一致。<strong>Λ</strong>表示归一化矩阵，<strong>W</strong>是可学习矩阵，并节点间共享。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306092748791.png" alt="image-20220306092748791"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306092748791.png" alt="image-20220306092748791"></p>
 </li>
 <li><p>对于具有多个权重的分区策略，<strong>即距离分区和空间配置分区</strong></p>
 <p>α 为0.01，防止归一化矩阵为0。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306093202778.png" alt="image-20220306093202778"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306093202778.png" alt="image-20220306093202778"></p>
 <p>现在邻接矩阵被分解成几个矩阵<strong>Aj</strong>，其中<strong>A+I=Aj之和</strong>。例如，<strong>在距离分割策略中，A0=I和A1=A</strong> 。</p>
 </li>
 <li><p><strong>优化：</strong>实现可学习的边缘重要性权重很简单。对于每个邻接矩阵，我们附带一个<strong>可学习的权重矩阵M</strong>。我们将等式中的矩阵A+I和矩阵Aj替换为（A+I）⊗ M和Aj⊗ M、 分别。在这里⊗ 表示两个矩阵之间的元素乘积。掩码M被初始化为一个全一矩阵。</p>
@@ -1564,7 +1564,7 @@ self.st_gcn_networks = nn.ModuleList((
 <ul>
 <li><p>Ablation Study</p>
 <p>ST-GCN中<strong>分区策略的效果对比</strong>，多个权重的分区会比单标记分区好。一些说明：distance partitioning*表示使用分区策略，但W1=-W0（相对于只有一个可学习权重）；ST-GCN + Imp表示使用(A + I) ⊗ M优化后的结果。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220308165622623.png" alt="image-20220308165622623"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220308165622623.png" alt="image-20220308165622623"></p>
 </li>
 </ul>
 </li>
@@ -1573,7 +1573,7 @@ self.st_gcn_networks = nn.ModuleList((
 </ul>
 <ul>
 <li><p><strong>NTU RGB+D</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220308165457816.png" alt="image-20220308165457816"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220308165457816.png" alt="image-20220308165457816"></p>
 </li>
 </ul>
 <h5 id="4-3-5-2-a-gcn-2019-cvpr-">4.3.5.2 A-GCN（2019 CVPR）</h5>
@@ -1596,7 +1596,7 @@ self.st_gcn_networks = nn.ModuleList((
 <li><p><strong>自适应图卷积层</strong> </p>
 <ul>
 <li><p>为了使图形结构自适应，我们提出了一种自适应图卷积层。它以端到端学习的方式，将图的拓扑结构与网络的其他参数一起优化。<strong>对于不同的层和样本，该图是唯一的</strong>，这大大增加了模型的灵活性。自适应图卷积公式：✨</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313232544110.png" alt="image-20220313232544110" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313232544110.png" alt="image-20220313232544110" style="zoom:80%;" /></p>
 </li>
 <li><p>主要区别在于图的邻接矩阵，它分为<strong>三部分：Ak、Bk和Ck：</strong></p>
 <ul>
@@ -1605,16 +1605,16 @@ self.st_gcn_networks = nn.ModuleList((
 <li><p>第二部分<strong>（Bk）</strong>也是一个<strong>N×N邻接矩阵</strong>。与Ak相比，Bk的元素在训练过程中与其他参数一起被参数化和优化。Bk的值没有限制，这意味着图形完全是<strong>根据训练数据学习的</strong>。通过这种数据驱动的方式，该模型可以学习完全针对识别任务的图形，并且对于不同层中包含的不同信息更加个性化。请注意，矩阵中的元素可以是任意值。它不仅表明两个接头之间存在连接，还表明连接的强度。</p>
 </li>
 <li><p>第三部分<strong>（Ck）</strong>是一个<strong>数据相关图，它为每个样本学习一个唯一的图。</strong>为了确定两个顶点之间是否存在连接以及连接的强度，我们应用归一化嵌入高斯函数来计算<strong>两个顶点的相似性</strong>：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313233059053.png" alt="image-20220313233059053" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313233059053.png" alt="image-20220313233059053" style="zoom:80%;" /></p>
 <p><strong>其中N是顶点的总数。我们使用点积来衡量嵌入空间中两个顶点的相似性。</strong>具体地说，给定尺寸为<strong>C~in~×T×N</strong>的输入特征映射f~in~，我们首先使用两个嵌入函数，<strong>即θ和φ，</strong>将其嵌入到<strong>Ce×T×N</strong>中。在这里，通过大量实验，我们选择了一个1×1卷积层作为嵌入函数。这两个嵌入的特征映射被重新排列和重塑为一<strong>个N×Ce*T 矩阵和一个Ce* T×N 矩阵。然后将它们相乘，得到N×N相似矩阵Ck</strong>，其元素<strong>C^ij^ k表示顶点vi和顶点vj的相似性。</strong>矩阵的值被归一化为0− 1，用作两个顶点的软边。由于归一化高斯函数配备了SOFTMAX运算，我们可以根据计算Ck：</p>
 </li>
 </ul>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313233552005.png" alt="image-20220313233552005" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313233552005.png" alt="image-20220313233552005" style="zoom:80%;" /></p>
 <ul>
 <li><p><strong>自适应图卷积层的图示。</strong>每一层共有三种图形，即Ak、Bk和Ck。<strong>橙色框表示该参数是可学习的</strong>。（1×1）表示卷积的核大小。Kv表示子集的数量。⊕ 表示元素相加。⊗ 表示matirx乘法。仅当Cin与Cout不同时，才需要残差框（虚线）。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313233957086.png" alt="image-20220313233957086" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313233957086.png" alt="image-20220313233957086" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>补充</strong>📢</p>
 <p><strong>我们没有直接用Bk或Ck替换原来的Ak，而是将它们添加到Ak中。</strong>Bk的值以及θ和φ的参数初始化为0。这样可以在不降低原有性能的前提下增强模型的灵活性。</p>
@@ -1623,11 +1623,11 @@ self.st_gcn_networks = nn.ModuleList((
 </li>
 <li><p><strong>自适应图卷积块 </strong></p>
 <p><strong>时间维度的卷积与ST-GCN相同</strong>，即在C×T×N特征图上执行Kt×1卷积。在空间GCN和时间GCN之后是批量标准化（BN）层和ReLU层。一个基本块是一个空间GCN（Convs）、一个时间GCN（Convt）和另一个丢弃层的组合，丢弃率设置为0.5。为了稳定训练，为每个区块添加一个残差连接 。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313234728832.png" alt="image-20220313234728832" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313234728832.png" alt="image-20220313234728832" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>自适应图卷积网络 </strong></p>
 <p>自适应图卷积网络（A-GCN）是基本块的堆栈，总共有9个街区。每个块的输出通道数为64、64、64、128、128、256、256和256。在开始处添加数据BN层，以规范化输入数据。在末端执行<strong>全局平均池层</strong>，以将不同样本的特征映射池到相同大小。最终输出被发送到Softmax分类器以获得预测。<strong>（每个块的三个数字分别代表输入通道数、输出通道数和步幅。）</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313234919943.png" alt="image-20220313234919943" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313234919943.png" alt="image-20220313234919943" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>双流网络</strong></p>
 <p><strong>输入：</strong></p>
@@ -1637,30 +1637,30 @@ self.st_gcn_networks = nn.ModuleList((
 </ol>
 <p><strong>补充：</strong>由于骨骼数据的图形没有循环，因此可以为每个骨骼指定唯一的目标关节。<strong>关节数比骨骼数多一个，</strong>因为中心关节未指定给任何骨骼。为了简化网络的设计，<strong>我们向中心关节添加一个值为0的空骨骼。</strong>通过这种方式，骨骼的图形和网络可以与关节的图形和网络设计相同，因为每个骨骼都可以与唯一的关节绑定。</p>
 <p><strong>模型：</strong>我们分别使用J-Stream和B-Stream来表示关节和骨骼的网络。整体架构（2sAGCN）如图。给定一个样本，我们首先根据关节数据计算骨骼数据。然后，将关节数据和骨骼数据分别输入J-Stream和B-Stream。最后，<strong>将两个流的SOFTMAX分数相加，得到融合分数并预测动作标签。</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313235149217.png" alt="image-20220313235149217" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313235149217.png" alt="image-20220313235149217" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>实验结果</strong></p>
 <p>(使用NTU-RGBD数据集上的X-View基准测试)</p>
 <ul>
 <li><p><strong>Adaptive graph convolutional block</strong></p>
 <p>自适应图卷积块中有3种类型的图，即A、B和C。我们<strong>手动删除其中一种图，并在选项卡中显示它们的性能。</strong>（wo/X表示删除X模块。）</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220314101810839.png" alt="image-20220314101810839" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220314101810839.png" alt="image-20220314101810839" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>Visualization of the learned graphs</strong></p>
 <p>左矩阵是NTU-RGBD数据集中第二个子集的<strong>原始邻接矩阵</strong>。右矩阵是我们的模型学<strong>习到的相应自适应邻接矩阵</strong>的一个例子</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220314104253464.png" alt="image-20220314104253464" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220314104253464.png" alt="image-20220314104253464" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>一个样本不同层的骨架图可视化</strong></p>
 <p>这些骨架是根据人体的物理联系绘制的。每个圆代表一个关节，它的大小代表我们模型的学习自适应图中当前关节和第25个关节之间的连接强度。研究表明，传统的人体物理连接并不是动作识别任务的最佳选择，<strong>不同的层次需要具有不同拓扑结构的图形。</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220314104514659.png" alt="image-20220314104514659" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220314104514659.png" alt="image-20220314104514659" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>相同层不同样本的骨架可视化</strong></p>
 <p>从模型第五层的第二个子集中提取学习到的邻接矩阵。结果表明，即使对于同一卷积子集和同一层，我们的模型<strong>对不同样本学习到的图结构也是不同的</strong>。它验证了我们的观点，即不同的样本需要不同的图拓扑，<strong>数据驱动的图结构优于固定的图结构。</strong> </p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220314104714509.png" alt="image-20220314104714509" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220314104714509.png" alt="image-20220314104714509" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>Two-stream framework</strong></p>
 <p>比较单独使用每种类型的输入数据的性能，显然，两流方法优于基于一流的方法。 </p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220314104826552.png" alt="image-20220314104826552" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220314104826552.png" alt="image-20220314104826552" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
@@ -1693,7 +1693,7 @@ self.st_gcn_networks = nn.ModuleList((
 <ul>
 <li>shift卷积过程相当于将原输入的矩阵在某个方向进行平移，这也是为什么该操作称之为shift的原因。虽然简单的平移操作似乎没有提取到空间信息，但是考虑到我们之前说到的，<strong>通道域是空间域信息的层次化扩散</strong>。因此通过设置不同方向的shift卷积核，可以将输入张量不同通道进行平移，随后配合1x1卷积实现跨通道的信息融合，即可实现空间域和通道域的信息提取。</li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313153347141.png" alt="image-20220313153347141" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313153347141.png" alt="image-20220313153347141" style="zoom:80%;" /></p>
 <ul>
 <li><p>CNN中的规则卷积核可以被视为几个逐点卷积核的融合，其中每个核在指定的位置上运行，如图（A）中不同颜色的显示。例如，一个3×3卷积核是9个逐点卷积核的融合。</p>
 </li>
@@ -1704,12 +1704,12 @@ self.st_gcn_networks = nn.ModuleList((
 </li>
 <li><p><strong>Spatial shift graph convolution</strong></p>
 <p>移位图操作的主要思想是将<strong>相邻节点的特征转移到当前卷积节点。</strong>具体来说，我们提出了两种移位图卷积：局部移位图卷积和非局部移位图卷积。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313161045545.png" alt="image-20220313161045545" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313161045545.png" alt="image-20220313161045545" style="zoom:80%;" /></p>
 <ul>
 <li><p><strong>局部移位图卷积</strong></p>
 <p>对于局部移位图卷积，<strong>感受野由人体的物理结构指定</strong>，该结构由骨架数据集预定义。</p>
 <p>在此设置中，移位图操作在身体物理图的相邻节点之间执行。因为身体关节之间的连接不像CNN特征那样有序，不同的节点有不同数量的邻居。设v表示一个节点，Bv={B^1^v，B^2^v，···，B^n^v}表示其相邻节点集，其中<strong>n表示v的相邻节点数</strong>。我们将<strong>节点v的通道平均划分为n+1个分区</strong>。我们让<strong>第一个分区保留v的特征。其他n个分区分别从B1v、B2v、···、Bnv转移</strong>。F维度<strong>(N,C)</strong>。我们在F的每个节点上进行移位操作 ：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313161636510.png" alt="image-20220313161636510" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313161636510.png" alt="image-20220313161636510" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>局部移位图卷积有两个缺点：</strong></p>
 <ol>
@@ -1724,7 +1724,7 @@ self.st_gcn_networks = nn.ModuleList((
 <li><p><strong>步骤：</strong>给定一个空间骨架特征图F（维度N×C），<strong>第i个通道的移位距离为i mod N</strong>。移位出的通道用于填充相应的空白。非局部移位后，该特征看起来像一个螺旋，使每个节点从所有其他节点获取信息，将<strong>非局部移位图运算与逐点卷积相结合</strong>，得到非局部移位图卷积。</p>
 </li>
 <li><p><strong>改进：</strong>在非局部移位图卷积中，<strong>不同节点之间的连接强度是相同的。</strong>但人类骨骼的重要性是不同的。因此，我们引入了一种<strong>自适应非局部移位机制</strong>。我们计算移位特征和可学习掩码之间的元素乘积： </p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313163330951.png" alt="image-20220313163330951" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313163330951.png" alt="image-20220313163330951" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
@@ -1748,7 +1748,7 @@ self.st_gcn_networks = nn.ModuleList((
 </li>
 <li><p><strong>自适应时间移位图卷积</strong> </p>
 <p>每个通道都有一个<strong>可学习的时间移位参数Si</strong>，i=1,2，···，C。我们将时间移位参数从整数约束放宽为实数。非整数移位可通过线性插值计算：</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313165659981.png" alt="image-20220313165659981" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313165659981.png" alt="image-20220313165659981" style="zoom:80%;" /></p>
 <p><strong>λ=Si− ⌊Si⌋</strong>. 这种操作是可微的，可以通过反向传播进行训练。</p>
 </li>
 </ul>
@@ -1756,7 +1756,7 @@ self.st_gcn_networks = nn.ModuleList((
 <li><p><strong>Spatiotemporal shift GCN</strong></p>
 <p>使用最先进的方法的主干（ST-GCN）来构建时空移位GCN。ST-GCN主干由一个输入块和9个残差时空图卷积块组成，其中每个块包含一个规则的空间卷积和一个规则的时间卷积。我们用<strong>空间移位运算和空间逐点卷积来代替规则的空间卷积</strong>。我们用<strong>时间移位操作和时间逐点卷积来代替常规的时间卷积</strong>。</p>
 <p>将移位运算与逐点卷积相结合有两种模式：shift-Conv和shift-Conv-Shift。Shift Conv Shift模式具有更大的感受野，实验证明可获得更好的性能。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313170121491.png" alt="image-20220313170121491" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313170121491.png" alt="image-20220313170121491" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>实验结果</strong></p>
 <ul>
@@ -1764,11 +1764,11 @@ self.st_gcn_networks = nn.ModuleList((
 <ol>
 <li><p><strong>Spatial shift graph convolution</strong></p>
 <p>我们将ST-GCN中的规则空间卷积替换为简单的点卷积，构建了一个轻量级的点式空间基线。我们的空间移位GCN和该逐点基线之间的唯一区别是插入空间移位操作。<strong>非局部移位图操作比局部移位图操作更有效。</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313172207964.png" alt="image-20220313172207964" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313172207964.png" alt="image-20220313172207964" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>Temporal shift graph convolution</strong></p>
 <p>我们将空间模型固定为ST-GCN的规则空间卷积，并评估不同时间模型的有效性和效率 。我们对常规时间卷积和朴素时间移位操作的最佳感受野进行了详尽的搜索。<strong>我们的自适应时间移位操作不需要麻烦的穷举搜索，并且优于其他两种方法的最佳结果。</strong>（Kt是卷积核大小）</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313172514845.png" alt="image-20220313172514845" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313172514845.png" alt="image-20220313172514845" style="zoom:80%;" /></p>
 </li>
 </ol>
 </li>
@@ -1784,7 +1784,7 @@ self.st_gcn_networks = nn.ModuleList((
 <li><p><strong>将多个流的softmax分数相加以获得融合分数。</strong>我们的时空移位GCN（shift-GCN）有三种设置：1-stream，它只使用联合流；2-stream，同时使用关节流和骨流；4-stream，它使用所有4个流。</p>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220313172856440.png" alt="image-20220313172856440" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220313172856440.png" alt="image-20220313172856440" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
@@ -1828,46 +1828,46 @@ self.st_gcn_networks = nn.ModuleList((
 <li><p><strong>自注意力</strong></p>
 <p><a href="https://zhuanlan.zhihu.com/p/340149804">Vision Transformer 超详细解读 (原理分析+代码解读) (一) - 知乎 (zhihu.com)</a></p>
 <p>其中Q、K和V是分别包含预测查询、键向量和值向量的矩阵，dk是键向量的<strong>通道维度</strong>。除√dk是为了在训练期间<strong>增加梯度稳定性</strong>。为了获得更好的表现，通常会采用一种称为多头注意的机制，该机制包括使用不同的可学习参数多次应用注意，即一个头部，然后将结果合并 。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306165309667.png" alt="image-20220306165309667"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306165309667.png" alt="image-20220306165309667"></p>
 </li>
 <li><p><strong>模型</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306163212013.png" alt="image-20220306163212013"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306163212013.png" alt="image-20220306163212013"></p>
 <ul>
 <li><p>输入<strong>(N , C, T, V, M)</strong>，N是batch_size；C是通道数（3个坐标）；T是帧数；V是关键节点数；M是单个帧中骨架数。相关处理同ST-GCN，==&gt;&gt;<strong>(N*M , C, T, V,)</strong></p>
 </li>
 <li><p>ST-GCN layer由一个GCN与TCN组成。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306165640471.png" alt="image-20220306165640471"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306165640471.png" alt="image-20220306165640471"></p>
 <p>TCN是卷积核为（K,1）的二维卷积操作；GCN有两种选择：</p>
 <ul>
 <li><p><strong>ST-GCN</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306165808194.png" alt="image-20220306165808194"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306165808194.png" alt="image-20220306165808194"></p>
 </li>
 <li><p><strong>A-GCN</strong></p>
 <blockquote>
 <p>Two-stream adaptive graph convolutional networks for skeleton-based action recognition（2019 CVPR）</p>
 </blockquote>
 <p>ST-GCN图形结构是预定义的，邻接矩阵是固定的。为了使其具有适应性。A-GCN做改进，其中Ak与等式1中的相同，Bk在训练期间学习，Ck通过相似性函数确定两个顶点是否连接 。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306165826218.png" alt="image-20220306165826218"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306165826218.png" alt="image-20220306165826218"></p>
 </li>
 </ul>
 </li>
 <li><p><strong>S-TR/T-TR</strong></p>
 <p>Kt是时间维度（TCN）上具有内核，根据输入顺序不同可能是（Kt,1）</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306170335663.png" alt="image-20220306170335663"></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306170511937.png" alt="image-20220306170511937"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306170335663.png" alt="image-20220306170335663"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306170511937.png" alt="image-20220306170511937"></p>
 </li>
 </ul>
 </li>
 <li><p><strong>Spatial Self-Attention (SSA)</strong></p>
 <p>空间自我注意模块在每个<strong>帧内</strong>应用自我注意，提取嵌入身体部位之间关系的低层特征。这是通过<strong>独立计算每一帧中每对关节之间的相关性</strong>来实现的。单个样本维度<strong>（1,C,V）</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306170821552.png" alt="image-20220306170821552"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306170821552.png" alt="image-20220306170821552"></p>
 <p>SSA模块的图示。通过在批次维度中<strong>移动T</strong>（T相当于batch_size）来重塑输入，从而使自我注意在每个时间帧上分别运作。SSA实现为矩阵乘法，其中Q、K和V分别是查询矩阵、键矩阵和值矩阵，以及⊗ 表示矩阵乘法。</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306171213379.png" alt="image-20220306171213379"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306171213379.png" alt="image-20220306171213379"></p>
 </li>
 <li><p><strong>Temporal Self-Attention (TSA)</strong></p>
 <p>使用时间自我注意（TSA）模块，沿着所有框架分别研究每个关节的动力学，即<strong>每个关节被视为独立的</strong>，通过比较同一身体关节沿时间维度嵌入的变化来计算框架之间的相关性，在时间上提取节点之间的帧间关系。单个样本维度<strong>（1,C,T）</strong></p>
 <p><strong>TSA的实现是同上面SSA图，唯一的区别是尺寸V对应于T和反之亦然</strong></p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306171011545.png" alt="image-20220306171011545"></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306171011545.png" alt="image-20220306171011545"></p>
 </li>
 <li><p><strong>实验结果</strong></p>
 <ul>
@@ -1882,11 +1882,11 @@ self.st_gcn_networks = nn.ModuleList((
 </ul>
 </li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220309141018564.png" alt="image-20220309141018564" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220309141018564.png" alt="image-20220309141018564" style="zoom:80%;" /></p>
 <ul>
 <li><strong>NTU RGB+D</strong></li>
 </ul>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220306212731504.png" alt="image-20220306212731504" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220306212731504.png" alt="image-20220306212731504" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>总结：</strong></p>
 <p>提出了一种新的方法，在骨骼活动识别中<strong>引入Transformer自我注意，作为图形卷积的替代</strong>。通过对NTU-60、NTU-120和动力学的大量实验，我们证明了我们的空间自我注意模块（SSA）可以取代图形卷积，实现更灵活和动态的表示。类似地，时间自注意模块（TSA）克服了标准卷积的严格局部性，能够提取动作的长期依赖性。</p>
@@ -1957,14 +1957,14 @@ Cross-Subject按照人物ID来划分训练集和测试集，训练集40320个样
 <p><a href="https://zhuanlan.zhihu.com/p/136047113">机器学习（十）：损失函数 - 知乎 (zhihu.com)</a></p>
 <p>MSE 损失收敛快但容易受 outlier 影响，MAE 对 outlier 更加健壮但是收敛慢。</p>
 <p><strong>Huber Loss</strong>则是一种将 MSE 与 MAE 结合起来，取两者优点的损失函数，也被称作 Smooth Mean Absolute Error Loss 。其原理很简单，就是在<strong>误差接近 0 时使用 MSE，误差较大时使用 MAE</strong>，公式为</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220226160401522.png" alt="image-20220226160401522" style="zoom:80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220226160401522.png" alt="image-20220226160401522" style="zoom:80%;" /></p>
 <blockquote>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220226160634130.png" alt="image-20220226160634130" style="zoom: 80%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220226160634130.png" alt="image-20220226160634130" style="zoom: 80%;" /></p>
 </blockquote>
 <h3 id="6-2-">6.2 自监督学习</h3>
 <h4 id="6-2-1-">6.2.1 对比学习</h4>
 <p>A simple framework for contrastive learning of visual representations</p>
-<p><img src="../md文档/基于关键节点的行为识别/picture/image-20220302145648801.png" alt="image-20220302145648801" style="zoom: 67%;" /></p>
+<p><img src="../md文档/基于骨骼的行为识别/picture/image-20220302145648801.png" alt="image-20220302145648801" style="zoom: 67%;" /></p>
 <h3 id="6-3-">6.3 网络优化</h3>
 <h4 id="6-3-1-shift-">6.3.1 Shift操作</h4>
 <p><a href="https://zhuanlan.zhihu.com/p/312348288">解读模型压缩4：你一定从未见过如此通俗易懂的模型压缩Shift操作解读 - 知乎 (zhihu.com)</a></p>
