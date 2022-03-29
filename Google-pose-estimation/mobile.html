@@ -13,7 +13,7 @@
 <body>
   <div class="container">
     <video hidden class="input_video"></video>
-    <canvas class="output_canvas" width="720px" height="1280px"></canvas>
+    <canvas class="output_canvas" width="1080px" height="2400px"></canvas>
   </div>
 <script type="module">
     const videoElement = document.getElementsByClassName('input_video')[0];
@@ -67,8 +67,8 @@
       onFrame: async () => {
         await pose.send({image: videoElement});
       },
-      width: 720,
-      height: 1280
+      width: 1080,
+      height: 2400
     });
     camera.start();
 </script>
