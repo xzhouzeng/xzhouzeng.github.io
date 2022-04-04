@@ -107,8 +107,8 @@
 <li><p><strong>基于模型的人体表示</strong></p>
 <p>基于模型的表示是根据人体固有的结构特征发展起来的。它提供了比基于关键点的描述更丰富的身体信息。</p>
 <ol>
-<li>基于零件的体积模型。开发基于零件的体积模型是为了应对现实中的挑战。如图（e）的蓝色模型所示，每个肢体都表示为圆柱体。通过将顶部和底部曲面中心与肢体的3D关键点对齐来定位每个圆柱体。类似地，如图（e）的粉红色模型所示，提出了一种椭圆体模型，将椭球体作为身体部位的基本单位。它比圆筒更灵活。</li>
-<li>详细的统计3D人体模型。与基于零件的体积模型相比，统计三维人体网格描述了更详细的信息，包括身体姿态和形状。我们介绍了应用最广泛的皮肤多人线性模型（SMPL），这是一种骨架驱动的人体模型。SMPL分离人体的形状和姿态，并将3D网格编码为低维参数。它建立了一个有效映射M（β，θ；Φ）：R |θ|×|β| 7→ R3×6890。从形状β和姿态θ到带有6890个顶点的三角网格，其中Φ表示人体的统计先验。形状参数β∈ R10是10种基本形状的线性组合权重。姿态参数θ∈ R3×23表示轴角度表示中23个关节的相对三维旋转。然后是线性回归∈ R6890×24用于推导预选的身体关节J∈ 通过J=M（β，θ；Φ）R，从人体网格的6890个顶点得到R3×24。该回归器的线性组合运算保证关节位置相对于形状β和姿态θ参数是可微的。</li>
+<li><strong>基于部位的体积模型。</strong>开发基于零件的体积模型是为了应对现实中的挑战。如图（e）的蓝色模型所示，每个肢体都表示为圆柱体。通过将顶部和底部曲面中心与肢体的3D关键点对齐来定位每个圆柱体。类似地，如图（e）的粉红色模型所示，提出了一种椭圆体模型，将椭球体作为身体部位的基本单位。它比圆筒更灵活。</li>
+<li><strong>详细的统计3D人体模型。</strong>与基于零件的体积模型相比，统计三维人体网格描述了更详细的信息，包括身体姿态和形状。我们介绍了应用最广泛的皮肤多人线性模型（SMPL），这是一种骨架驱动的人体模型。SMPL分离人体的形状和姿态，并将3D网格编码为低维参数。它建立了一个有效映射M（β，θ；Φ）：R |θ|×|β| 7→ R3×6890。从形状β和姿态θ到带有6890个顶点的三角网格，其中Φ表示人体的统计先验。形状参数β∈ R10是10种基本形状的线性组合权重。姿态参数θ∈ R3×23表示轴角度表示中23个关节的相对三维旋转。然后是线性回归∈ R6890×24用于推导预选的身体关节J∈ 通过J=M（β，θ；Φ）R，从人体网格的6890个顶点得到R3×24。该回归器的线性组合运算保证关节位置相对于形状β和姿态θ参数是可微的。</li>
 </ol>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220318170804798.png" alt="image-20220318170804798" style="zoom:80%;" /></p>
 </li>
@@ -335,10 +335,6 @@
 <p>Whole-body human pose estimation in the wild（2020 ECCV）</p>
 </blockquote>
 </li>
-</ul>
-</li>
-<li><p><strong>pose and parsing together</strong></p>
-<ul>
 <li><p><strong>[83]–[85]</strong>鉴于<strong>人类关键点和人类语义部分是相互关联和互补的</strong>，设计了多任务网络来联合预测关键点并分割语义部分。</p>
 <blockquote>
 <p>Multi-task human analysis in still images: 2d/3d pose, depth map, and multi-part segmentation（2019 FG）</p>
@@ -441,10 +437,6 @@
 <p>Pifpaf: Composite fields for human pose estimation（2019 CVPR）</p>
 </blockquote>
 </li>
-</ul>
-</li>
-<li><p><strong>whole body OpenPose</strong></p>
-<ul>
 <li><p><strong>[96]</strong>提出了第一种用于<strong>全身多人姿态估计</strong>的单网络方法，该方法可以同时定位图像中的身体、面部、手和脚关键点。</p>
 <blockquote>
 <p>Single-network whole-body pose estimation（2019 ICCV）</p>
@@ -581,7 +573,7 @@
 </ul>
 </li>
 </ul>
-<p>==视频中的多人姿势估计需要在多人遮挡、运动模糊、姿势和外观变化的情况下识别和定位关键点。为了利用时间线索，<strong>多人姿态估计通常与关节跟踪相关联。</strong>==</p>
+<p>==视频中的多人姿态估计需要在多人遮挡、运动模糊、姿态和外观变化的情况下识别和定位关键点。为了利用时间线索，<strong>多人姿态估计通常与关节跟踪相关联。</strong>==</p>
 </li>
 <li><p><strong>多人-Top-down</strong></p>
 <p>自上而下的方法<strong>遵循检测跟踪范式</strong>。它们首先检测每个帧中的人物和关键点，然后在帧之间传播边界框或关键点。</p>
@@ -602,7 +594,7 @@
 </li>
 <li><p><strong>Optical flow-based FlowTrack</strong></p>
 <ul>
-<li><p><strong>[16]</strong>中的工作<strong>独立地建立在单帧检测的基础上</strong>，并利用基于<strong>光流的时间姿势相似性</strong>来关联不同帧中的关键点。</p>
+<li><p><strong>[16]</strong>中的工作<strong>独立地建立在单帧检测的基础上</strong>，并利用基于<strong>光流的时间姿态相似性</strong>来关联不同帧中的关键点。</p>
 <blockquote>
 <p>Simple baselines for human pose estimation and tracking（2018 ECCV）</p>
 </blockquote>
@@ -616,7 +608,7 @@
 </li>
 <li><p><strong>Transformer-based keypoint tracker KeyTrack</strong></p>
 <ul>
-<li><p><strong>KeyTrack[113]</strong>提出了一种基于<strong>Transformer的跟踪器</strong>，它只依赖于15个关键点。基于变压器的网络利用二元分类来预测一个姿势是否在时间上跟随另一个姿势。 </p>
+<li><p><strong>KeyTrack[113]</strong>提出了一种基于<strong>Transformer的跟踪器</strong>，它只依赖于15个关键点。基于变压器的网络利用二元分类来预测一个姿态是否在时间上跟随另一个姿态。 </p>
 <blockquote>
 <p>15 keypoints is all you need（2020 CVPR）</p>
 </blockquote>
@@ -625,12 +617,12 @@
 </li>
 <li><p><strong>Recovering missing detection</strong></p>
 <ul>
-<li><p><strong>PGPT[114]</strong>为了<strong>应对单个帧中的缺失检测</strong>，提出将基于图像的检测器与在线人员位置预测器相结合，以补偿缺失的边界框。同时，PGPT引入了一个层次化的姿势引导图卷积网络，该网络利用人的结构关系来增强人的表示和数据关联。</p>
+<li><p><strong>PGPT[114]</strong>为了<strong>应对单个帧中的缺失检测</strong>，提出将基于图像的检测器与在线人员位置预测器相结合，以补偿缺失的边界框。同时，PGPT引入了一个层次化的姿态引导图卷积网络，该网络利用人的结构关系来增强人的表示和数据关联。</p>
 <blockquote>
 <p>Poseguided tracking-by-detection: Robust multi-person pose tracking（2020 TMM）</p>
 </blockquote>
 </li>
-<li><p><strong>[115]</strong>中的工作提出了<strong>自监督关键点对应</strong>，它不仅可以恢复丢失的姿势检测，还可以跨帧关联检测到的和恢复的姿势。</p>
+<li><p><strong>[115]</strong>中的工作提出了<strong>自监督关键点对应</strong>，它不仅可以恢复丢失的姿态检测，还可以跨帧关联检测到的和恢复的姿态。</p>
 <blockquote>
 <p>Self-supervised keypoint correspondences for multi-person pose estimation and tracking in videos（2020 ECCV）</p>
 </blockquote>
@@ -639,12 +631,12 @@
 </li>
 <li><p><strong>Learnable similarity metric (POINet [116] and [117].</strong></p>
 <ul>
-<li><p><strong>POINet[116]</strong>为了实现高效的数据关联，探索了一种姿势引导的ovonic insight网络，以在统一的端到端网络中学习特征提取、相似性度量和身份分配。</p>
+<li><p><strong>POINet[116]</strong>为了实现高效的数据关联，探索了一种姿态引导的ovonic insight网络，以在统一的端到端网络中学习特征提取、相似性度量和身份分配。</p>
 <blockquote>
 <p>POINet: pose-guided ovonic insight network for multi-person pose tracking（2019 ACM MM）</p>
 </blockquote>
 </li>
-<li><p><strong>[117]</strong>是可学习相似性度量的另一项工作，时间关键点匹配和关键点细化分别用于关键点关联和姿势校正。它们都是可学习的，并被整合到姿势估计网络中。</p>
+<li><p><strong>[117]</strong>是可学习相似性度量的另一项工作，时间关键点匹配和关键点细化分别用于关键点关联和姿态校正。它们都是可学习的，并被整合到姿态估计网络中。</p>
 <blockquote>
 <p>Temporal keypoint matching and refinement network for pose estimation and tracking（2020 ECCV）</p>
 </blockquote>
@@ -658,7 +650,7 @@
 <ul>
 <li><p><strong>Graph partitioning-based model</strong></p>
 <ul>
-<li><p><strong>[118]、[119]、[137]</strong>中基于图分割的方法首先扩展了图像级自底向上的多人姿势估计。然后，他们建立了一个时空图，将关键点候选点在空间和时间上连接起来，可以将其表述为一个线性规划问题</p>
+<li><p><strong>[118]、[119]、[137]</strong>中基于图分割的方法首先扩展了图像级自底向上的多人姿态估计。然后，他们建立了一个时空图，将关键点候选点在空间和时间上连接起来，可以将其表述为一个线性规划问题</p>
 <blockquote>
 <p>Posetrack: Joint multi-person pose estimation and tracking（2017 CVPR）</p>
 <p>Arttrack: Articulated multi-person tracking in the wild（2017 CVPR）</p>
@@ -743,7 +735,7 @@
 </li>
 <li><p>利用“<strong>各个关键点以一致的几何配置出现</strong>”这一事实，后续阶段的预测器可以使用图像上位置z周围区域的带噪heatmaps生成空间上下文信息来提高预测结果。</p>
 </li>
-<li><p>第二阶段网络输出层的感受野必须足够大，以保证网络具有学习各个关键点间复杂和长距离关系的潜力。大的感受野可以通过池化操作得到（但要牺牲精度），也可以通过增大卷积核的尺寸来实现（会增加参数数量），也可以通过增加卷积层层数实现（训练的时候可能会遇到梯度消失的风险）。</p>
+<li><p>第二阶段网络<strong>输出层的感受野必须足够大</strong>，以保证网络具有<strong>学习各个关键点间复杂和长距离关系</strong>的潜力。大的感受野可以通过<strong>池化操作得到</strong>（但要牺牲精度），也可以通过<strong>增大卷积核的尺寸</strong>来实现（会增加参数数量），也可以通过增<strong>加卷积层层数</strong>实现（训练的时候可能会遇到梯度消失的风险）。</p>
 </li>
 <li><p><strong>输入包含三部分</strong>，（1）原图（2）stage1输出的heatmap（3）每个目标的中心约束map（见下图中的small center map）； 输出的是P+1通道的heatmaps。</p>
 </li>
@@ -764,7 +756,7 @@
 <ul>
 <li><p><strong>输入：</strong>为了达到一定的精度，我们将输入的裁剪图像规格化为<strong>368×368</strong>。</p>
 </li>
-<li><p><strong>损失函数：</strong>上述姿势机器的设计产生了一个可以有大量层的深层架构。训练这样一个具有许多层的网络可能容易出现梯度消失的问题，使用中间监督。p部分的<strong>belief-map</strong>写为<strong>b^p^∗（Yp=z）</strong>，通过将高斯峰置于每个身体部位p的地面真值位置来创建。因此，我们旨在使每个级别的<strong>每个阶段的输出最小化的成本函数</strong>如下所示： </p>
+<li><p><strong>损失函数：</strong>上述姿态机器的设计产生了一个可以有大量层的深层架构。训练这样一个具有许多层的网络可能容易出现梯度消失的问题，使用中间监督。p部分的<strong>belief-map</strong>写为<strong>b^p^∗（Yp=z）</strong>，通过将高斯峰置于每个身体部位p的地面真值位置来创建。因此，我们旨在使每个级别的<strong>每个阶段的输出最小化的成本函数</strong>如下所示： </p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220321102924612.png" alt="image-20220321102924612" style="zoom:80%;" /></p>
 <p><strong>整个架构的总体目标</strong>是通过增加每个阶段的损失来实现的，具体如下所示： </p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220321103050552.png" alt="image-20220321103050552" style="zoom:80%;" /></p>
@@ -804,15 +796,15 @@
 <p>2d/3d pose estimation and action recognition using multitask deep learning</p>
 </blockquote>
 <ul>
-<li><p><strong>出发点：</strong>行为识别和人体姿势估计密切相关，但在文献中，这两个问题通常作为不同的任务处理。</p>
+<li><p><strong>出发点：</strong>行为识别和人体姿态估计密切相关，但在文献中，这两个问题通常作为不同的任务处理。</p>
 <ul>
-<li>相关任务可以相互受益，在这项工作提出了一个<strong>多任务框架</strong>。用于从静止图像中联合估计二维和三维姿势，以及从视频序列中识别人体行为。</li>
-<li>因为大多数姿势估计方法都执行热图预测。这些基于检测的方法需要使用<strong>不可微的argmax函数</strong>来恢复关节坐标，作为后处理阶段，这打破了端到端学习所需的反向传播链。我们建议通过扩展<strong>可微soft-argmax</strong>来解决这个问题，用于关节二维和三维姿态估计。这使我们能够在姿势估计的基础上叠加行为识别，从而形成一个<strong>端到端可训练</strong>的多任务框架。</li>
+<li>相关任务可以相互受益，在这项工作提出了一个<strong>多任务框架</strong>。用于从静止图像中联合估计二维和三维姿态，以及从视频序列中识别人体行为。</li>
+<li>因为大多数姿态估计方法都执行热图预测。这些基于检测的方法需要使用<strong>不可微的argmax函数</strong>来恢复关节坐标，作为后处理阶段，这打破了端到端学习所需的反向传播链。我们建议通过扩展<strong>可微soft-argmax</strong>来解决这个问题，用于关节二维和三维姿态估计。这使我们能够在姿态估计的基础上叠加行为识别，从而形成一个<strong>端到端可训练</strong>的多任务框架。</li>
 <li>所提出的体系结构可以无缝地<strong>同时使用来自不同类别的数据进行训练。</strong>在四个数据集（MPII、Human3.6M、Penn Action和NTU）上报告的结果证明了我们的方法对目标任务的有效性。 </li>
 </ul>
 </li>
 <li><p><strong>整体结构</strong></p>
-<p>一种用于姿态估计和行为识别的多任务方法。从单个图像或帧序列中提供2D/3D姿势估计。姿势和视觉信息用于在统一的框架中预测行为。</p>
+<p>一种用于姿态估计和行为识别的多任务方法。从单个图像或帧序列中提供2D/3D姿态估计。姿态和视觉信息用于在统一的框架中预测行为。</p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220320143842419.png" alt="image-20220320143842419" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>Human pose estimation</strong></p>
@@ -820,7 +812,7 @@
 <ul>
 <li><p>网络体系结构的入口流程基于<strong>Inception-V4</strong>，用于提供基本特征提取。</p>
 </li>
-<li><p>K个预测块被用于<strong>细化估计</strong>，从中我们使用最后一个预测p^k^作为我们的估计姿势p。每个预测块由八个残差深度方向的卷积组成，<strong>分成三个不同的分辨率</strong>。作为副产品，我们还可以访问低级视觉特征和中间联合概率图。</p>
+<li><p>K个预测块被用于<strong>细化估计</strong>，从中我们使用最后一个预测p^k^作为我们的估计姿态p。每个预测块由八个残差深度方向的卷积组成，<strong>分成三个不同的分辨率</strong>。作为副产品，我们还可以访问低级视觉特征和中间联合概率图。</p>
 </li>
 <li><p>这些都是通过<strong>soft-argmax层</strong>间接学习到的。</p>
 <ul>
@@ -833,7 +825,7 @@
 </li>
 </ul>
 </li>
-<li><p><strong>3D姿态估计：</strong>通过将<strong>二维热图扩展到体积表示</strong>，我们将二维姿势回归扩展到三维场景。我们定义了与深度分辨率相对应的<strong>Nd</strong>叠加二维热图。（x，y）坐标中的预测是通过对平均热图应用Soft-argmax操作来执行的，而z分量是通过对x和y维度中的平均体积表示应用一维Soft argmax来回归的。</p>
+<li><p><strong>3D姿态估计：</strong>通过将<strong>二维热图扩展到体积表示</strong>，我们将二维姿态回归扩展到三维场景。我们定义了与深度分辨率相对应的<strong>Nd</strong>叠加二维热图。（x，y）坐标中的预测是通过对平均热图应用Soft-argmax操作来执行的，而z分量是通过对x和y维度中的平均体积表示应用一维Soft argmax来回归的。</p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220320142042611.png" alt="image-20220320142042611" style="zoom:80%;" /></p>
 </li>
 <li><p><strong>详细模型结构</strong></p>
@@ -844,7 +836,7 @@
 <li><p>基于<strong>Inception-V4</strong>的共享网络（入口流）。C：卷积，SR：可分离残差模块。</p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220320142717545.png" alt="image-20220320142717545" style="zoom:80%;" /></p>
 </li>
-<li><p>姿势估计的<strong>预测块</strong>，其中Nd是每个关节的深度热图数，NJ是身体关节数。C：卷积，SR：可分离残差模块。</p>
+<li><p>姿态估计的<strong>预测块</strong>，其中Nd是每个关节的深度热图数，NJ是身体关节数。C：卷积，SR：可分离残差模块。</p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220320142926480.png" alt="image-20220320142926480" style="zoom:80%;" /></p>
 </li>
 </ul>
@@ -852,26 +844,26 @@
 </ul>
 </li>
 <li><p><strong>Human action recognition</strong>
-提议的行为识别方法分为两部分，一部分基于身体关节坐标序列，我们称之为<strong>基于姿势的识别</strong>，另一部分基于视觉特征序列，我们称之为<strong>基于外观的识别</strong>。将每个部分的结果结合起来，以估计最终行动标签。</p>
+提议的行为识别方法分为两部分，一部分基于身体关节坐标序列，我们称之为<strong>基于姿态的识别</strong>，另一部分基于视觉特征序列，我们称之为<strong>基于外观的识别</strong>。将每个部分的结果结合起来，以估计最终行动标签。</p>
 <ul>
 <li><p><strong>Pose-based recognition</strong></p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220320150101999.png" alt="image-20220320150101999" style="zoom:80%;" /></p>
 <ul>
-<li><p>为了探索身体关节位置编码的高级信息，我们将一系列<strong>具有NJ关节的T姿势转换为类似图像的表示</strong>。我们选择将时间维度编码为垂直轴，将关节编码为水平轴，并将每个点的坐标（（x，y）编码为2D，（x，y，z）编码为3D）作为通道。</p>
+<li><p>为了探索身体关节位置编码的高级信息，我们将一系列<strong>具有NJ关节的T姿态转换为类似图像的表示</strong>。我们选择将时间维度编码为垂直轴，将关节编码为水平轴，并将每个点的坐标（（x，y）编码为2D，（x，y，z）编码为3D）作为通道。</p>
 </li>
 <li><p>通过这种方法，我们可以使用<strong>经典的二维卷积直接从身体关节的时间序列中提取模式</strong>。由于姿态估计方法基于静止图像，我们使用时间分布的抽象来处理视频片段，这是一种处理单个图像和视频序列的简单技术。</p>
 </li>
-<li><p>为了产生视频剪辑每个行为的输出概率，必须在行为图上执行一个池操作。为了对每个行为的最强响应更敏感，我们使用<strong>max plus min pooling</strong>，然后使用Softmax激活。此外，受人体姿势回归方法的启发，我们通过在<strong>K个预测块中使用具有中间监督的堆叠结构来细化预测</strong>。然后将每个预测块的行为热图重新注入下一个行为识别块。</p>
+<li><p>为了产生视频剪辑每个行为的输出概率，必须在行为图上执行一个池操作。为了对每个行为的最强响应更敏感，我们使用<strong>max plus min pooling</strong>，然后使用Softmax激活。此外，受人体姿态回归方法的启发，我们通过在<strong>K个预测块中使用具有中间监督的堆叠结构来细化预测</strong>。然后将每个预测块的行为热图重新注入下一个行为识别块。</p>
 </li>
 <li><p><strong>详细模型结构</strong></p>
-<p>用于行为识别的网络架构。行为预测块可以重复<strong>K</strong>次。<strong>同样的架构用于姿势和外观识别</strong>，除了姿势，每个卷积使用这里显示的特征数量的一半。T表示帧数，<strong>Na表示行为数</strong>。 </p>
+<p>用于行为识别的网络架构。行为预测块可以重复<strong>K</strong>次。<strong>同样的架构用于姿态和外观识别</strong>，除了姿态，每个卷积使用这里显示的特征数量的一半。T表示帧数，<strong>Na表示行为数</strong>。 </p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220320150229912.png" alt="image-20220320150229912" style="zoom:80%;" /></p>
 </li>
 </ul>
 </li>
 <li><p><strong>Appearance-based recognition</strong></p>
 <ul>
-<li><p>外观特征被输入行为识别网络，<strong>类似于基于姿势的动作识别块</strong>，不同之处在于它依赖于局部外观特征，而不是关节坐标，即视觉特征取代身体关节的坐标。</p>
+<li><p>外观特征被输入行为识别网络，<strong>类似于基于姿态的动作识别块</strong>，不同之处在于它依赖于局部外观特征，而不是关节坐标，即视觉特征取代身体关节的坐标。</p>
 <p>==构建外观特征输入==</p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220320151028438.png" alt="image-20220320151028438" style="zoom:80%;" /></p>
 </li>
@@ -879,7 +871,7 @@
 </li>
 <li><p>我们没有像克罗内克乘积那样单独乘以每个值，<strong>而是将每个通道相乘</strong>，得到大小为<strong>（Wf×Hf×NJ×Nf）的张量</strong>。然后，空间维度被一个<strong>和折叠</strong>，从而得到<strong>一个时间t的外观特征</strong>，大小为<strong>（NJ×Nf）</strong>。对于一系列帧，我们将t={0，1，…，t}的每个外观特征连接起来，从而得到<strong>视频片段外观特征V（T×NJ×Nf）</strong>。</p>
 </li>
-<li><p>我们的多任务框架对于基于外观的部分有两个好处：</p>
+<li><p>我们的多任务框架<strong>对于基于外观的部分有两个好处：</strong></p>
 <ol>
 <li>第一，由于大部分计算是共享的，因此它在计算上非常高效。</li>
 <li>第二，提取的视觉特征更加健壮，因为它们针对不同的任务和不同的数据集同时进行训练。 </li>
@@ -889,22 +881,22 @@
 </li>
 <li><p><strong>Action aggregation</strong></p>
 <ul>
-<li><strong>一些动作很难仅通过高水平的姿势表示来区分。</strong>例如，如果我们只考虑身体关节，喝水和打电话的动作非常相似，但如果我们有与杯子和电话对应的视觉信息，则很容易将其分离。另一方面，<strong>其他动作与视觉信息没有直接关系，但与身体动作有关，</strong>如敬礼和触摸胸部，在这种情况下，姿势信息可以提供补充信息。</li>
-<li>为了探索姿势和外观模型的贡献，我们使用一个<strong>完全连接的层和Softmax激活将各自的预测结合起来，</strong>从而给出我们模型的最终预测。 </li>
+<li><strong>一些动作很难仅通过高水平的姿态表示来区分。</strong>例如，如果我们只考虑身体关节，喝水和打电话的动作非常相似，但如果我们有与杯子和电话对应的视觉信息，则很容易将其分离。另一方面，<strong>其他动作与视觉信息没有直接关系，但与身体动作有关，</strong>如敬礼和触摸胸部，在这种情况下，姿态信息可以提供补充信息。</li>
+<li>为了探索姿态和外观模型的贡献，我们使用一个<strong>完全连接的层和Softmax激活将各自的预测结合起来，</strong>从而给出我们模型的最终预测。 </li>
 </ul>
 </li>
 </ul>
 </li>
 <li><p><strong>训练过程</strong></p>
 <ul>
-<li>我们使用RMSprop优化器<strong>优化姿势回归部分，</strong>初始学习率为0.001，当验证分数稳定时，初始学习率降低了0.2倍，并批量生成24幅图像。</li>
-<li>对于动作识别任务，我们使用<strong>预先训练好的姿势估计模型</strong>同时训练姿势和外观模型，<strong>初始权重为冻结。</strong>在这种情况下，我们使用了一个经典的SGD优化器，Nesterov动量为0.98，初始学习率为0.0002，在验证平稳时减少了0.2倍，并使用了一批2个视频剪辑。</li>
+<li>我们使用RMSprop优化器<strong>优化姿态回归部分，</strong>初始学习率为0.001，当验证分数稳定时，初始学习率降低了0.2倍，并批量生成24幅图像。</li>
+<li>对于动作识别任务，我们使用<strong>预先训练好的姿态估计模型</strong>同时训练姿态和外观模型，<strong>初始权重为冻结。</strong>在这种情况下，我们使用了一个经典的SGD优化器，Nesterov动量为0.98，初始学习率为0.0002，在验证平稳时减少了0.2倍，并使用了一批2个视频剪辑。</li>
 <li><strong>当验证准确性停滞时</strong>，我们将最终学习率除以10，并<strong>对整个网络进行微调</strong>，使其持续5个epochs以上。</li>
 </ul>
 </li>
 <li><p><strong>损失函数</strong></p>
 <ul>
-<li><p>对于姿势估计任务，我们在预测姿势上使用弹性净损失函数对网络进行训练：</p>
+<li><p>对于姿态估计任务，我们在预测姿态上使用弹性净损失函数对网络进行训练：</p>
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220320152812862.png" alt="image-20220320152812862" style="zoom:80%;" /></p>
 <p>==式中，ˆpn和pn分别是第n个关节的估计位置和真值位置。==</p>
 </li>
@@ -921,7 +913,7 @@
 <ol>
 <li>首先，多个预测块提供了对动作准确性的持续改进，</li>
 <li>其次，由于我们的完全可微架构，我们可以将模型从RGB帧微调到预测动作，从而显著提高准确性。</li>
-<li>第三，所提出的方法还受益于互补的外观和姿势信息，这些信息在聚合后可以提高分类精度。 </li>
+<li>第三，所提出的方法还受益于互补的外观和姿态信息，这些信息在聚合后可以提高分类精度。 </li>
 </ol>
 </li>
 </ul>
@@ -939,6 +931,127 @@
 <blockquote>
 <p>Toward fast and accurate human pose estimation via soft-gated skip connections</p>
 </blockquote>
+<h4 id="scnet-2020-cvpr-">SCNet (2020 CVPR)</h4>
+<h4 id="udp-2020-cvpr-">UDP (2020 CVPR)</h4>
+<h4 id="litehrnet-2021-cvpr-">LiteHRNet (2021 CVPR)</h4>
+<blockquote>
+<p>Lite-HRNet: A Lightweight High-Resolution Network</p>
+</blockquote>
+<ul>
+<li><p><strong>出发点：</strong>人体姿势估计<strong>需要高分辨率表示才能实现高性能</strong>。基于对模型效率的日益增长的需求，本文研究了<strong>在计算资源有限的情况下开发高效高分辨率模型</strong>的问题。</p>
+<ul>
+<li>现有的<strong>高效网络</strong>主要从两个角度进行设计：<ul>
+<li>一种是<strong>借用分类网络的设计</strong>，如MobileNet和ShuffleNet，以减少矩阵向量乘法中的冗余，其中卷积运算占主要成本。</li>
+<li>另一种是通过各种技巧来<strong>调解空间信息丢失</strong>，例如编码器-解码器架构和多分支架构。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>本文贡献：</strong></p>
+<ul>
+<li>我们首先通过<strong>简单地结合ShuffleNet中的shuffle块和HRNet中的高分辨率设计模式</strong>来研究一个简单的轻量级网络。在位置敏感问题中，HRNet在大型模型中表现出更强的能力，例如语义分割、人体姿势估计和目标检测。目前尚不清楚高分辨率是否有助于小型模型。我们的经验表明，<strong>直接组合优于ShuffleNet、MobileNet和Small HRNet1。</strong></li>
+<li>为了进一步实现更高的效率，我们引入了一个<strong>高效的单元</strong>，称为<strong>conditional channel weighting</strong>，用于执行跨信道的信息交换，以<strong>取代shuffle块中代价高昂的逐点（1×1）卷积</strong>。引入高效单元后网络称为 <strong>Lite-HRNet</strong>。性能优于shuffle块和HRNet的简单组合（naive-Lite-HRNet）。<ul>
+<li>conditional channel weighting非常有效：其<strong>复杂度与信道数呈线性关系</strong>，低于<strong>逐点卷积的二次时间复杂度</strong>。例如，利用64×64×40和32×32×80的多分辨率特性，conditional channel weighting 单元可以将shuffle块的整体计算复杂度降低80%。</li>
+<li>我们的解决方案<strong>从所有通道和多个分辨率中学习权重</strong>，这些分辨率在HRNet的并行分支中随时可用。它使用权重作为桥梁，在通道和分辨率之间交换信息，补偿逐点（1×1）卷积所起的作用。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Naive Lite-HRNet</strong></p>
+<ul>
+<li><p><strong>Shuffle blocks</strong></p>
+<p>ShuffleNet V2中的shuffle块首先将通道分割为两个分区。一个分区经过1×1卷积、3×3深度卷积和1×1卷积序列，输出与另一个分区连接。最后，串接的通道被shuffle。下图a。</p>
+<blockquote>
+<p>其中的DWConv表示的是Depthwise convolution，其输入和输入通道数相同，并且每个卷积核只与一个特征通道进行卷积，其使用线性激活函数。DWConv实现时将groups属性设置为和out_channels相同即可。</p>
+<p><img src="../md文档/2D人体姿态估计/picture/v2-84c5ef30263c13eadd528fe3a423a8bb_r.jpg" alt="查看源图像" style="zoom:80%;" /></p>
+</blockquote>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404102632218.png" alt="image-20220404102632218" style="zoom:80%;" /></p>
+<p>（a）shuffle块。（b） 我们的conditional channel weighting块。虚线表示其他分辨率的表示以及分配给其他分辨率的权重。H=交叉分辨率加权函数。F=空间加权函数。 </p>
+</li>
+<li><p><strong>Small HRNet-W16</strong></p>
+<p>它由一个高分辨率的stem（由两个步幅为2的3×3的卷积组成）作为第一级，逐渐增加高分辨率到低分辨率的流作为主体。主体有一系列阶段，每个阶段包含平行的多分辨率流和重复的多分辨率融合。</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404103351868.png" alt="image-20220404103351868" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>Simple combination</strong></p>
+<p>我们采用Shuffle blocks替换small HRNet主干中的<strong>第二个3×3卷积</strong>，并替换所有正常的<strong>residual blocks</strong>（由两个3×3卷积组成）。多分辨率融合中的正常卷积被可<strong>分离卷积</strong>所取代，从而形成了一个 <strong>naive Lite-HRNet</strong>。 </p>
+</li>
+</ul>
+</li>
+<li><p><strong>1×1 convolution is costly</strong></p>
+<p>1×1卷积相对于信道数（C）具有二次时间复杂度（Θ（C^2^））。3×3 DWconv具有线性时间复杂度（Θ（9C）。在shuffle块中，两个1×1卷积的复杂度远高于深度卷积：对于通常情况C&gt;5，Θ（2C2）&gt;Θ（9C）。</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404105648494.png" alt="image-20220404105648494" style="zoom: 67%;" /></p>
+</li>
+<li><p><strong>Conditional channel weighting</strong></p>
+<p>我们建议在naive Lite HRNet中使用<strong>元素加权操作来代替1×1卷积</strong>，后者在第s阶段具有s分支。第s解析分支的元素加权操作写为：</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404110702551.png" alt="image-20220404110702551" style="zoom:80%;" /></p>
+<p>其中，Ws是一个权重图，一个大小为<strong>Ws×Hs×Cs</strong>的三维张量，以及⊙ 是<strong>按元素的乘法运算符</strong>。复杂度与通道数Θ（C）成线性关系，远低于shuffle块中的1×1卷积。我们通过使用<strong>单个分辨率</strong>的通道和<strong>所有分辨率</strong>的通道来计算权重Ws，如上图（b）所示，并表明权重在通道和分辨率之间起着交换信息的作用。 </p>
+<p>两种条件通道加权（即两种计算Ws方法）：</p>
+<ul>
+<li><p><strong>Cross-resolution weight computation</strong></p>
+<ul>
+<li>考虑到第s级，有s个平行分辨率和s个权重图W1，W2，Ws，每个都对应于相应的分辨率。我们使用一个轻量级函数Hs（·）计算所有通道在不同分辨率下的s权重图：</li>
+</ul>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404110926411.png" alt="image-20220404110926411" style="zoom:80%;" /></p>
+<ul>
+<li><p>轻量级函数Hs（·）实现：</p>
+<ol>
+<li><p>其中{X1，…，Xs}是s分辨率的输入映射<strong>。X1对应于最高分辨率，Xs对应于第s个最高分辨率</strong>。我们在{X1，X2，…，Xs−1}上执行<strong>自适应平均池（AAP）</strong> ：<strong>X′1=AAP（X1）</strong>，X′2=AAP（X2），X&#39;s−1=AAP（Xs−1） ，其中AAP将任何输入大小合并为给定的<strong>输出大小Ws×Hs</strong>。然后我们连接{X′1，X′2，…，X′s−1} 和Xs一起。</p>
+</li>
+<li><p>然后经过如下运输，Conv是<strong>1x1 Conv</strong>：</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404111122743.png" alt="image-20220404111122743" style="zoom:80%;" /></p>
+<p><strong>生成由s分区</strong>、W′1、W′2，W‘s（每种分辨率对应一种)。</p>
+</li>
+<li><p>s− 1权重图，W′1，W′2，W&#39;s−1，被<strong>上采样到相应的分辨率</strong>，输出W1，W2，Ws−1，用于后续的元素通道加权。 </p>
+</li>
+</ol>
+</li>
+<li><p><strong>优点：</strong></p>
+<ol>
+<li>位置i处的权重向量wsi的每个元素（来自权重映射Ws）从<strong>在所有分辨率下，从同一位置的所有输入通道接收信息。</strong></li>
+<li>Hs（·）应<strong>用于小分辨率，因此计算复杂度很低。</strong></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>Spatial weight computation</strong></p>
+<p>对于每个分辨率，我们还计算与空间位置一致的空间权重：所有位置的权重向量wsi都是相同的。<strong>权重取决于单个分辨率中输入通道的所有像素：</strong> </p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404120711182.png" alt="image-20220404120711182" style="zoom:80%;" /></p>
+<p>这里，函数Fs（·）被实现如下。全局平均池（GAP）操作符用于从所有位置收集空间信息。数据维度(1*1*C)=GAP(H*W*C)</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404120724777.png" alt="image-20220404120724777" style="zoom:80%;" /></p>
+</li>
+</ul>
+</li>
+<li><p><strong>实例</strong></p>
+<p>Lite HRNet由高分辨率stem和主体组成，以保持高分辨率表示。茎部有一个步幅2的3×3卷积，和一个shuffle块，作为第一阶段。主体部分有一系列模块化模块。 每个模块包括两个条件信道加权块和一个多分辨率融合。每个分辨率分支的通道尺寸分别为C、2C、4C和8C。Lite-HRNet-N中的N表示层数。( ccw = conditional channel weight)</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404122720295.png" alt="image-20220404122720295" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>计算复杂度比较 </strong></p>
+<p>存疑🤔</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404124135531.png" alt="image-20220404124135531" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>参数计算：</strong></p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404125309462.png" alt="image-20220404125309462" style="zoom: 80%;" /></p>
+</li>
+<li><p><strong>实验结果</strong></p>
+<p>我们的Lite-HRNet-30达到69.7 AP分数。它明显<strong>优于小型网络</strong>，并且在GFLOP和参数方面更有效。与大型网络相比，我们的Lite-HRNet-30优于Mask RCNN、G-RMI和Integral Pose Regression。虽然与一些大型网络存在性能差距，但我们的网络的GFLOP和参数要低得多。 </p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404125532766.png" alt="image-20220404125532766" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>Ablation Study</strong></p>
+<ul>
+<li><p><strong>Lite-HRNet vs. Small HRNet/ Naive Lite-HRNet</strong></p>
+<p>wider naive Lite-HRNet是增加层使参数与small HRNet-W16一致作比较。</p>
+</li>
+</ul>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404125918315.png" alt="image-20220404125918315" style="zoom:80%;" /></p>
+<ul>
+<li><p><strong>Spatial and multi-resolution weights</strong></p>
+<p>我们通过改变空间加权和交叉分辨率加权的排列顺序进行了实验，获得了类似的性能。仅使用两个空间权重或两个交叉分辨率权重的实验几乎会导致0.3的下降。 </p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404130559120.png" alt="image-20220404130559120" style="zoom:80%;" /></p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="vipnas-2021-cvpr-">ViPNAS (2021 CVPR)</h4>
 <h4 id="prtr-2021-cvpr-">PRTR（2021 CVPR）</h4>
 <blockquote>
 <p>Pose Recognition with Cascade Transformers</p>
@@ -967,7 +1080,116 @@
 <h4 id="hrnet-2019-cvpr-">HRNet（2019 CVPR）</h4>
 <blockquote>
 <p>Deep high-resolution representation learning for human pose estimation</p>
+<p>Deep High-Resolution Representation Learning for Visual Recognition</p>
 </blockquote>
+<p><strong>解读：</strong><a href="https://zhuanlan.zhihu.com/p/134253318">https://zhuanlan.zhihu.com/p/134253318</a></p>
+<p><strong>code：</strong><a href="https://github.com/HRNet">HRNet (github.com)</a></p>
+<ul>
+<li><p><strong>当前网络局限：</strong></p>
+<ul>
+<li>大多数现有方法通过网络传递输入，通常由<strong>串联的高到低分辨率子网络组成，然后提高分辨率。</strong></li>
+<li>最新开发的分类网络，包括AlexNet、VGGNet、GoogleNet、ResNet等，都遵循LeNet-5的设计规则。该规则如图（a）所示：逐渐减小特征地图的空间大小，将高分辨率到低分辨率的卷积<strong>串联</strong>起来，形成<strong>低分辨率</strong>表示，并进一步处理以进行分类。</li>
+<li><strong>位置敏感任务需要高分辨率表示</strong>，例如语义分割、人体姿势估计和目标检测。先前最先进的方法采用<strong>高分辨率恢复过程</strong>，以从图（b）所示的分类或类分类网络输出的低分辨率表示提高表示分辨率，例如 SegNet , DeconvNet , U-Net and Hourglass , encoder-decoder  and SimpleBaseline 。此外，dilated convolutions用于移除一些下采样层，从而产生中等分辨率表示。</li>
+</ul>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220402224926055.png" alt="image-20220402224926055" style="zoom:80%;" /></p>
+<p>基于高到低和低到高框架的典型姿势估计网络的图示。（a） Hourglass .Cascaded pyramid networks. (c) SimpleBaseline(d) Combination with dilated convolutions </p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220402235853417.png" alt="image-20220402235853417" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>本文贡献：</strong></p>
+<p>我们提出了一种新的体系结构，即高分辨率网络（<strong>HRNet</strong>）。</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220402232031961.png" alt="image-20220402232031961" style="zoom:80%;" /></p>
+<ul>
+<li>我们的方法是<strong>并行</strong>连接高分辨率到低分辨率的子网络，而不是像大多数现有解决方案那样串联。因此，我们的方法能够<strong>保持高分辨率，而不是通过从低到高的过程恢复分辨率，因此预测的热图在空间上可能更精确。</strong></li>
+<li>大多数现有的融合方案聚合了低级和高级表示。相反，我们通过<strong>重复的多尺度融合</strong>，在相同深度和相似级别的低分辨率表示的帮助下<strong>提高高分辨率表示</strong>，反之亦然。从而使高分辨率表示也有丰富的姿势估计。因此，我们预测的热图可能更准确。</li>
+<li>我们通过网络输出的<strong>高分辨率表示来估计关键点。</strong></li>
+</ul>
+</li>
+<li><p><strong>网络</strong></p>
+<p>该网络由一个<strong>stem、主体（HRNet）、representation head </strong>组成。</p>
+<ul>
+<li><p>该stem由两个降低分辨率的跨步卷积组成；我们将图像输入一个stem，该stem由<strong>两个步长为2的 3×3卷积组成</strong>，将分辨率降低到1/4，然后<strong>主体以相同的分辨率输出表示（1/4）</strong>。</p>
+</li>
+<li><p><strong>主体以与其输入特征图相同的分辨率输出特征图</strong>；</p>
+</li>
+<li>representation head 选择进行后续任务预测的高分辨率特征图（或低分辨率），即用于估计选择关键点位置并转换为全分辨率的热图。 </li>
+</ul>
+</li>
+<li><p><strong>主体——HRNet（网络实例化 ）</strong></p>
+<ul>
+<li><p>主体部分包含<strong>四个阶段</strong>和<strong>四个并行卷积流</strong>。分辨率分别为1/4、1/8、1/16和1/32。<strong>当分辨率降低到一半，宽度（通道数）增加到两倍。</strong>即四种分辨率的卷积宽度（通道数）分别为C、2C、4C和8C。 </p>
+</li>
+<li><p>第一阶段包含4个residual units ，其中每个单元（与ResNet-50相同）由通道数为64的 <strong>bottleneck</strong> 形成，然后是一个3×3卷积，将特征映射的宽度减小到<strong>C</strong>。</p>
+</li>
+<li><p>第二、第三、第四阶段分别包含<strong>1、4、3个exchange block（或称 模块化块）</strong>。一个交换块包含4个 <strong>residual units</strong>（basicblock）和一个<strong>exchange unit</strong>在分辨率之间，其中每个单元在每个分辨率中包含两个3×3卷积。综上所述，共有8个exchange unit，即进行了8次多尺度融合。 </p>
+</li>
+</ul>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220404002817628.png" alt="image-20220404002817628" style="zoom:80%;" /></p>
+</li>
+</ul>
+<p>  🐱‍🏍<strong>注意：</strong>在我们的实验中，我们研究了一个小网络和一个大网络：<strong>HRNet-W32和HRNet-W48</strong>，其中32和48分别代表最后三个阶段的<strong>高分辨率子网络的通道数（C）</strong>。对于HRNet-W32，其他三个并行子网的宽度分别为64、128、256，对于HRNet-W48，宽度分别为96、192、384。</p>
+<ul>
+<li><p><strong>重复多分辨率融合</strong></p>
+<p>融合模块的目标是在多分辨率表示中交换信息。</p>
+<ul>
+<li><p>同分辨率的层直接复制。</p>
+</li>
+<li><p>需要升分辨率的使用bilinear upsample （或  nearest neighbor up-sampling） + <strong>1x1卷积将channel数统一</strong>。</p>
+</li>
+<li><p>需要降分辨率的使用strided为2 的 3x3 卷积。</p>
+<blockquote>
+<p>至于为何要用strided 3x3卷积，这是因为卷积在降维的时候会出现信息损失，使用strided 3x3卷积是为了通过学习的方式，降低信息的损耗。所以这里没有用maxpool或者组合池化。</p>
+</blockquote>
+</li>
+<li><p>三个feature map融合的方式是<strong>相加</strong>。</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220403002518929.png" alt="image-20220403002518929" style="zoom:80%;" /></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Representation Head</strong></p>
+<p>我们有三种表示头，如图4所示，分别称为HRNetV1、HRNetV2和HRNetV2p。</p>
+<ul>
+<li><strong>HRNetV1：</strong>输出是<strong>仅来自高分辨率流的表示</strong>。其他三种表述被忽略。如图（a）所示。</li>
+<li><strong>HRNetV2：</strong>我们通过双线性上采样重新调整低分辨率表示尺度，而不将通道数更改为高分辨率，并将四种表示<strong>拼接</strong>起来，然后进行1×1卷积以混合四种表示。如图（b）所示。</li>
+<li><strong>HRNetV2p</strong>：我们通过将HRNetV2的高分辨率表示输出降采样到多个级别来构造多级表示。如图（c）所示。</li>
+</ul>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220403004425856.png" alt="image-20220403004425856" style="zoom:80%;" /></p>
+<p><strong>在本文中，我们将展示将HRNetV1应用于人体姿势估计、HRNetV2应用于语义分割和HRNetV2p应用于对象检测的结果。</strong></p>
+<p>如下主要用于分类网络：</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220403004818699.png" alt="image-20220403004818699" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>分析</strong></p>
+<p>我们分析了模块化块，它分为两部分：<strong>多分辨率并行卷积</strong>（图a）和<strong>多分辨率融合</strong>（图b）。</p>
+<ul>
+<li><strong>多分辨率并行卷积</strong>类似于<strong>群卷积</strong>。它将输入通道划分为几个通道子集，并分别在不同的空间分辨率上对每个子集执行规则卷积，而<strong>在组卷积中，分辨率是相同的。</strong>这种联系意味着多分辨率并行卷积可以享受群卷积的一些好处。</li>
+<li><strong>多分辨率融合单元</strong>类似于规则卷积的多分支全连接形式，如图c所示。<ul>
+<li>规则卷积可分为多个小卷积。输入通道被划分为几个子集，输出通道也被划分为几个子集。<strong>输入和输出子集以完全连接的方式连接，每个连接都是一个规则卷积。</strong>输出通道的每个子集是每个输入通道子集上卷积输出的<strong>总和</strong>。</li>
+<li>不同之处在于，我们的<strong>多分辨率融合需要处理分辨率的变化</strong>。多分辨率融合和规则卷积之间的联系为探索HRNetV2和HRNetV2p中的所有四种分辨率表示提供了证据。 </li>
+</ul>
+</li>
+</ul>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220403104607720.png" alt="image-20220403104607720" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>实验结果</strong></p>
+<ul>
+<li><p><strong>重复多尺度融合消融实验</strong>。我们实证分析了重复多尺度融合的效果。我们研究了网络的三种变体。（a） 没有中间交换单元（1个融合）：除最后一个交换单元外，多分辨率子网之间没有交换。（b） 跨级交换单元（3个熔合）：每个级内的并行子网之间没有交换。（c） 跨级和级内交换单元（共8个融合）：这是我们提出的方法。所有的网络都是从零开始训练的。表给出的COCO验证集的结果表明，多尺度融合是有帮助的，更多融合会带来更好的性能。 </p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220403124952265.png" alt="image-20220403124952265" style="zoom:80%;" /></p>
+</li>
+<li><p>我们从两个方面研究了<strong>表征分辨率对姿态估计性能的影响</strong>：</p>
+<ul>
+<li><p><strong>从高到低检查由每个分辨率的特征图估计的热图的质量</strong>，我们通过为ImageNet分类预先训练的模型来训练我们的大小网络。我们的网络输出从高到低的四个响应图。较低分辨率的热图预测质量太低，AP分数低于10分。如图比较表明，<strong>分辨率确实会影响关键点预测质量。</strong> </p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220403125537500.png" alt="image-20220403125537500" style="zoom:80%;" /></p>
+</li>
+<li><p>图显示了与SimpleBaseline（ResNet-50）相比，<strong>输入大小如何影响性能。</strong>由于在整个过程中保持了高分辨率，较小输入尺寸的改善比较大输入尺寸的改善更为显著。</p>
+</li>
+</ul>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220403125219011.png" alt="image-20220403125219011" style="zoom:80%;" /></p>
+</li>
+<li><p>COCO测试集的比较</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220403125948988.png" alt="image-20220403125948988" style="zoom:80%;" /></p>
+</li>
+</ul>
+</li>
+</ul>
 <h4 id="mspn-2019-arxiv-">MSPN（2019 arXiv）</h4>
 <blockquote>
 <p>Rethinking on multi-stage networks for human pose estimation</p>
@@ -1035,6 +1257,73 @@
 <blockquote>
 <p> Unipose: Unified human pose estimation in single images and videos</p>
 </blockquote>
+<h4 id="blazepose-2020-cvprw-">BlazePose（2020 CVPRW）</h4>
+<blockquote>
+<p>BlazePose: On-device Real-time Body Pose tracking</p>
+</blockquote>
+<ul>
+<li><p><strong>出发点：</strong>提出一种用于人体姿态估计的轻量级卷积神经网络体系结构——BlazePose，专门用于移动设备上的实时推理。</p>
+<ul>
+<li>热图选择可以以最小的开销扩展到多人，但它使单人的模型比适用于移动电话实时推理的模型大得多。与基于热图的技术相比，基于回归的方法虽然<strong>计算要求较低且更具可扩展性</strong>，但却试图预测平均坐标值，通常无法解决潜在的模糊性。</li>
+<li>在我们的工作中，我们扩展了<strong>参数数量较少，叠层沙漏结构也能显著提高预测质量</strong>的想法，并使用编码器-解码器网络架构来预测所有关节的热图，然后使用另一个编码器直接回归到所有关节的坐标。我们工作背后的关键洞见是，在推理过程中<strong>可以丢弃热图分支，使其足够轻，</strong>可以在移动设备上运行。 </li>
+</ul>
+</li>
+<li><p><strong>Inference pipeline</strong></p>
+<p>我们的管道由一个<strong>轻量级身体姿态检测器</strong>和一个<strong>姿态跟踪器</strong>网络组成。跟踪器预测关键点坐标、当前帧上的人物以及当前帧的精细感兴趣区域。当跟踪器显示没有人在场时，我们在下一帧重新运行探测器网络 </p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220402131747570.png" alt="image-20220402131747570" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>Person detector</strong></p>
+<ul>
+<li><p><strong>出发点：</strong>大多数现代<strong>目标检测</strong>解决方案的最后一个后处理步骤都依赖于非最大抑制（NMS）算法。这<strong>适用于自由度很少的刚性对象</strong>。然而，这种算法在包含高度关节化姿态（如人类的姿态）的场景中会失效，例如人们挥手或拥抱。这是因为多个不明确的框满足NMS算法的联合交集（IoU）阈值。</p>
+</li>
+<li><p>为了克服这一局限性，我们着重于检测<strong>相对刚性身体部位（如人脸或躯干）的边界框</strong>。</p>
+<ul>
+<li>我们观察到，在许多情况下，向神经网络发送的有关躯干位置的最强信号是人的脸（因为它具有高对比度特征，外观变化较少）。<strong>为了使这样的人检测器快速、轻便，</strong>我们提出了一个强有力的<strong>假设</strong>，即在我们的单人用例中，<strong>人的头部应该始终可见</strong>，但对于AR应用程序来说，这是有效的。</li>
+<li>因此，我们使用<strong>快速设备人脸检测器作为个人检测器的代理</strong>。该面部检测器可预测其他特定于人的对齐参数：人的臀部之间的中点、环绕整个人的圆圈的大小，以及倾斜度（连接两个肩部中点和臀部中点的线条之间的角度）。  </li>
+</ul>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220402132800982.png" alt="image-20220402132800982" style="zoom:80%;" /></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Topology</strong></p>
+<p>我们利用BlazeFace、BlazePalm和Coco使用的超集，提出了一种新的拓扑结构，使用人体上的<strong>33</strong>个点。这使我们能够与各自的数据集和推理网络保持一致。</p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220402141149960.png" alt="image-20220402141149960" style="zoom:80%;" /></p>
+</li>
+<li><p><strong>神经网络结构</strong></p>
+<ul>
+<li><p>我们系统的姿势估计组件预测所有33个人关键点的位置，并<strong>使用管道第一阶段提供的个人定位</strong>建议。</p>
+</li>
+<li><p>我们采用了<strong>组合热图、偏移和回归方法</strong>。我们仅在训练阶段使用热图和补偿损失，并在运行推理之前从模型中<strong>删除</strong>相应的输出层。因此，我们有效地使用热图来监督轻量级嵌入，然后由回归编码器网络使用。</p>
+</li>
+<li><p>我们叠加了一个基于热图的微型编码器-解码器网络和一个随后的<strong>回归编码器网络</strong>。我们积极利用网络所有阶段之间的跳过连接，以实现高级和低级功能之间的平衡。然而，<strong>回归编码器的梯度不会传播回经过热图训练的特征</strong>（请注意图中的梯度停止连接）。我们发现，这不仅改善了热图预测，而且大大提高了坐标回归的精度。 </p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220402133222155.png" alt="image-20220402133222155" style="zoom:80%;" /></p>
+</li>
+</ul>
+</li>
+<li><p><strong>数据集</strong></p>
+<p>与大多数使用热图检测关键点的现有姿势估计解决方案相比，我们基于跟踪的解决方案需要初始姿势对齐。我们将数据集限制在可以<strong>看到整个人</strong>，或者<strong>可以自信地标注髋部和肩部关键点的情况下</strong>。为了确保模型支持数据集中不存在的严重遮挡，我们使用了大量遮挡模拟增强。我们的训练数据集由60K图像和25K图像组成，其中场景中有一个或几个人摆出普通姿势，场景中有一个人进行健身锻炼。所有这些图像都是由人类注释的。 </p>
+</li>
+<li><p><strong>Alignment and occlusions augmentation</strong></p>
+<p>在增强和训练数据准备期间，我们故意<strong>限制角度、比例和平移的支持范围</strong>。这允许我们降低网络容量，使网络更快，同时需要更少的计算资源，从而减少主机设备上的能源。</p>
+<ul>
+<li>基于检测阶段或之前的帧关键点，我们对齐人，使<strong>髋部之间的点位于作为神经网络输入传递的方形图像的中心</strong>。我们将旋转估计为<strong>髋部中点和肩部中点之间的线L，并旋转图像，使L平行于y轴。</strong>对比例进行估计，以便所有身体点都适合在身体周围的方形边界框中。</li>
+<li>我们还应用了<strong>10%的缩放和移位增强</strong>，以确保跟踪器处理帧间的身体运动和扭曲的对齐。</li>
+<li>为了<strong>支持对不可见点的预测</strong>，我们在训练期间模拟遮挡（填充各种颜色的随机矩形），<strong>并引入逐点可见性分类器，以指示特定点是否被遮挡，</strong>以及位置预测是否被认为不准确。这使得即使是在严重遮挡的情况下，也可以持续跟踪一个人。</li>
+</ul>
+</li>
+<li><p><strong>实验结果</strong></p>
+<ul>
+<li><p>我们手动注释了两个包含1000张图像的内部数据集，每个图像中有1-2人。第一个数据集被称为<strong>AR数据集</strong>，由各种各样的野外人体姿势组成，而第二个数据集仅由<strong>瑜伽/健身姿势</strong>组成。为了保持一致性，我们<strong>只使用了MS Coco拓扑，17个点用于评估</strong>，这是OpenPose和BlazePose的共同子集。</p>
+</li>
+<li><p>作为评估指标，我们使用20%公差的正确点百分比(<a href="mailto:**PCK@0.2">**PCK@0.2</a>**)（如果2D欧几里德误差小于相应人躯干尺寸的20%，我们假设该点被正确检测到）。</p>
+</li>
+<li>为了验证人类基线，我们要求两名注释员独立地重新注释AR数据集，并获得手工注释平均值<a href="mailto:**PCK@0.2">**PCK@0.2</a>=97.2**。</li>
+<li>我们训练了两个不同能力的模型：<strong>BlazePose Full（6.9 MFlop，3.5 M参数）</strong>和<strong>BlazePose Lite（2.7 MFlop，1.3 M参数）</strong>。</li>
+</ul>
+<p>虽然我们的模型显示的性能比OpenPose模型稍差 AR数据集BlazePose Full在Yoga/健身用例上的表现优于OpenPose。同时，BlazePose在单个中端手机CPU上的性能比在20核桌面CPU上的OpenPose快<strong>25-75倍</strong></p>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220402140554214.png" alt="image-20220402140554214" style="zoom:80%;" /></p>
+</li>
+</ul>
 <h3 id="4-2-top-down">4.2 多人-Top-down</h3>
 <h4 id="detect-and-track-2018-cvpr-">Detect-and-track（2018 CVPR）</h4>
 <blockquote>
@@ -1060,10 +1349,6 @@
 <blockquote>
 <p>Combining detection and tracking for human pose estimation in videos</p>
 </blockquote>
-<h4 id="blazepose-2020-cvpr-">BlazePose（2020 CVPR）</h4>
-<blockquote>
-<p>BlazePose: On-device Real-time Body Pose tracking</p>
-</blockquote>
 <h3 id="4-3-bottom-up">4.3 多人-Bottom-up</h3>
 <h4 id="posetrack-2017-cvpr-">PoseTrack（2017 CVPR）</h4>
 <blockquote>
@@ -1081,16 +1366,16 @@
 <p><img src="../md文档/2D人体姿态估计/picture/image-20220318123353439.png" alt="image-20220318123353439" style="zoom:80%;" /></p>
 <h3 id="5-1-mpii">5.1 MPII</h3>
 <p>==Image-level 2D Single Person Dataset==</p>
-<p>MPII是<strong>单人人体关键点检测的主要数据集</strong>。包含丰富的活动和多样性捕获环境，包括室内和室外。它是从Y ouTube的3913个视频中收集的，涉及491个不同的活动。从收集的视频中总共提取了24920帧。注释由亚马逊机械土耳其公司（AMT）的内部工作人员进行。注释包括<strong>16</strong>个关键点的二维位置、完整的三维躯干和头部方向、关键点的遮挡标签以及活动标签。相邻的视频帧也可用于运动信息。最后，<strong>40522人被贴上标签，其中28821人用于培训，11701人用于测试。</strong>MPII数据集已被广泛用于姿势估计和其他与姿势相关的任务。由于姿态相对容易，检测到的2D关键点的精度较高，性能接近饱和。</p>
+<p>MPII是<strong>单人人体关键点检测的主要数据集</strong>。包含丰富的活动和多样性捕获环境，包括室内和室外。它是从Y ouTube的3913个视频中收集的，涉及491个不同的活动。从收集的视频中总共提取了24920帧。注释由亚马逊机械土耳其公司（AMT）的内部工作人员进行。注释包括<strong>16</strong>个关键点的二维位置、完整的三维躯干和头部方向、关键点的遮挡标签以及活动标签。相邻的视频帧也可用于运动信息。最后，<strong>40522人被贴上标签，其中28821人用于培训，11701人用于测试。</strong>MPII数据集已被广泛用于姿态估计和其他与姿态相关的任务。由于姿态相对容易，检测到的2D关键点的精度较高，性能接近饱和。</p>
 <h3 id="5-2-coco">5.2 COCO</h3>
 <p>==Image-level 2D Multi-Person Dataset==</p>
-<p>COCO是<strong>多人关键点检测的主要数据集</strong>。包含用于对象检测、全景分割和关键点检测的注释。这些图片来自谷歌、必应和Flickr等网站。注释由亚马逊的Mechanical Turk（AMT）上的工人执行。该数据集包含超过20万张图像和25万个人实例。自2016年以来，除了数据集，COCO关键点检测的挑战每年都会举行。数据集有两个版本。区别在于训练集和验证集的划分。在2017年的最新版本中，<strong>training/val images拆分为118K/5K，</strong>而不是之前的83K/41K。测试集包含20K图像，注释由官方测试服务器提供。此外，还发布了120K未标记图像，它们与标记图像遵循相同的类别分布。它们可以用于半监督学习。对于关键点检测，将标记<strong>17</strong>个关键点以及可见性标记、边界框和身体分割区域。COCO数据集是一个广泛使用的评估基准，并作为姿势相关任务的辅助数据，</p>
+<p>COCO是<strong>多人关键点检测的主要数据集</strong>。包含用于对象检测、全景分割和关键点检测的注释。这些图片来自谷歌、必应和Flickr等网站。注释由亚马逊的Mechanical Turk（AMT）上的工人执行。该数据集包含超过20万张图像和25万个人实例。自2016年以来，除了数据集，COCO关键点检测的挑战每年都会举行。数据集有两个版本。区别在于训练集和验证集的划分。在2017年的最新版本中，<strong>training/val images拆分为118K/5K，</strong>而不是之前的83K/41K。测试集包含20K图像，注释由官方测试服务器提供。此外，还发布了120K未标记图像，它们与标记图像遵循相同的类别分布。它们可以用于半监督学习。对于关键点检测，将标记<strong>17</strong>个关键点以及可见性标记、边界框和身体分割区域。COCO数据集是一个广泛使用的评估基准，并作为姿态相关任务的辅助数据，</p>
 <h3 id="5-3-j-hmdb">5.3 J-HMDB</h3>
 <p>==Video-level 2D Single Person Dataset==</p>
-<p>J-HMDB数据集是关节注释HMDB的缩写，是<strong>HMDB51数据库的子集</strong>，该数据库包含51个人类行为的5100多个片段。J-HMDB数据集包含<strong>928个剪辑，包含21个行为类别</strong>。每个行为类包含36-55个片段。<strong>每个剪辑包括15-40帧。</strong>31838张图片通过亚马逊 2D puppet model进行注释。最多可标记<strong>15</strong>个可见的身体关键点，以及比例、视点、分割、遮罩和流。训练和测试图像的数量比例大约为7:3。J-HMDB数据集已广泛应用于视频中的<strong>姿势估计和行为识别。</strong> </p>
+<p>J-HMDB数据集是关节注释HMDB的缩写，是<strong>HMDB51数据库的子集</strong>，该数据库包含51个人类行为的5100多个片段。J-HMDB数据集包含<strong>928个剪辑，包含21个行为类别</strong>。每个行为类包含36-55个片段。<strong>每个剪辑包括15-40帧。</strong>31838张图片通过亚马逊 2D puppet model进行注释。最多可标记<strong>15</strong>个可见的身体关键点，以及比例、视点、分割、遮罩和流。训练和测试图像的数量比例大约为7:3。J-HMDB数据集已广泛应用于视频中的<strong>姿态估计和行为识别。</strong> </p>
 <h3 id="5-4-posetrack-dataset">5.4 PoseTrack Dataset</h3>
 <p>==Video-level 2D Multi-Person Dataset==</p>
-<p>PoseTrack数据集是<strong>第一个大规模多人姿态估计和跟踪数据集</strong>。它是从MPII多人姿势数据集中的未标记视频中收集的。它有两个版本，即PoseTrack 2017和PoseTrack 2018。PoseTrack 2017包含550个视频，<strong>分为292、50和208个视频，分别用于训练、验证和测试</strong>。共有23000帧使用153615个姿势标签进行注释。PoseTrack 2018是其扩展版。<strong>它包含593个训练视频、170个验证视频和375个测试视频</strong>。对于训练集中的每个视频，中间的30帧都会被注释。对于验证集和测试集，中间的30帧以及每四帧被注释。标签包含<strong>15个二维关键点</strong>、一个唯一的个人ID和每个人的头部边界框。PoseTrack具有挑战性，因为视频包含各种姿势外观和比例变化，以及身体部位的遮挡和截断。</p>
+<p>PoseTrack数据集是<strong>第一个大规模多人姿态估计和跟踪数据集</strong>。它是从MPII多人姿态数据集中的未标记视频中收集的。它有两个版本，即PoseTrack 2017和PoseTrack 2018。PoseTrack 2017包含550个视频，<strong>分为292、50和208个视频，分别用于训练、验证和测试</strong>。共有23000帧使用153615个姿态标签进行注释。PoseTrack 2018是其扩展版。<strong>它包含593个训练视频、170个验证视频和375个测试视频</strong>。对于训练集中的每个视频，中间的30帧都会被注释。对于验证集和测试集，中间的30帧以及每四帧被注释。标签包含<strong>15个二维关键点</strong>、一个唯一的个人ID和每个人的头部边界框。PoseTrack具有挑战性，因为视频包含各种姿态外观和比例变化，以及身体部位的遮挡和截断。</p>
 <h2 id="6-2d-hpe-">6. 2D-HPE评价标准</h2>
 <p><a href="https://zhuanlan.zhihu.com/p/270619106">人体姿态估计-评价指标 - 知乎 (zhihu.com)</a></p>
 <p>二维姿态估计的评估旨在测量预测的二维位置的准确性。根据数据集的特点，广泛使用的评估指标包括：</p>
@@ -1203,6 +1488,16 @@
 </li>
 </ul>
 <h2 id="7-">7. 其他</h2>
+<h4 id="7-1-group-convolution-">7.1 Group Convolution分组卷积</h4>
+<ul>
+<li>Group Convolution分组卷积，最早见于AlexNet——2012年Imagenet的冠军方法，Group Convolution被用来切分网络，主要是解决显存不足问题，<strong>使其在</strong>2个GPU上并行运行。</li>
+<li>Group Convolution顾名思义，则是对<strong>输入feature map进行分组，然后每组分别卷积。</strong>假设输入feature map的尺寸仍为C∗H∗W，输出feature map的数量为N个，如果设定要分成G个groups，则每组的输入feature map数量为C/G，每组的输出feature map数量为N/G，每组卷积核的尺寸为N/G∗C/G∗K∗K，所有组卷积核的总参数量为N∗C/G∗K∗K，可见，总参数量减少为原来的 <strong>1/G</strong>。</li>
+</ul>
+<p><img src="../md文档/2D人体姿态估计/picture/image-20220403131543674.png" alt="image-20220403131543674" style="zoom:80%;" /></p>
+<h4 id="7-2-depth-wise-convolution">7.2 Depth-wise Convolution</h4>
+<p><a href="https://zhuanlan.zhihu.com/p/149564248">Depth-wise Convolution - 知乎 (zhihu.com)</a></p>
+<p>Separable Convolution可以分成spatial separable convolution和depthwise separable convolution</p>
+<p>depth-wise卷积的FLOPs更少没错，但是在相同的FLOPs条件下，depth-wise卷积<strong>需要的IO读取次数是普通卷积的100倍</strong>，因此，由于depth-wise卷积的小尺寸，相同的显存下，我们能放更大的batch来让GPU跑满，但是此时<strong>速度的瓶颈已经从计算变成了IO</strong>。自然desired小尺寸卷积应该有的快速的特性，也无法实现。</p>
 
           	</article>
         </div>
@@ -1215,7 +1510,6 @@
 <script type="text/javascript" src="../js-css/toc_conf.js"></script>
 
 <SCRIPT type="text/javascript" >
-
 $(document).ready(function(){
     var css_conf = eval(markdown_panel_style);
     $('#readme').css(css_conf)
